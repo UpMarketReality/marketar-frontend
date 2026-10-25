@@ -1,0 +1,313 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+/* TARJETA Y RESUMEN DEL PEDIDO. */
+.order-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* ENCABEZADO DEL APARTADO. */
+.page-heading {
+  margin: 3px 0 30px;
+}
+
+.page-heading .subtitle {
+  margin: 8px 0 0;
+}
+
+/* ACCIONES DE LAS TARJETAS. */
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* FILTROS DEL HISTORIAL. */
+.tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+  margin: 0 0 28px;
+}
+
+.tabs button {
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  padding: 13px 16px;
+  color: #516787;
+  font-size: 13px;
+}
+
+.tabs button[aria-pressed="true"] {
+  border-bottom-color: var(--brand);
+  color: var(--brand-ink);
+}
+
+/* ESTRUCTURA DEL APARTADO. */
+.card-stack {
+  display: grid;
+  gap: 24px;
+}
+
+/* TARJETA Y RESUMEN DEL PEDIDO. */
+.order-meta {
+  display: flex;
+  gap: 26px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 18px 20px;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--line);
+}
+
+/* DATOS, FABRICANTE E IMPORTES. */
+dl {
+  margin: 0;
+}
+
+/* TARJETA Y RESUMEN DEL PEDIDO. */
+.order-meta dl {
+  display: grid;
+  gap: 4px;
+}
+
+/* DATOS, FABRICANTE E IMPORTES. */
+dt {
+  font-size: 10px;
+  color: #526887;
+  text-transform: uppercase;
+}
+
+dd {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ETIQUETAS DE ESTADO. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.badge .icon {
+  width: 13px;
+  height: 13px;
+  flex-basis: 13px;
+}
+
+.badge--blue {
+  background: #eef4ff;
+  color: #235bc2;
+}
+
+.badge--orange {
+  background: #fff5e8;
+  color: #9c5200;
+}
+
+.badge--green {
+  background: #eafbf0;
+  color: #137938;
+}
+
+.badge--teal {
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+}
+
+/* TARJETA Y RESUMEN DEL PEDIDO. */
+.order-meta > .badge {
+  margin-left: auto;
+}
+
+.order-card--delivered .order-meta {
+  background: #effcf4;
+}
+
+/* SEGUIMIENTO DE LAS ETAPAS DEL PEDIDO. */
+.progress {
+  list-style: none;
+  padding: 20px 20px 22px;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--line);
+}
+
+.progress li {
+  text-align: center;
+  position: relative;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.progress li::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  left: -50%;
+  width: 100%;
+  height: 2px;
+  background: var(--line);
+}
+
+.progress li:first-child::before {
+  display: none;
+}
+
+.progress li.is-complete::before,
+.progress li.is-current::before {
+  background: var(--brand);
+}
+
+.progress__dot {
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 1;
+  width: 28px;
+  height: 28px;
+  margin: 0 auto 8px;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: white;
+  color: #9badc4;
+}
+
+.progress .is-complete,
+.progress .is-current {
+  color: var(--ink);
+}
+
+.is-complete .progress__dot,
+.is-current .progress__dot {
+  color: white;
+  background: var(--brand);
+  border-color: var(--brand);
+}
+
+.is-current .progress__dot {
+  box-shadow: 0 0 0 4px var(--brand-soft);
+}
+
+.progress .icon {
+  width: 15px;
+  height: 15px;
+}
+
+/* PRODUCTO INCLUIDO EN EL PEDIDO. */
+.product-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.product-row img {
+  width: 64px;
+  height: 68px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+
+.product-row p {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 5px 0 0;
+}
+
+/* ACCIONES DE LAS TARJETAS. */
+.card-actions {
+  padding: 14px 18px;
+  border-top: 1px dashed var(--line);
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 900px). */
+@media (max-width: 900px) {
+  /* TARJETA Y RESUMEN DEL PEDIDO. */
+  .order-meta {
+    gap: 14px;
+  }
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 700px). */
+@media (max-width: 700px) {
+  /* ENCABEZADO DEL APARTADO. */
+  .page-heading {
+    margin: 0 0 22px;
+  }
+
+  /* FILTROS DEL HISTORIAL. */
+  .tabs {
+    gap: 0;
+  }
+
+  .tabs button {
+    flex: 1;
+    padding: 12px 6px;
+    font-size: 12px;
+    min-height: 44px;
+  }
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 430px). */
+@media (max-width: 430px) {
+  /* TARJETA Y RESUMEN DEL PEDIDO. */
+  .order-meta {
+    padding: 14px;
+    gap: 12px 16px;
+  }
+
+  .order-meta > .badge {
+    margin-left: 0;
+  }
+
+  /* PRODUCTO INCLUIDO EN EL PEDIDO. */
+  .product-row {
+    padding: 16px 14px;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .product-row img {
+    width: 56px;
+    height: 62px;
+  }
+
+  /* SEGUIMIENTO DE LAS ETAPAS DEL PEDIDO. */
+  .progress {
+    padding-inline: 8px;
+  }
+
+  .progress li {
+    font-size: 10px;
+  }
+
+  /* ACCIONES DE LAS TARJETAS. */
+  .card-actions {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .card-actions .button {
+    flex: 1 1 auto;
+  }
+}
