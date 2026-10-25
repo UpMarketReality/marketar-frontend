@@ -1,1 +1,283 @@
-<p>perfil-comprador-pedidos-componente works!</p>
+<main id="contenido" tabindex="-1">
+  <noscript
+  ><p class="demo-note">
+    Activa JavaScript para usar filtros, validaciones y acciones de
+    demostración.
+  </p></noscript
+  >
+  <header class="page-heading">
+    <h1>Historial de pedidos</h1>
+    <p class="subtitle">
+      Haz seguimiento a tus compras y revisa el estado de fabricación o
+      envío.
+    </p>
+  </header>
+  <div class="tabs" role="group" aria-label="Filtrar pedidos">
+    <button type="button" aria-pressed="true" data-filter="all">
+      Todos los pedidos</button
+    ><button type="button" aria-pressed="false" data-filter="active">
+    En curso (2)</button
+  ><button type="button" aria-pressed="false" data-filter="delivered">
+    Entregados
+  </button>
+  </div>
+  <div class="card-stack" id="order-list">
+    <article
+      class="order-card"
+      data-order-card
+      data-state="transit"
+      id="pedido-9023"
+    >
+      <header class="order-meta">
+        <dl>
+          <dt>Pedido realizado</dt>
+          <dd><time datetime="2026-10-25">25 oct., 2026</time></dd>
+        </dl>
+        <dl>
+          <dt>Total pagado</dt>
+          <dd>S/ 5,000.00</dd>
+        </dl>
+        <dl>
+          <dt>N.º pedido</dt>
+          <dd>#ORD-9023</dd>
+        </dl>
+        <span class="badge badge--blue"
+        ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M1 5h13v12H1ZM14 9h5l4 5v3h-9" />
+                  <circle cx="6" cy="18" r="3" />
+                  <circle cx="18" cy="18" r="3" /></svg
+        >En tránsito</span
+        >
+      </header>
+      <ol class="progress" aria-label="Seguimiento del pedido">
+        <li class="is-complete">
+                <span class="progress__dot"
+                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="m5 12 4 4L20 5" /></svg></span
+                >Pagado<span class="visually-hidden">: completado</span>
+        </li>
+        <li class="is-complete">
+                <span class="progress__dot"
+                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="m5 12 4 4L20 5" /></svg></span
+                >Fabricación<span class="visually-hidden">: completado</span>
+        </li>
+        <li class="is-current" aria-current="step">
+                <span class="progress__dot"
+                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M1 5h13v12H1ZM14 9h5l4 5v3h-9" />
+                    <circle cx="6" cy="18" r="3" />
+                    <circle cx="18" cy="18" r="3" /></svg></span
+                >En camino<span class="visually-hidden">: etapa actual</span>
+        </li>
+        <li class="">
+                <span class="progress__dot"
+                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="m2 11 10-9 10 9M5 9v13h5v-7h4v7h5V9" /></svg></span
+                >Entregado<span class="visually-hidden">: pendiente</span>
+        </li>
+      </ol>
+      <div class="product-row">
+        <img
+          src="assets/armario.svg"
+          alt="Ilustración de armario clásico de melamina premium"
+          width="64"
+          height="68"
+        />
+        <div>
+          <h3>Armario clásico de melamina premium</h3>
+          <p>Vendido por: DomusDecoSAC</p>
+          <p>Entrega estimada: 02 de noviembre, 2026</p>
+        </div>
+      </div>
+      <footer class="card-actions">
+        <button
+          type="button"
+          class="button"
+          data-action="receipt"
+          data-order="9023"
+        >
+          Ver recibo</button
+        ><button
+        type="button"
+        class="button"
+        data-action="contact"
+        data-seller="Vendido por: DomusDecoSAC"
+      >
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+          <path
+            d="M21 12a9 9 0 0 1-9 9H3l2-5a9 9 0 1 1 16-4ZM8 10h8M8 14h5"
+          /></svg
+        >Contactar vendedor</button
+      ><button
+        type="button"
+        class="button button--dark"
+        data-action="tracking"
+        data-order="9023"
+      >
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" />
+          <circle cx="12" cy="10" r="2.5" /></svg
+        >Rastrear envío
+      </button>
+      </footer>
+    </article>
+    <article
+      class="order-card"
+      data-order-card
+      data-state="making"
+      id="pedido-9105"
+    >
+      <header class="order-meta">
+        <dl>
+          <dt>Pedido realizado</dt>
+          <dd><time datetime="2026-10-12">12 oct., 2026</time></dd>
+        </dl>
+        <dl>
+          <dt>Total pagado</dt>
+          <dd>S/ 1,200.00</dd>
+        </dl>
+        <dl>
+          <dt>N.º pedido</dt>
+          <dd>#ORD-9105</dd>
+        </dl>
+        <span class="badge badge--orange"
+        ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                  <path
+                    d="m3 21 10-10M10 4l3-3 9 9-3 3-3-3-3 3-4-4 3-3Z"
+                  /></svg
+        >En fabricación</span
+        >
+      </header>
+      <ol class="progress" aria-label="Seguimiento del pedido">
+        <li class="is-complete">
+                <span class="progress__dot"
+                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="m5 12 4 4L20 5" /></svg></span
+                >Cotización pagada<span class="visually-hidden"
+        >: completado</span
+        >
+        </li>
+        <li class="is-current" aria-current="step">
+                <span class="progress__dot"
+                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                    <path
+                      d="m3 21 10-10M10 4l3-3 9 9-3 3-3-3-3 3-4-4 3-3Z"
+                    /></svg></span
+                >Construyendo<span class="visually-hidden">: etapa actual</span>
+        </li>
+        <li class="">
+                <span class="progress__dot"
+                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M1 5h13v12H1ZM14 9h5l4 5v3h-9" />
+                    <circle cx="6" cy="18" r="3" />
+                    <circle cx="18" cy="18" r="3" /></svg></span
+                >Despacho<span class="visually-hidden">: pendiente</span>
+        </li>
+        <li class="">
+                <span class="progress__dot"
+                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="m2 11 10-9 10 9M5 9v13h5v-7h4v7h5V9" /></svg></span
+                >Entregado<span class="visually-hidden">: pendiente</span>
+        </li>
+      </ol>
+      <div class="product-row">
+        <img
+          src="assets/comoda.svg"
+          alt="Ilustración de cómoda moderna 4 cajones (diseño a medida)"
+          width="64"
+          height="68"
+        />
+        <div>
+          <h3>Cómoda moderna 4 cajones (diseño a medida)</h3>
+          <p>Fabricado por: Carpintería Ruiz</p>
+          <p>
+            Se encuentra en la etapa de ensamblaje final de la madera.
+          </p>
+        </div>
+      </div>
+      <footer class="card-actions">
+        <button
+          type="button"
+          class="button"
+          data-action="contact"
+          data-seller="Fabricado por: Carpintería Ruiz"
+        >
+          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+            <path
+              d="M21 12a9 9 0 0 1-9 9H3l2-5a9 9 0 1 1 16-4ZM8 10h8M8 14h5"
+            /></svg
+          >Contactar vendedor
+        </button>
+      </footer>
+    </article>
+    <article
+      class="order-card order-card--delivered"
+      data-order-card
+      data-state="delivered"
+      id="pedido-8801"
+    >
+      <header class="order-meta">
+        <dl>
+          <dt>Pedido realizado</dt>
+          <dd><time datetime="2026-09-01">01 sept., 2026</time></dd>
+        </dl>
+        <dl>
+          <dt>Total pagado</dt>
+          <dd>S/ 650.00</dd>
+        </dl>
+        <dl>
+          <dt>N.º pedido</dt>
+          <dd>#ORD-8801</dd>
+        </dl>
+        <span class="badge badge--green"
+        ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="m5 12 4 4L20 5" /></svg
+        >Entregado</span
+        >
+      </header>
+      <div class="product-row">
+        <img
+          src="assets/mesa.svg"
+          alt="Ilustración de mesa de centro rústica circular"
+          width="64"
+          height="68"
+        />
+        <div>
+          <h3>Mesa de centro rústica circular</h3>
+          <p>Vendido por: Muebles M&M</p>
+          <p>Entregado el 10 de septiembre, 2026</p>
+        </div>
+      </div>
+      <footer class="card-actions">
+        <button
+          type="button"
+          class="button"
+          data-action="receipt"
+          data-order="8801"
+        >
+          Ver factura</button
+        ><button
+        type="button"
+        class="button button--primary"
+        data-action="review"
+        data-order="8801"
+      >
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+          <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z" /></svg
+        >Escribir reseña
+      </button>
+      </footer>
+    </article>
+  </div>
+  <p
+    id="filter-status"
+    class="visually-hidden"
+    role="status"
+    aria-live="polite"
+  ></p>
+  <p class="demo-note">
+    Vista de demostración · Datos de ejemplo. Los pagos y cambios de
+    cuenta requieren conexión con el servidor.
+  </p>
+</main>

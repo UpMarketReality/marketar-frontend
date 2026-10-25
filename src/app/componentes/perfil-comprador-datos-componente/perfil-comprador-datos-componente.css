@@ -1,0 +1,144 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+/* TARJETA DEL FORMULARIO. */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.panel {
+  padding: 30px;
+}
+
+/* SEPARACIÓN ENTRE DATOS Y SEGURIDAD. */
+.section-divider {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 28px 0;
+}
+
+/* CAMPOS Y DISTRIBUCIÓN DEL FORMULARIO. */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 20px;
+}
+
+.field {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  min-width: 0;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 550;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 11px 13px;
+  color: var(--ink);
+  background: white;
+  min-height: 44px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #71839d;
+  opacity: 1;
+  font-size: 13px;
+}
+
+input[readonly] {
+  background: var(--canvas);
+  color: var(--muted);
+}
+
+.input-wrap {
+  position: relative;
+}
+
+.input-wrap > .icon {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  width: 17px;
+  height: 17px;
+  color: #7d90ac;
+  pointer-events: none;
+}
+
+.input-wrap input {
+  padding-left: 39px;
+}
+
+.field small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.field small {
+  margin-top: -2px;
+}
+
+/* ACCIONES DEL FORMULARIO. */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-actions {
+  margin-top: 28px;
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 900px). */
+@media (max-width: 900px) {
+  /* TARJETA DEL FORMULARIO. */
+  .panel {
+    padding: 24px;
+  }
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 700px). */
+@media (max-width: 700px) {
+  /* TARJETA DEL FORMULARIO. */
+  .panel {
+    padding: 22px;
+  }
+}
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 430px). */
+@media (max-width: 430px) {
+  /* CAMPOS Y DISTRIBUCIÓN DEL FORMULARIO. */
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid > div[aria-hidden="true"] {
+    display: none;
+  }
+
+  /* ACCIONES DEL FORMULARIO. */
+  .form-actions .button {
+    width: 100%;
+  }
+}
