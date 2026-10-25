@@ -1,1 +1,102 @@
-<p>perfil-comprador-direccion-componente works!</p>
+<main id="contenido" tabindex="-1">
+  <noscript
+  ><p class="demo-note">
+    Activa JavaScript para usar filtros, validaciones y acciones de
+    demostración.
+  </p></noscript
+  >
+  <section class="panel" aria-labelledby="address-title">
+    <div class="section-title">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+        <path d="M1 5h13v12H1ZM14 9h5l4 5v3h-9" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="18" cy="18" r="3" />
+      </svg>
+      <h1 id="address-title">Dirección de envío</h1>
+    </div>
+    <form id="address-form">
+      <div class="form-grid">
+        <div class="field">
+          <label for="given-name">Nombre</label
+          ><input
+          id="given-name"
+          name="given-name"
+          type="text"
+          placeholder="Tu nombre"
+          required
+          autocomplete="given-name"
+          maxlength="60"
+        />
+        </div>
+        <div class="field">
+          <label for="family-name">Apellidos</label
+          ><input
+          id="family-name"
+          name="family-name"
+          type="text"
+          placeholder="Tus apellidos"
+          required
+          autocomplete="family-name"
+          maxlength="80"
+        />
+        </div>
+        <div class="field field--full">
+          <label for="street"
+          >Dirección (calle, número, departamento)</label
+          ><input
+          id="street"
+          name="street"
+          type="text"
+          placeholder="Ej.: Av. Javier Prado Este 123, Dpto. 402"
+          required
+          autocomplete="street-address"
+          maxlength="180"
+        />
+        </div>
+        <div class="field">
+          <label for="region">Departamento / Región</label
+          ><input
+          id="region"
+          name="region"
+          type="text"
+          value="Lima"
+          required
+          autocomplete="address-level1"
+          maxlength="60"
+        />
+        </div>
+        <div class="field">
+          <label for="district">Distrito</label
+          ><input
+          id="district"
+          name="district"
+          type="text"
+          placeholder="Ej.: Miraflores"
+          required
+          autocomplete="address-level3"
+          maxlength="60"
+        />
+        </div>
+        <div class="field field--full">
+          <label for="reference">Referencia de entrega (opcional)</label
+          ><input
+          id="reference"
+          name="reference"
+          type="text"
+          placeholder="Ej.: Frente al parque central, casa de rejas negras"
+          maxlength="200"
+        />
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="button button--primary" type="submit">
+          Guardar dirección
+        </button>
+      </div>
+    </form>
+  </section>
+  <p class="demo-note">
+    Vista de demostración · Datos de ejemplo. Los pagos y cambios de
+    cuenta requieren conexión con el servidor.
+  </p>
+</main>
