@@ -1,0 +1,226 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+/* TARJETA DE COTIZACIÓN. */
+.quote-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* ENCABEZADO DEL APARTADO. */
+.page-heading {
+  margin: 3px 0 30px;
+}
+
+.page-heading .subtitle {
+  margin: 8px 0 0;
+}
+
+/* ACCIONES DE LAS TARJETAS. */
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ESTRUCTURA DEL APARTADO. */
+.card-stack {
+  display: grid;
+  gap: 24px;
+}
+
+/* DATOS, FABRICANTE E IMPORTES. */
+dl {
+  margin: 0;
+}
+
+dt {
+  font-size: 10px;
+  color: #526887;
+  text-transform: uppercase;
+}
+
+dd {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ETIQUETAS DE ESTADO. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.badge .icon {
+  width: 13px;
+  height: 13px;
+  flex-basis: 13px;
+}
+
+.badge--blue {
+  background: #eef4ff;
+  color: #235bc2;
+}
+
+.badge--orange {
+  background: #fff5e8;
+  color: #9c5200;
+}
+
+.badge--green {
+  background: #eafbf0;
+  color: #137938;
+}
+
+.badge--teal {
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+}
+
+/* ACCIONES DE LAS TARJETAS. */
+.card-actions {
+  padding: 14px 18px;
+  border-top: 1px dashed var(--line);
+}
+
+/* TARJETA DE COTIZACIÓN. */
+.quote-meta {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--line);
+  background: #f8fafc;
+  font-size: 12px;
+}
+
+.quote-meta time {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.quote-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 22px 20px;
+}
+
+.quote-body > img {
+  width: 96px;
+  height: 96px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.quote-detail {
+  min-width: 0;
+  flex: 1;
+}
+
+.quote-title {
+  display: flex;
+  align-items: start;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.quote-detail p {
+  margin: 9px 0 14px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* DATOS, FABRICANTE E IMPORTES. */
+.quote-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+
+.quote-facts dt {
+  font-size: 9px;
+  margin-bottom: 4px;
+}
+
+.quote-facts dd {
+  font-weight: 500;
+}
+
+.price {
+  color: var(--brand-ink);
+  font-size: 16px;
+  font-weight: 700 !important;
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 900px). */
+@media (max-width: 900px) {
+  /* TARJETA DE COTIZACIÓN. */
+  .quote-body {
+    gap: 14px;
+  }
+
+  .quote-body > img {
+    width: 76px;
+    height: 76px;
+  }
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 700px). */
+@media (max-width: 700px) {
+  /* ENCABEZADO DEL APARTADO. */
+  .page-heading {
+    margin: 0 0 22px;
+  }
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 430px). */
+@media (max-width: 430px) {
+  /* ACCIONES DE LAS TARJETAS. */
+  .card-actions {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .card-actions .button {
+    flex: 1 1 auto;
+  }
+
+  /* TARJETA DE COTIZACIÓN. */
+  .quote-body {
+    padding: 16px 14px;
+    flex-direction: column;
+  }
+
+  .quote-body > img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .quote-meta {
+    padding-inline: 14px;
+  }
+
+  /* DATOS, FABRICANTE E IMPORTES. */
+  .quote-facts {
+    gap: 12px 18px;
+  }
+}
