@@ -1,0 +1,240 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+/* ENLACE PARA SALTAR AL CONTENIDO. */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 20;
+  padding: 12px;
+  background: white;
+  border: 2px solid var(--brand-ink);
+}
+
+.skip-link:focus {
+  top: 8px;
+}
+
+/* GRID: MENÚ LATERAL Y CONTENIDO. */
+.account-layout {
+  width: min(var(--content), calc(100% - 48px));
+  margin: 36px auto 80px;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  align-items: start;
+  gap: 32px;
+}
+
+main {
+  min-width: 0;
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 900px). */
+@media (max-width: 900px) {
+  /* GRID: MENÚ LATERAL Y CONTENIDO. */
+  .account-layout {
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 22px;
+  }
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 700px). */
+@media (max-width: 700px) {
+  /* GRID: MENÚ LATERAL Y CONTENIDO. */
+  .account-layout {
+    width: calc(100% - 32px);
+    margin: 22px auto 48px;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+
+
+
+:host {
+  display: block;
+  min-width: 0;
+}
+/* ESTRUCTURA DEL APARTADO. */
+.sidebar {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* CONTENEDOR ANGULAR DEL COMPONENTE. */
+:host {
+  position: sticky;
+  top: 24px;
+}
+
+/* AVATAR Y DATOS DEL COMPRADOR. */
+.user-summary {
+  text-align: center;
+  padding: 28px 18px 24px;
+  background: linear-gradient(#f9fbfc, white);
+}
+
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 4px solid white;
+  box-shadow: 0 2px 12px #20314920;
+}
+
+.avatar-wrap {
+  position: relative;
+  width: 70px;
+  margin: 0 auto 12px;
+}
+
+.avatar-edit {
+  position: absolute;
+  bottom: -2px;
+  right: -3px;
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border: 2px solid white;
+  border-radius: 50%;
+  color: white;
+  background: var(--ink);
+}
+
+.avatar-edit .icon {
+  width: 13px;
+  height: 13px;
+}
+
+.user-summary h2 {
+  margin: 8px 0 3px;
+  font-size: 17px;
+}
+
+.user-summary p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ENLACES Y CIERRE DE SESIÓN. */
+.account-nav {
+  display: grid;
+}
+
+.account-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 49px;
+  padding: 12px 22px;
+  color: #4e6483;
+  border-left: 3px solid transparent;
+  font-size: 13px;
+}
+
+.account-nav a:hover {
+  background: #f3faf9;
+}
+
+.account-nav a[aria-current="page"] {
+  border-left-color: var(--brand);
+  color: var(--brand-ink);
+  background: var(--brand-soft);
+}
+
+.logout {
+  border: 0;
+  border-top: 1px solid var(--line);
+  padding: 17px 22px;
+  width: 100%;
+  color: var(--danger);
+  background: white;
+  text-align: left;
+  font-size: 13px;
+}
+
+.logout:hover {
+  background: #fff6f6;
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 900px). */
+@media (max-width: 900px) {
+  /* ENLACES Y CIERRE DE SESIÓN. */
+  .account-nav a {
+    padding-inline: 14px;
+    font-size: 12px;
+  }
+}
+
+/* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 700px). */
+@media (max-width: 700px) {
+  /* CONTENEDOR ANGULAR DEL COMPONENTE. */
+  :host {
+    position: static;
+  }
+
+  /* AVATAR Y DATOS DEL COMPRADOR. */
+  .user-summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    padding: 16px 20px;
+  }
+
+  .avatar-wrap {
+    width: 52px;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .avatar {
+    width: 52px;
+    height: 52px;
+    border-width: 3px;
+  }
+
+  .user-summary h2 {
+    margin-top: 0;
+    font-size: 15px;
+  }
+
+  /* ENLACES Y CIERRE DE SESIÓN. */
+  .account-nav {
+    display: flex;
+    overflow-x: auto;
+    border-top: 1px solid var(--line);
+    scrollbar-width: thin;
+  }
+
+  .account-nav a {
+    flex: 0 0 auto;
+    padding: 12px 15px;
+    border-left: 0;
+    border-bottom: 3px solid transparent;
+    min-height: 47px;
+  }
+
+  .account-nav a[aria-current="page"] {
+    border-bottom-color: var(--brand);
+  }
+
+  .account-nav a .icon {
+    display: none;
+  }
+
+  .logout {
+    padding: 10px 20px;
+    min-height: 44px;
+  }
+}
+
