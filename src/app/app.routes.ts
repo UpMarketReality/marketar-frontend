@@ -13,6 +13,7 @@ import {
 } from './componentes/perfil-comprador-direccion-componente/perfil-comprador-direccion-componente';
 import {CompradorLayoutComponente} from './componentes/comprador-layout-componente/comprador-layout-componente';
 import { VendedorLayoutComponente } from './componentes/vendedor-layout-componente/vendedor-layout-componente';
+import { VendedorMisProductos } from './componentes/vendedor-mis-productos/vendedor-mis-productos';
 
 export const routes: Routes = [
   {
@@ -45,6 +46,16 @@ export const routes: Routes = [
   {
     path: 'perfil-vendedor',
     component: VendedorLayoutComponente,
-    children: [],
+    children: [
+      {
+        path: '',
+        redirectTo: 'productos',
+        pathMatch: 'full',
+      },
+      {
+        path: 'productos',
+        component: VendedorMisProductos,
+      }
+    ],
   }
 ];
