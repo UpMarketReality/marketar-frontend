@@ -12,6 +12,7 @@ import {
   PerfilCompradorDireccionComponente
 } from './componentes/perfil-comprador-direccion-componente/perfil-comprador-direccion-componente';
 import {CompradorLayoutComponente} from './componentes/comprador-layout-componente/comprador-layout-componente';
+import { VendedorLayoutComponente } from './componentes/vendedor-layout-componente/vendedor-layout-componente';
 
 export const routes: Routes = [
   {
@@ -41,4 +42,9 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'perfil-vendedor',
+    component: VendedorLayoutComponente,
+    children: [],
+  }
 ];
