@@ -1,1 +1,56 @@
-<p>vendedor-layout-componente works!</p>
+<!-- Top Barra Superior -->
+<div class="top_bar_mini">
+  <div class="top_bar_left">
+    <span>🇵🇪 Portal de Fabricantes y Vendedores MarketAR</span>
+  </div>
+  <div class="top_bar_right">
+    <a href="#" class="top_link">Soporte Técnico</a>
+    <a href="#" class="top_link">Centro de Ayuda</a>
+    <a href="#" class="top_link">Volver a la Tienda</a>
+  </div>
+</div>
+
+<!-- Cabecera Principal -->
+<header class="main_header">
+  <div class="logo_container">
+    <div class="logo_icon">📦</div>
+    <div class="logo_text">MARKET <span>AR</span></div>
+    <div class="logo_divider">| Portal Vendedores</div>
+  </div>
+  <div class="user_profile_container">
+    <button class="notification_btn">🔔</button>
+    <div class="user_avatar">DD</div>
+    <span class="user_name">DomusDecoSAC </span>
+  </div>
+</header>
+
+
+<div class="app_layout">
+  <!-- Barra Lateral -->
+  <aside class="side_bar">
+    <nav class="side_nav">
+      <a href="/Seccion Vendedor/VENDEDOR_MIS PRODUCTOS A.html" class="nav_item active_item">
+        <span class="nav_icon">🏷️</span> Mis productos
+      </a>
+      <a href="/Seccion Vendedor/VENDEDOR_RESUMEN.html" class="nav_item">
+        <span class="nav_icon">📊</span> Resumen
+      </a>
+      <a href="/Seccion Vendedor/VENDEDOR_GESTOR DE PEDIDOS.html" class="nav_item">
+        <span class="nav_icon">📦</span> Gestor de pedidos
+      </a>
+      <a href="/Seccion Vendedor/VENDEDOR_COTIZACIONES FINANZAS.html" class="nav_item">
+        <span class="nav_icon">📄</span> Cotizaciones y finanzas
+      </a>
+      <a href="/Seccion Vendedor/VENDEDOR_PERFIL.html" class="nav_item">
+        <span class="nav_icon">👤</span> Perfil
+      </a>
+    </nav>
+    <div class="logout_container">
+      <a href="#" class="logout_link">Cerrar sesión</a>
+    </div>
+  </aside>
+
+  <main id="contenido_main_vendedor">
+    <router-outlet></router-outlet>
+  </main>
+</div>
