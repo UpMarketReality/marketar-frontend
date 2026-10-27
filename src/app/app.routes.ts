@@ -53,8 +53,10 @@ export const routes: Routes = [
       {
         path: 'pagos',
         component: PagosComponente,
-      }
-    ]
+      },
+    ],
+  },
+  {
     path: 'perfil-vendedor',
     component: VendedorLayoutComponente,
     children: [
