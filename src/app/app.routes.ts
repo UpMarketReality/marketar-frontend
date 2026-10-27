@@ -12,6 +12,7 @@ import {
   PerfilCompradorDireccionComponente
 } from './componentes/perfil-comprador-direccion-componente/perfil-comprador-direccion-componente';
 import {CompradorLayoutComponente} from './componentes/comprador-layout-componente/comprador-layout-componente';
+import { PagosComponente } from './componentes/pagos-componente/pagos-componente';
 
 export const routes: Routes = [
   {
@@ -40,5 +41,21 @@ export const routes: Routes = [
         component: PerfilCompradorCotizacionesComponente,
       },
     ],
+  },
+  {
+    path: 'carrito',
+    component: PagosComponente, //cambiar por componente del carrito
+    children: [
+      {
+        path: 'pagos',
+        component: PagosComponente,
+        children: [
+          {
+            path: 'carrito',
+            redirectTo: 'carrito',
+          }
+        ]
+      }
+    ]
   },
 ];

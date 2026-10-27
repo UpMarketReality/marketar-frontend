@@ -1,0 +1,629 @@
+/* =========================================================
+   1. BASE DEL COMPONENTE Y VARIABLES
+   Las variables usan los colores globales si ya existen.
+   ========================================================= */
+
+:host {
+  --checkout-brand: var(--brand, #00bfb3);
+  --checkout-brand-dark: var(--brand-ink, #007e77);
+  --checkout-ink: var(--ink, #202c40);
+  --checkout-muted: var(--muted, #607491);
+  --checkout-line: var(--line, #e2e9f2);
+  --checkout-background: var(--canvas, #f7f9fb);
+
+  display: block;
+  min-width: 0;
+  min-height: 100vh;
+  padding: 24px 0 64px;
+  background: var(--checkout-background);
+  color: var(--checkout-ink);
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+input,
+button {
+  font: inherit;
+}
+
+svg {
+  display: block;
+}
+
+a,
+button,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(a, button, input):focus-visible {
+  outline: 3px solid var(--checkout-brand-dark);
+  outline-offset: 4px;
+}
+
+/* =========================================================
+   2. CONTENEDOR Y DISTRIBUCIÓN EN DOS COLUMNAS
+   ========================================================= */
+
+.checkout {
+  width: min(1100px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  color: var(--checkout-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--checkout-brand-dark);
+  text-decoration: underline;
+}
+
+.back-link span {
+  font-size: 20px;
+}
+
+.checkout-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr);
+  align-items: start;
+  gap: 32px;
+}
+
+.checkout-form {
+  display: grid;
+  min-width: 0;
+  gap: 22px;
+}
+
+/* =========================================================
+   3. TARJETAS Y TÍTULOS
+   ========================================================= */
+
+.checkout-card {
+  min-width: 0;
+  padding: 26px;
+  border: 1px solid var(--checkout-line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgb(26 46 72 / 5%);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 24px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.4px;
+}
+
+.section-icon {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--checkout-brand);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* =========================================================
+   4. FORMULARIOS DE CONTACTO Y DIRECCIÓN
+   ========================================================= */
+
+.fields-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 16px;
+}
+
+.field {
+  display: grid;
+  align-content: start;
+  min-width: 0;
+  gap: 7px;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.optional {
+  color: var(--checkout-muted);
+  font-weight: 400;
+}
+
+.field input {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid var(--checkout-line);
+  border-radius: 6px;
+  background: #f8fafc;
+  color: var(--checkout-ink);
+  font-size: 13px;
+}
+
+.field input::placeholder {
+  color: #738096;
+  opacity: 1;
+}
+
+.field input:focus {
+  border-color: var(--checkout-brand);
+  background: #fff;
+}
+
+.field input:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   5. OPCIONES DE PAGO
+   El radio seleccionado controla el contenido visible.
+   ========================================================= */
+
+.payment-methods,
+.card-fields {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.payment-methods {
+  display: grid;
+  gap: 12px;
+}
+
+.payment-option {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--checkout-line);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.method-radio {
+  position: absolute;
+  top: 18px;
+  left: 14px;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--checkout-brand-dark);
+  cursor: pointer;
+}
+
+.method-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 14px 14px 14px 42px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.method-radio:checked + .method-label {
+  background: #eafbf9;
+  color: var(--checkout-brand-dark);
+}
+
+.method-details {
+  display: none;
+  padding: 18px 14px;
+  border-top: 1px dashed var(--checkout-line);
+  background: #fff;
+}
+
+.method-radio:checked ~ .method-details {
+  display: block;
+}
+
+.method-note {
+  margin: 12px 0 0;
+  color: var(--checkout-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.method-details > .method-note {
+  margin-top: 0;
+}
+
+/* =========================================================
+   6. IDENTIFICADORES VISUALES DE LOS MÉTODOS DE PAGO
+   Son textos decorativos, no imágenes externas.
+   ========================================================= */
+
+.payment-brands {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 5px;
+}
+
+.brand-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  padding: 3px 4px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.brand-tag--visa {
+  background: #263781;
+}
+
+.brand-tag--mastercard {
+  background: #c53d40;
+}
+
+.brand-tag--amex {
+  background: #137ba3;
+}
+
+.brand-tag--yape {
+  background: #742187;
+}
+
+.brand-tag--plin {
+  background: #00d2e0;
+  color: #153c53;
+}
+
+.bank-icon {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--checkout-muted);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* =========================================================
+   7. RESUMEN Y PRODUCTOS
+   ========================================================= */
+
+.order-summary {
+  position: sticky;
+  top: 24px;
+}
+
+.summary-title {
+  margin: 0;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--checkout-line);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.summary-products {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--checkout-line);
+  list-style: none;
+}
+
+.summary-product {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.product-thumbnail {
+  width: 46px;
+  height: 52px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.product-info {
+  min-width: 0;
+}
+
+.product-info h3 {
+  margin: 0 0 5px;
+  font-size: 12px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.product-info p {
+  margin: 0;
+  color: var(--checkout-muted);
+  font-size: 10px;
+}
+
+.product-price {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   8. SUBTOTAL, ENVÍO Y TOTAL
+   ========================================================= */
+
+.summary-totals {
+  display: grid;
+  gap: 14px;
+  margin: 22px 0 26px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  color: var(--checkout-muted);
+  font-size: 13px;
+}
+
+.total-row dd {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.free-shipping {
+  color: var(--checkout-brand-dark);
+  font-weight: 600;
+}
+
+.total-row--final {
+  padding-top: 18px;
+  border-top: 1px solid var(--checkout-line);
+  color: var(--checkout-ink);
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.total-row--final dd {
+  color: var(--checkout-brand-dark);
+}
+
+/* =========================================================
+   9. BOTÓN DE PAGO Y MENSAJE INFORMATIVO
+   ========================================================= */
+
+.pay-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--checkout-brand);
+  color: #073c39;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgb(0 191 179 / 20%);
+}
+
+.pay-button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pay-button:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.pay-button:not(:disabled) {
+  cursor: pointer;
+}
+
+.pay-button:not(:disabled):hover {
+  background: #00afa4;
+}
+
+.payment-status {
+  margin: 10px 0 20px;
+  color: var(--checkout-muted);
+  font-size: 11px;
+  text-align: center;
+}
+
+.security-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--checkout-line);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.security-note > svg {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--checkout-brand);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.security-note h3 {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.security-note p {
+  margin: 0;
+  color: var(--checkout-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   10. ACCESIBILIDAD
+   ========================================================= */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* =========================================================
+   11. TABLETS Y PANTALLAS MEDIANAS
+   ========================================================= */
+
+@media (max-width: 960px) {
+  .checkout-layout {
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, 1fr);
+    gap: 20px;
+  }
+
+  .checkout-card {
+    padding: 20px;
+  }
+
+  .summary-product {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .product-thumbnail {
+    width: 40px;
+    height: 46px;
+  }
+
+  .product-price {
+    grid-column: 2;
+  }
+
+  .method-label {
+    flex-wrap: wrap;
+  }
+}
+
+/* =========================================================
+   12. CELULARES: UNA SOLA COLUMNA
+   ========================================================= */
+
+@media (max-width: 720px) {
+  :host {
+    padding-top: 20px;
+  }
+
+  .checkout {
+    width: calc(100% - 32px);
+  }
+
+  .back-link {
+    margin-bottom: 22px;
+  }
+
+  .checkout-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .order-summary {
+    position: static;
+  }
+
+  .summary-product {
+    grid-template-columns: 46px minmax(0, 1fr) auto;
+  }
+
+  .product-price {
+    grid-column: auto;
+  }
+
+  .product-thumbnail {
+    width: 46px;
+    height: 52px;
+  }
+}
+
+/* =========================================================
+   13. CELULARES PEQUEÑOS
+   ========================================================= */
+
+@media (max-width: 420px) {
+  .checkout-card {
+    padding: 18px;
+  }
+
+  .fields-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .section-title,
+  .summary-title {
+    font-size: 17px;
+  }
+
+  .method-label {
+    font-size: 12px;
+  }
+
+  .summary-product {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  .product-price {
+    grid-column: 2;
+  }
+
+  .total-row--final {
+    font-size: 17px;
+  }
+}
