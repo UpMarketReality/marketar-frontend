@@ -1,0 +1,29 @@
+<div class="app_layout">
+  <!-- Barra Lateral -->
+  <aside class="side_bar">
+    <nav class="side_nav">
+      <a routerLink = "/perfil-vendedor/productos" class="nav_item active_item">
+        <span class="nav_icon">🏷️</span> Mis productos
+      </a>
+      <a routerLink="/perfil-vendedor/resumen" class="nav_item">
+        <span class="nav_icon">📊</span> Resumen
+      </a>
+      <a routerLink="/perfil-vendedor/gestor pedidos" class="nav_item">
+        <span class="nav_icon">📦</span> Gestor de pedidos
+      </a>
+      <a  class="nav_item">
+        <span class="nav_icon">📄</span> Cotizaciones y finanzas
+      </a>
+      <a  class="nav_item">
+        <span class="nav_icon">👤</span> Perfil
+      </a>
+    </nav>
+    <div class="logout_container">
+      <a href="#" class="logout_link">Cerrar sesión</a>
+    </div>
+  </aside>
+
+  <main id="contenido_main_vendedor">
+    <router-outlet></router-outlet>
+  </main>
+</div>

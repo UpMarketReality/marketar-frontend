@@ -1,1 +1,62 @@
-<p>vendedor-mis-productos works!</p>
+<!-- Contenido: Catálogo Activo -->
+<main class="contenido_main_vendedor">
+  <section class="view_section">
+    <h1 class="page_title">Mis Productos</h1>
+
+    <div class="tabs_container">
+      <a href="/Seccion Vendedor/VENDEDOR_MIS PRODUCTOS A.html"><button class="tab_btn active_tab">🗂️ Catálogo Activo</button></a>
+      <a href="/Seccion Vendedor/VENDEDOR_MIS PRODUCTOS B.html" style="text-decoration:none;"><button class="tab_btn">Añadir Nuevo</button></a>
+    </div>
+
+    <div class="toolbar_container">
+      <div class="search_box">
+        <span>🔍</span>
+        <input type="text" placeholder="Buscar por nombre o ID..." class="search_input">
+      </div>
+      <div class="filter_actions">
+        <select class="dropdown_select"><option>Todos (12)</option></select>
+        <select class="dropdown_select"><option>Más recientes</option></select>
+      </div>
+    </div>
+
+    <div class="product_grid">
+      <div class="product_card">
+        <div class="product_image_wrapper">
+          <span class="status_pill pill_active">🟢 Activo</span>
+          <img src="placeholder.jpg" alt="Armario" class="product_img">
+        </div>
+        <div class="product_info">
+          <span class="product_category">ARMARIOS & CLOSETS</span>
+          <h4 class="product_name">Armario Bella y la Bestia de Melamina</h4>
+          <div class="product_meta">
+            <span class="product_price">S/ 2,400.00</span>
+            <span class="product_stock">Stock: 5</span>
+          </div>
+        </div>
+        <div class="product_actions">
+          <button class="card_btn">✏️ Editar</button>
+          <button class="card_btn">🗑️ Eliminar</button>
+        </div>
+      </div>
+
+      <div class="product_card">
+        <div class="product_image_wrapper">
+          <span class="status_pill pill_active">🟢 Activo</span>
+          <img src="placeholder.jpg" alt="Escritorio" class="product_img">
+        </div>
+        <div class="product_info">
+          <span class="product_category">ESCRITORIOS</span>
+          <h4 class="product_name">Escritorio Minimalista Roble Claro</h4>
+          <div class="product_meta">
+            <span class="product_price">S/ 1,450.00</span>
+            <span class="product_stock">Stock: 2</span>
+          </div>
+        </div>
+        <div class="product_actions">
+          <button class="card_btn">✏️ Editar</button>
+          <button class="card_btn">🗑️ Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

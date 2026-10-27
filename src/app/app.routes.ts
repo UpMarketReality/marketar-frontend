@@ -13,6 +13,10 @@ import {
 } from './componentes/perfil-comprador-direccion-componente/perfil-comprador-direccion-componente';
 import {CompradorLayoutComponente} from './componentes/comprador-layout-componente/comprador-layout-componente';
 import { PagosComponente } from './componentes/pagos-componente/pagos-componente';
+import { VendedorLayoutComponente } from './componentes/vendedor-layout-componente/vendedor-layout-componente';
+import { VendedorMisProductos } from './componentes/vendedor-mis-productos/vendedor-mis-productos';
+import { VendedorGestorDePedidos } from './componentes/vendedor-gestor-de-pedidos/vendedor-gestor-de-pedidos';
+import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen';
 
 export const routes: Routes = [
   {
@@ -51,5 +55,26 @@ export const routes: Routes = [
         component: PagosComponente,
       }
     ]
+    path: 'perfil-vendedor',
+    component: VendedorLayoutComponente,
+    children: [
+      {
+        path: '',
+        redirectTo: 'productos',
+        pathMatch: 'full',
+      },
+      {
+        path: 'productos',
+        component: VendedorMisProductos,
+      },
+      {
+        path: 'gestor pedidos',
+        component: VendedorGestorDePedidos,
+      },
+      {
+        path: 'resumen',
+        component: VendedorResumen,
+      },
+    ],
   },
 ];
