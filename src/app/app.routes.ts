@@ -49,12 +49,6 @@ export const routes: Routes = [
       {
         path: 'pagos',
         component: PagosComponente,
-        children: [
-          {
-            path: 'carrito',
-            redirectTo: 'carrito',
-          }
-        ]
       }
     ]
   },
