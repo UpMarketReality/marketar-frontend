@@ -1,0 +1,259 @@
+/* =========================================
+   VISTA 3: AÑADIR NUEVO PRODUCTO
+========================================= */
+
+/* Contenedor principal */
+.contenido_main_vendedor {
+  flex: 1;
+  min-width: 0;
+  padding: 32px 40px;
+}
+
+.view_section {
+  width: 100%;
+}
+
+/* Título de la página */
+.page_title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+/* Panel general del formulario */
+.panel_card {
+  background: var(--color_white);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  border: 1px solid var(--color_border);
+}
+
+/* Pestañas */
+.tabs_container {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--color_border);
+  margin-bottom: 24px;
+}
+
+.tab_btn {
+  background: none;
+  border: none;
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color_text_muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.active_tab {
+  color: var(--color_primary);
+  border-bottom: 2px solid var(--color_primary);
+}
+
+/* Título del formulario */
+.form_title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+/* Distribución en dos columnas */
+.form_layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.form_col_left,
+.form_col_right {
+  min-width: 0;
+}
+
+/* Grupos y etiquetas */
+.form_group {
+  margin-bottom: 20px;
+}
+
+.form_label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+/* Zonas para cargar archivos */
+.upload_zone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  background-color: #f8fafc;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.upload_zone:hover {
+  border-color: var(--color_primary);
+  background-color: #f0fdfa;
+}
+
+.upload_icon {
+  font-size: 32px;
+  color: var(--color_primary);
+  margin-bottom: 12px;
+}
+
+.upload_text {
+  font-size: 14px;
+  color: var(--color_text_main);
+}
+
+.upload_subtext {
+  font-size: 12px;
+  color: var(--color_text_muted);
+  margin-top: 4px;
+}
+
+.upload_link_text {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--color_text_muted);
+}
+
+.upload_link {
+  color: var(--color_primary);
+  text-decoration: none;
+}
+
+.upload_link:hover {
+  text-decoration: underline;
+}
+
+/* Inputs, listas desplegables y descripción */
+.form_input,
+.form_textarea {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color_border);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--color_text_main);
+  background-color: var(--color_white);
+}
+
+.form_input:focus,
+.form_textarea:focus {
+  outline: none;
+  border-color: var(--color_primary);
+  box-shadow: 0 0 0 2px rgba(0, 196, 181, 0.12);
+}
+
+.form_input {
+  min-height: 40px;
+}
+
+.form_textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* Dos campos en una fila */
+.form_row_2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Botones inferiores */
+.form_footer_actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color_border);
+}
+
+.btn_outline {
+  padding: 10px 20px;
+  border: 1px solid var(--color_border);
+  background: var(--color_white);
+  color: var(--color_text_main);
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn_outline:hover {
+  background: #f8fafc;
+}
+
+.btn_primary {
+  padding: 10px 20px;
+  border: none;
+  background: var(--color_primary);
+  color: var(--color_white);
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn_primary:hover {
+  opacity: 0.9;
+}
+
+/* =========================================
+   DISEÑO RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+  .contenido_main_vendedor {
+    padding: 24px;
+  }
+
+  .form_layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .contenido_main_vendedor {
+    padding: 16px;
+  }
+
+  .panel_card {
+    padding: 16px;
+  }
+
+  .form_row_2 {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .tabs_container {
+    gap: 16px;
+  }
+
+  .tab_btn {
+    font-size: 13px;
+  }
+
+  .upload_zone {
+    padding: 28px 16px;
+  }
+
+  .form_footer_actions {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .btn_outline,
+  .btn_primary {
+    width: 100%;
+  }
+}
