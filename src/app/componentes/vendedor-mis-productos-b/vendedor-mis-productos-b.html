@@ -1,1 +1,88 @@
-<p>vendedor-mis-productos-b works!</p>
+<main class="contenido_main_vendedor">
+  <section class="view_section">
+    <h1 class="page_title">Mis Productos</h1>
+
+    <div class="tabs_container">
+      <a routerLink ="/perfil-vendedor/productos" style="text-decoration:none;"><button class="tab_btn">🗂️ Catálogo Activo</button></a>
+      <a routerLink ="/perfil-vendedor/nuevo producto" style="text-decoration:none;"><button class="tab_btn active_tab">Añadir Nuevo</button></a>
+    </div>
+    <div class="form_panel panel_card">
+      <h3 class="form_title">Crear Nuevo Producto</h3>
+
+      <div class="form_layout">
+        <!-- Columna Izquierda (Archivos) -->
+        <div class="form_col_left">
+          <div class="form_group">
+            <label class="form_label">Imágenes del producto</label>
+            <div class="upload_zone">
+              <div class="upload_icon">🖼️</div>
+              <p class="upload_text"><strong>Arrastra las imágenes aquí</strong></p>
+              <p class="upload_subtext">Formatos JPG, PNG (Máx 5MB)</p>
+            </div>
+          </div>
+
+          <div class="form_group">
+            <label class="form_label">Modelo 3D / Realidad Aumentada</label>
+            <div class="upload_zone">
+              <div class="upload_icon">📦</div>
+              <p class="upload_text"><strong>Cargar archivo 3D</strong></p>
+              <p class="upload_subtext">Formatos .USDZ o .GLTF</p>
+              <p class="upload_link_text">o <a href="#" class="upload_link">usa tu celular para escanearlo</a></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha (Inputs) -->
+        <div class="form_col_right">
+          <div class="form_group">
+            <label class="form_label">Nombre del Mueble</label>
+            <input type="text" class="form_input" placeholder="Ej: Escritorio Minimalista de Roble">
+          </div>
+
+          <div class="form_row_2">
+            <div class="form_group">
+              <label class="form_label">Categoría Principal</label>
+              <select class="form_input"><option>Selecciona una categoría...</option></select>
+            </div>
+            <div class="form_group">
+              <label class="form_label">Material Principal</label>
+              <select class="form_input"><option>Seleccionar material...</option></select>
+            </div>
+          </div>
+
+          <div class="form_row_2">
+            <div class="form_group">
+              <label class="form_label">Precio de Venta (S/)</label>
+              <input type="text" class="form_input" placeholder="0.00">
+            </div>
+            <div class="form_group">
+              <label class="form_label">Stock Disponible</label>
+              <input type="number" class="form_input" placeholder="1">
+            </div>
+          </div>
+
+          <div class="form_group">
+            <label class="form_label">Descripción Detallada</label>
+            <textarea class="form_textarea" placeholder="Escribe las características, medidas exactas y detalles de fabricación..."></textarea>
+          </div>
+
+          <div class="form_row_2">
+            <div class="form_group">
+              <label class="form_label">Tiempo de Fabricación</label>
+              <select class="form_input"><option>Stock inmediato (1-3 días)</option></select>
+            </div>
+            <div class="form_group">
+              <label class="form_label">Requiere Armado</label>
+              <select class="form_input"><option>No, se entrega armado</option></select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form_footer_actions">
+        <button class="btn_outline">Cancelar</button>
+        <button class="btn_primary">✔️ Publicar Producto</button>
+      </div>
+    </div>
+  </section>
+</main>
