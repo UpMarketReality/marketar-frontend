@@ -1,1 +1,136 @@
-<p>vendedor-gestor-de-pedidos works!</p>
+<main class="contenido_main_vendedor">
+  <div class="header_with_action">
+    <h1 class="page_title">Gestor de Pedidos y Fabricación</h1>
+    <button class="btn_outline">📄 Exportar Reporte</button>
+  </div>
+
+  <div class="tabs_container sub_tabs">
+    <button class="tab_btn active_tab">Todos <span class="badge_count active_badge">12</span></button>
+    <button class="tab_btn">Pendientes <span class="badge_count">3</span></button>
+    <button class="tab_btn">En Fabricación <span class="badge_count">8</span></button>
+    <button class="tab_btn">Completados</button>
+  </div>
+
+  <div class="two_col_layout">
+    <!-- Columna Izquierda: Tabla -->
+    <div class="panel_card">
+      <div class="panel_header">
+        <h3 class="panel_title">🧾 Listado de Pedidos</h3>
+        <div class="search_box search_small">
+          <span>🔍</span>
+          <input type="text" placeholder="Buscar ID o Cliente..." class="search_input">
+        </div>
+      </div>
+      <table class="data_table table_hover">
+        <thead>
+        <tr>
+          <th>ID PEDIDO</th>
+          <th>CLIENTE</th>
+          <th>MUEBLE</th>
+          <th>ESTADO</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="active_row">
+          <td class="order_id">#MK-9021</td>
+          <td><div class="client_cell"><span class="avatar_mini bg_gray">JP</span> Juan Pérez</div></td>
+          <td>Armario Bella y la Bestia</td>
+          <td><span class="status_badge status_warning">En Fabricación</span></td>
+        </tr>
+        <tr>
+          <td class="order_id">#MK-8944</td>
+          <td><div class="client_cell"><span class="avatar_mini bg_blue">MC</span> María Castro</div></td>
+          <td>Escritorio Minimalista Roble</td>
+          <td><span class="status_badge status_success">Enviado</span></td>
+        </tr>
+        <tr>
+          <td class="order_id">#MK-8902</td>
+          <td><div class="client_cell"><span class="avatar_mini bg_gray">LT</span> Luis Torres</div></td>
+          <td>Juego de Comedor Abeto</td>
+          <td><span class="status_badge status_info">Aprobación Planos</span></td>
+        </tr>
+        <tr>
+          <td class="order_id">#MK-8871</td>
+          <td><div class="client_cell"><span class="avatar_mini bg_gray">AR</span> Ana Rojas</div></td>
+          <td>Estantería Modular Industrial</td>
+          <td><span class="status_badge status_success">Enviado</span></td>
+        </tr>
+        <tr>
+          <td class="order_id">#MK-8850</td>
+          <td><div class="client_cell"><span class="avatar_mini bg_gray">CM</span> Carlos Mendoza</div></td>
+          <td>Cómoda Moderna 4 Cajones</td>
+          <td><span class="status_badge status_warning">En Fabricación</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Columna Derecha: Detalle -->
+    <div class="panel_card detail_card">
+      <div class="detail_header">
+        <div>
+          <h2 class="detail_title">Pedido #MK-9021</h2>
+          <p class="detail_subtitle">Realizado el 05 Oct, 2026</p>
+        </div>
+        <span class="status_badge status_warning">En Fabricación</span>
+      </div>
+
+      <div class="product_brief">
+        <img src="placeholder.jpg" alt="Armario" class="brief_img">
+        <div class="brief_info">
+          <h4>Armario Bella y la Bestia de Melamina</h4>
+          <span class="brief_price">S/ 2,400.00</span>
+          <span class="brief_qty">Cant: 1 unidad</span>
+        </div>
+      </div>
+
+      <h4 class="section_subtitle">Progreso de Fabricación</h4>
+      <div class="stepper_container">
+        <div class="step_item completed">
+          <div class="step_dot"></div>
+          <div class="step_content">
+            <h5>Pedido y Pago Recibido</h5>
+            <p>05 Oct, 14:30 PM</p>
+          </div>
+        </div>
+        <div class="step_item completed">
+          <div class="step_dot"></div>
+          <div class="step_content">
+            <h5>Planos 3D Aprobados</h5>
+            <p>06 Oct, 09:15 AM</p>
+          </div>
+        </div>
+        <div class="step_item current">
+          <div class="step_dot"></div>
+          <div class="step_content">
+            <h5>En Fabricación (Corte y Armado)</h5>
+            <p>Progreso actual</p>
+          </div>
+        </div>
+        <div class="step_item pending">
+          <div class="step_dot"></div>
+          <div class="step_content">
+            <h5>Control de Calidad / Acabados</h5>
+            <p>Pendiente</p>
+          </div>
+        </div>
+        <div class="step_item pending last_step">
+          <div class="step_dot"></div>
+          <div class="step_content">
+            <h5>Listo para Envío</h5>
+            <p>Pendiente</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="client_info_box">
+        <p class="box_label">DATOS DEL CLIENTE</p>
+        <p>👤 Juan Pérez</p>
+        <p>📞 (+51) 987 123 456</p>
+        <p>📍 Av. Javier Prado Este 456, La Molina, Lima</p>
+      </div>
+
+      <button class="btn_primary btn_full">Marcar Control de Calidad ✔️</button>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,369 @@
+
+/* =========================================
+   GESTOR DE PEDIDOS Y FABRICACIÓN
+========================================= */
+
+/* Encabezado y distribución */
+.header_with_action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.btn_outline {
+  padding: 10px 20px;
+  border: 1px solid var(--color_border);
+  background: var(--color_white);
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.two_col_layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+/* Pestañas */
+.tabs_container {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--color_border);
+  margin-bottom: 24px;
+}
+
+.tab_btn {
+  background: none;
+  border: none;
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color_text_muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.active_tab {
+  color: var(--color_primary);
+  border-bottom: 2px solid var(--color_primary);
+}
+
+.sub_tabs {
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--color_border);
+  padding-bottom: 0;
+}
+
+.badge_count {
+  background: #e2e8f0;
+  color: var(--color_text_muted);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  margin-left: 6px;
+}
+
+.active_badge {
+  background: rgba(0, 196, 181, 0.15);
+  color: var(--color_primary);
+}
+
+/* Tarjetas y encabezados */
+.panel_card {
+  background: var(--color_white);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  padding: 24px;
+  border: 1px solid var(--color_border);
+}
+
+.panel_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.panel_title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Buscador */
+.search_box {
+  display: flex;
+  align-items: center;
+  background: var(--color_white);
+  border: 1px solid var(--color_border);
+  padding: 8px 12px;
+  border-radius: 6px;
+  width: 300px;
+}
+
+.search_input {
+  border: none;
+  outline: none;
+  margin-left: 8px;
+  width: 100%;
+}
+
+/* Tabla de pedidos */
+.data_table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data_table th {
+  text-align: left;
+  padding: 12px 0;
+  font-size: 12px;
+  color: var(--color_text_muted);
+  border-bottom: 1px solid var(--color_border);
+}
+
+.data_table td {
+  padding: 16px 0;
+  font-size: 14px;
+  border-bottom: 1px solid var(--color_border);
+}
+
+.table_hover tbody tr:hover,
+.active_row {
+  background-color: #f8fafc;
+}
+
+.order_id {
+  font-weight: 600;
+}
+
+.client_cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar_mini {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+}
+
+.bg_gray {
+  background-color: #94a3b8;
+}
+
+.bg_blue {
+  background-color: #3b82f6;
+}
+
+/* Estados de pedidos */
+.status_badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status_warning {
+  background: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.status_success {
+  background: #d1fae5;
+  color: #047857;
+  border: 1px solid #6ee7b7;
+}
+
+.status_info {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: 1px solid #93c5fd;
+}
+
+/* Detalle del pedido */
+.detail_card {
+  padding: 32px 24px;
+}
+
+.detail_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--color_border);
+  padding-bottom: 16px;
+}
+
+.detail_title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.detail_subtitle {
+  font-size: 13px;
+  color: var(--color_text_muted);
+  margin-top: 4px;
+}
+
+/* Resumen del producto */
+.product_brief {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px dashed var(--color_border);
+}
+
+.brief_img {
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #e2e8f0;
+}
+
+.brief_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.brief_info h4 {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.brief_price {
+  color: var(--color_primary);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.brief_qty {
+  font-size: 12px;
+  color: var(--color_text_muted);
+}
+
+/* Progreso de fabricación */
+.section_subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 24px 0 16px 0;
+}
+
+.stepper_container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 32px;
+}
+
+.step_item {
+  display: flex;
+  gap: 16px;
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.step_item:not(.last_step)::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 16px;
+  bottom: 0;
+  width: 2px;
+  background: var(--color_border);
+}
+
+.step_item.completed:not(.last_step)::before {
+  background: var(--color_primary);
+}
+
+.step_dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color_white);
+  border: 3px solid var(--color_border);
+  position: relative;
+  z-index: 2;
+  margin-top: 2px;
+}
+
+.step_item.completed .step_dot {
+  background: var(--color_primary);
+  border-color: var(--color_primary);
+}
+
+.step_item.current .step_dot {
+  border-color: var(--color_primary);
+}
+
+.step_content h5 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color_text_main);
+  margin-bottom: 4px;
+}
+
+.step_item.pending .step_content h5 {
+  color: var(--color_text_muted);
+}
+
+.step_content p {
+  font-size: 12px;
+  color: var(--color_text_muted);
+}
+
+.step_item.current .step_content h5 {
+  color: var(--color_primary);
+}
+
+/* Datos del cliente */
+.client_info_box {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 13px;
+  color: var(--color_text_main);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.box_label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color_text_muted);
+  margin-bottom: 4px;
+}
+
+/* Botón principal */
+.btn_primary {
+  padding: 10px 20px;
+  border: none;
+  background: var(--color_primary);
+  color: var(--color_white);
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn_primary:hover {
+  opacity: 0.9;
+}
+
+.btn_full {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
