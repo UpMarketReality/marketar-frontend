@@ -12,6 +12,17 @@
   --radius: 12px;
   --shadow: 0 4px 12px rgb(26 46 72 / 5%);
   --content: 1120px;
+  --color_primary: #00c4b5; /* Cyan de MarketAR */
+  --color_sidebar: #222f3e;
+  --color_bg_app: #f4f6f8;
+  --color_white: #ffffff;
+  --color_text_main: #1e293b;
+  --color_text_muted: #64748b;
+  --color_border: #e2e8f0;
+  --color_success: #10b981;
+  --color_warning: #f59e0b;
+  --color_info: #3b82f6;
+  --color_danger: #ef4444;
 }
 
 /* BASE Y UTILIDADES COMPARTIDAS. */
