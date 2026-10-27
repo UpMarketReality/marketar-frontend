@@ -12,6 +12,7 @@ import {
   PerfilCompradorDireccionComponente
 } from './componentes/perfil-comprador-direccion-componente/perfil-comprador-direccion-componente';
 import {CompradorLayoutComponente} from './componentes/comprador-layout-componente/comprador-layout-componente';
+import { PagosComponente } from './componentes/pagos-componente/pagos-componente';
 import { VendedorLayoutComponente } from './componentes/vendedor-layout-componente/vendedor-layout-componente';
 import { VendedorMisProductos } from './componentes/vendedor-mis-productos/vendedor-mis-productos';
 import { VendedorGestorDePedidos } from './componentes/vendedor-gestor-de-pedidos/vendedor-gestor-de-pedidos';
@@ -46,6 +47,14 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'carrito',
+    component: PagosComponente, //cambiar por componente del carrito
+    children: [
+      {
+        path: 'pagos',
+        component: PagosComponente,
+      }
+    ]
     path: 'perfil-vendedor',
     component: VendedorLayoutComponente,
     children: [

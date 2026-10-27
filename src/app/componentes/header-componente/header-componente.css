@@ -2,7 +2,130 @@
   display: block;
   min-width: 0;
 }
+/* =========================================================
+   BARRA SUPERIOR: mensaje nacional y enlaces informativos
+   ========================================================= */
 
+.topbar {
+  width: 100%;
+  border-bottom: 1px solid var(--line, #e2e9f2);
+  background: #fff;
+  color: var(--muted, #607491);
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.topbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  width: min(1560px, calc(100% - 48px));
+  min-height: 30px;
+  margin: 0 auto;
+}
+
+/* Mensaje ubicado a la izquierda. */
+
+.topbar__message {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+}
+
+/* Bandera de Perú dibujada con CSS, sin imágenes externas. */
+
+.peru-flag {
+  display: inline-block;
+  flex: 0 0 12px;
+  width: 12px;
+  height: 8px;
+
+  background: linear-gradient(
+    to right,
+    #d91023 0% 33.333%,
+    #fff 33.333% 66.666%,
+    #d91023 66.666% 100%
+  );
+}
+
+/* Enlaces ubicados a la derecha. */
+
+.topbar__nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+
+.topbar__nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+
+  color: inherit;
+  font-size: inherit;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.topbar__nav a:hover {
+  color: var(--brand-ink, #007e77);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.topbar__nav a:focus-visible {
+  outline: 2px solid var(--brand-ink, #007e77);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* =========================================================
+   TABLETS: reducir separación entre enlaces
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .topbar__inner {
+    width: calc(100% - 32px);
+    gap: 16px;
+  }
+
+  .topbar__nav {
+    gap: 6px 16px;
+  }
+}
+
+/* =========================================================
+   CELULARES: mensaje y navegación en filas separadas
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .topbar__inner {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 0;
+  }
+
+  .topbar__message {
+    justify-content: center;
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .topbar__nav {
+    justify-content: center;
+    gap: 0 16px;
+  }
+
+  .topbar__nav a {
+    min-height: 44px;
+    font-size: 11px;
+  }
+}
 /* BARRA SUPERIOR. */
 .topbar {
   border-bottom: 1px solid var(--line);

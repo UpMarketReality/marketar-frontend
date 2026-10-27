@@ -1,0 +1,400 @@
+<div class="checkout">
+  <a class="back-link" routerLink="">
+    <span aria-hidden="true">←</span>
+    Volver al carrito
+  </a>
+
+  <div class="checkout-layout">
+    <!-- COLUMNA IZQUIERDA: información del comprador -->
+    <form id="checkout-form" class="checkout-form">
+
+      <!-- 1. INFORMACIÓN DE CONTACTO -->
+      <section class="checkout-card" aria-labelledby="contact-title">
+        <h1 id="contact-title" class="section-title">
+          <svg class="section-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="m3 6 9 7 9-7" />
+          </svg>
+          Información de contacto
+        </h1>
+
+        <div class="fields-grid">
+          <div class="field">
+            <label for="checkout-email">Correo electrónico</label>
+            <input
+              id="checkout-email"
+              name="email"
+              type="email"
+              placeholder="cliente@ejemplo.com"
+              autocomplete="email"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="checkout-phone">Teléfono celular</label>
+            <input
+              id="checkout-phone"
+              name="phone"
+              type="tel"
+              placeholder="Ej.: 987654321"
+              autocomplete="tel-national"
+              inputmode="tel"
+              pattern="[0-9]{9}"
+              maxlength="9"
+              title="Ingresa un teléfono de 9 dígitos"
+              required
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. DIRECCIÓN DE ENVÍO -->
+      <section class="checkout-card" aria-labelledby="shipping-title">
+        <h2 id="shipping-title" class="section-title">
+          <svg class="section-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2 5h12v12H2M14 9h5l3 4v4h-8" />
+            <circle cx="6" cy="18" r="3" />
+            <circle cx="18" cy="18" r="3" />
+          </svg>
+          Dirección de envío
+        </h2>
+
+        <div class="fields-grid">
+          <div class="field">
+            <label for="shipping-name">Nombre</label>
+            <input
+              id="shipping-name"
+              name="givenName"
+              type="text"
+              placeholder="Tu nombre"
+              autocomplete="given-name"
+              maxlength="60"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="shipping-lastname">Apellidos</label>
+            <input
+              id="shipping-lastname"
+              name="familyName"
+              type="text"
+              placeholder="Tus apellidos"
+              autocomplete="family-name"
+              maxlength="100"
+              required
+            >
+          </div>
+
+          <div class="field field--full">
+            <label for="shipping-address">
+              Dirección (calle, número, departamento)
+            </label>
+            <input
+              id="shipping-address"
+              name="streetAddress"
+              type="text"
+              placeholder="Ej.: Av. Javier Prado Este 123, Dpto. 402"
+              autocomplete="street-address"
+              maxlength="180"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="shipping-region">Departamento / Región</label>
+            <input
+              id="shipping-region"
+              name="region"
+              type="text"
+              value="Lima"
+              autocomplete="address-level1"
+              maxlength="60"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="shipping-district">Distrito</label>
+            <input
+              id="shipping-district"
+              name="district"
+              type="text"
+              placeholder="Ej.: Miraflores"
+              autocomplete="address-level3"
+              maxlength="60"
+              required
+            >
+          </div>
+
+          <div class="field field--full">
+            <label for="shipping-reference">
+              Referencia de entrega
+              <span class="optional">(opcional)</span>
+            </label>
+            <input
+              id="shipping-reference"
+              name="reference"
+              type="text"
+              placeholder="Ej.: Frente al parque central, casa de rejas negras"
+              maxlength="200"
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. MÉTODO DE PAGO -->
+      <section class="checkout-card" aria-labelledby="payment-title">
+        <h2 id="payment-title" class="section-title">
+          <svg class="section-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M2 9h20M6 15h4" />
+          </svg>
+          Método de pago
+        </h2>
+
+        <fieldset class="payment-methods">
+          <legend class="visually-hidden">
+            Selecciona un método de pago
+          </legend>
+
+          <!-- TARJETA -->
+          <div class="payment-option">
+            <input
+              class="method-radio"
+              id="payment-card"
+              type="radio"
+              name="paymentMethod"
+              value="card"
+              checked
+            >
+
+            <label class="method-label" for="payment-card">
+              <span>Tarjeta de débito / crédito</span>
+
+              <span class="payment-brands" aria-label="Visa, Mastercard y American Express">
+                <span class="brand-tag brand-tag--visa">VISA</span>
+                <span class="brand-tag brand-tag--mastercard">MC</span>
+                <span class="brand-tag brand-tag--amex">AMEX</span>
+              </span>
+            </label>
+
+            <div class="method-details">
+              <!--
+                Solo presentación visual.
+                Sustituir estos campos por los controles de la pasarela.
+              -->
+              <fieldset class="card-fields" disabled>
+                <legend class="visually-hidden">
+                  Datos de la tarjeta: disponibles al integrar la pasarela
+                </legend>
+
+                <div class="fields-grid">
+                  <div class="field field--full">
+                    <label for="card-number">Número de tarjeta</label>
+                    <input
+                      id="card-number"
+                      type="text"
+                      placeholder="0000 0000 0000 0000"
+                    >
+                  </div>
+
+                  <div class="field">
+                    <label for="card-expiry">
+                      Fecha de vencimiento (MM/AA)
+                    </label>
+                    <input
+                      id="card-expiry"
+                      type="text"
+                      placeholder="MM/AA"
+                    >
+                  </div>
+
+                  <div class="field">
+                    <label for="card-cvc">Código de seguridad (CVC)</label>
+                    <input
+                      id="card-cvc"
+                      type="text"
+                      placeholder="123"
+                    >
+                  </div>
+
+                  <div class="field field--full">
+                    <label for="card-holder">Nombre del titular</label>
+                    <input
+                      id="card-holder"
+                      type="text"
+                      placeholder="Tal como aparece en la tarjeta"
+                    >
+                  </div>
+                </div>
+              </fieldset>
+
+              <p class="method-note">
+                Los campos se habilitarán al integrar la pasarela de pago.
+              </p>
+            </div>
+          </div>
+
+          <!-- BILLETERA DIGITAL -->
+          <div class="payment-option">
+            <input
+              class="method-radio"
+              id="payment-wallet"
+              type="radio"
+              name="paymentMethod"
+              value="wallet"
+            >
+
+            <label class="method-label" for="payment-wallet">
+              <span>Billetera digital (Yape / Plin)</span>
+
+              <span class="payment-brands" aria-hidden="true">
+                <span class="brand-tag brand-tag--yape">Yape</span>
+                <span class="brand-tag brand-tag--plin">Plin</span>
+              </span>
+            </label>
+
+            <div class="method-details">
+              <p class="method-note">
+                Aquí se mostrará el QR o las instrucciones que proporcione
+                el servicio de pago.
+              </p>
+            </div>
+          </div>
+
+          <!-- TRANSFERENCIA -->
+          <div class="payment-option">
+            <input
+              class="method-radio"
+              id="payment-transfer"
+              type="radio"
+              name="paymentMethod"
+              value="transfer"
+            >
+
+            <label class="method-label" for="payment-transfer">
+              <span>Transferencia bancaria</span>
+
+              <svg class="bank-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m3 8 9-5 9 5H3ZM5 20h14M3 22h18M6 10v8M12 10v8M18 10v8" />
+              </svg>
+            </label>
+
+            <div class="method-details">
+              <p class="method-note">
+                Aquí se mostrarán la cuenta bancaria y las instrucciones
+                de validación de la transferencia.
+              </p>
+            </div>
+          </div>
+        </fieldset>
+      </section>
+    </form>
+
+    <!-- COLUMNA DERECHA: resumen con datos de ejemplo -->
+    <aside class="checkout-card order-summary" aria-labelledby="summary-title">
+      <h2 id="summary-title" class="summary-title">
+        Resumen de tu compra
+      </h2>
+
+      <ul class="summary-products">
+        <li class="summary-product">
+          <!-- Ilustración local; puedes sustituirla por un img. -->
+          <svg
+            class="product-thumbnail"
+            viewBox="0 0 64 72"
+            role="img"
+            aria-label="Armario de madera clara"
+          >
+            <rect width="64" height="72" rx="6" fill="#eee8df" />
+            <rect x="14" y="6" width="36" height="59" rx="2" fill="#c8ae8a" />
+            <path d="M32 7v57" stroke="#9b805d" />
+            <path d="M28 30v9M36 30v9" stroke="#65584c" stroke-width="2" />
+          </svg>
+
+          <div class="product-info">
+            <h3>Armario Bella y la Bestia</h3>
+            <p>Cant.: 1 · DomusDecoSAC</p>
+          </div>
+
+          <span class="product-price">S/ 2,400</span>
+        </li>
+
+        <li class="summary-product">
+          <svg
+            class="product-thumbnail"
+            viewBox="0 0 64 72"
+            role="img"
+            aria-label="Armario de madera oscura"
+          >
+            <rect width="64" height="72" rx="6" fill="#ebe9e5" />
+            <rect x="14" y="6" width="36" height="59" rx="2" fill="#a5754e" />
+            <path d="M32 7v57" stroke="#714d32" />
+            <path d="M28 30v9M36 30v9" stroke="#45382c" stroke-width="2" />
+          </svg>
+
+          <div class="product-info">
+            <h3>Armario Bella y la Bestia</h3>
+            <p>Cant.: 1 · RobleReal</p>
+          </div>
+
+          <span class="product-price">S/ 1,900</span>
+        </li>
+      </ul>
+
+      <dl class="summary-totals">
+        <div class="total-row">
+          <dt>Subtotal (2 productos)</dt>
+          <dd>S/ 4,300.00</dd>
+        </div>
+
+        <div class="total-row">
+          <dt>Costo de envío a Lima</dt>
+          <dd class="free-shipping">Gratis</dd>
+        </div>
+
+        <div class="total-row total-row--final">
+          <dt>Total a pagar</dt>
+          <dd>S/ 4,300.00</dd>
+        </div>
+      </dl>
+
+      <!-- Quitar disabled únicamente cuando exista la integración del pago. -->
+      <button
+        class="pay-button"
+        type="submit"
+        form="checkout-form"
+        aria-describedby="payment-status"
+        disabled
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="5" y="10" width="14" height="11" rx="2" />
+          <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+        </svg>
+
+        Pagar S/ 4,300.00
+      </button>
+
+      <p id="payment-status" class="payment-status">
+        Vista previa · Pago aún no disponible.
+      </p>
+
+      <div class="security-note">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z" />
+          <path d="m8 12 3 3 5-6" />
+        </svg>
+
+        <div>
+          <h3>Pago protegido</h3>
+          <p>
+            Al habilitar el pago, los datos de tarjeta deberán procesarse
+            mediante la pasarela integrada.
+          </p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
