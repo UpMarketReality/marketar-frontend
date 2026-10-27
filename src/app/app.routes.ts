@@ -17,6 +17,7 @@ import { VendedorLayoutComponente } from './componentes/vendedor-layout-componen
 import { VendedorMisProductos } from './componentes/vendedor-mis-productos/vendedor-mis-productos';
 import { VendedorGestorDePedidos } from './componentes/vendedor-gestor-de-pedidos/vendedor-gestor-de-pedidos';
 import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen';
+import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/vendedor-mis-productos-b';
 
 export const routes: Routes = [
   {
@@ -70,7 +71,11 @@ export const routes: Routes = [
         component: VendedorMisProductos,
       },
       {
-        path: 'gestor pedidos',
+        path: 'nuevo-producto',
+        component: VendedorMisProductosB,
+      },
+      {
+        path: 'gestor-pedidos',
         component: VendedorGestorDePedidos,
       },
       {
