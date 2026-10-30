@@ -1,0 +1,97 @@
+/*Emcabezado y texto*/
+.catalogo {
+  max-width: 900px;
+  margin:  auto;
+  padding: 24px; 
+}
+
+.encabezado h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.encabezado p {
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 0;
+}
+
+/*Buscador y filtros*/
+
+.panel-de-filtros{
+    margin-top: 24px;
+    padding: 12px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05);
+}
+
+.barra-herramientas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.buscador {
+    display:flex;
+    align-items: center;
+    flex: 1;
+    gap:8px;
+    padding: 0 10px;
+    height: 38px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    box-sizing: border-box;
+}
+
+.icono-lupa {
+    color: #64748b;
+    font-size: 20px;
+}
+
+.buscador input {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 15.2px;
+    color:#334155;
+}
+
+.selector-orden {
+    height: 38px;
+    padding: 0 12px;
+    background-color: #ffffff;
+    border:1px solid #e2e8f0;
+    border-radius: 7px;
+    color:#334155;
+    font-size: 12px;
+    white-space: nowrap;
+    cursor:pointer;
+}
+
+.categorias{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 12px;
+}
+
+.categoria {
+    padding: 5px 11px;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    background-color: #f8fafc;
+    color: #475569;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.categoria.activa {
+    background-color: #ccfbf1;
+    border-color: #5eead4;
+    color:#0f766e;
+}

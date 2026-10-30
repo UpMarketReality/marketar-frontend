@@ -18,6 +18,7 @@ import { VendedorMisProductos } from './componentes/vendedor-mis-productos/vende
 import { VendedorGestorDePedidos } from './componentes/vendedor-gestor-de-pedidos/vendedor-gestor-de-pedidos';
 import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen';
 import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/vendedor-mis-productos-b';
+import { Catalogo } from './componentes/catalogo/catalogo';
 
 export const routes: Routes = [
   {
@@ -84,4 +85,7 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'catalogo', component: Catalogo,
+  }
 ];
