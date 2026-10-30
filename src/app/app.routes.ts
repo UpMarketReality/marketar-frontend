@@ -1,6 +1,6 @@
+
 import { Routes } from '@angular/router';
-import { App } from './app';
-import { TestBed } from '@angular/core/testing';
+import { InicioSesion } from './componentes/inicio-sesion/inicio-sesion';
 import { Carrito } from './componentes/carrito/carrito';
 import { EmpiezaACrear } from './componentes/empieza-acrear/empieza-acrear';
 import { Home1 } from './componentes/home1/home1';
@@ -17,11 +17,12 @@ import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen
 import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/vendedor-mis-productos-b';
 
 export const routes: Routes = [
-  { path: '', component: App },
+  { path: '', redirectTo: 'home1', pathMatch: 'full' },
+  { path: 'inicio-sesion', component: InicioSesion },
   { path: 'empieza-acrear', component: EmpiezaACrear },
   { path: 'home1', component: Home1 },
-  { 
-    path: 'carrito', 
+  {
+    path: 'carrito',
     component: Carrito,
     children: [
       {
