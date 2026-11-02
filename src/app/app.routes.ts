@@ -17,23 +17,17 @@ import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen
 import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/vendedor-mis-productos-b';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home1', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'inicio-sesion', component: InicioSesion },
   { path: 'empieza-acrear', component: EmpiezaACrear },
   { path: 'home', component: Home1 },
   {
     path: 'carrito',
-    children: [
-      {
-        path: '',
-        component: Carrito,
-        pathMatch: 'full',
-      },
-      {
-        path: 'pagos',
-        component: PagosComponente,
-      },
-    ],
+    component: Carrito,
+  },
+  {
+    path: 'pagos',
+    component: PagosComponente
   },
   {
     path: 'perfil-comprador',
