@@ -20,11 +20,15 @@ export const routes: Routes = [
   { path: '', redirectTo: 'home1', pathMatch: 'full' },
   { path: 'inicio-sesion', component: InicioSesion },
   { path: 'empieza-acrear', component: EmpiezaACrear },
-  { path: 'home1', component: Home1 },
+  { path: 'home', component: Home1 },
   {
     path: 'carrito',
-    component: Carrito,
     children: [
+      {
+        path: '',
+        component: Carrito,
+        pathMatch: 'full',
+      },
       {
         path: 'pagos',
         component: PagosComponente,

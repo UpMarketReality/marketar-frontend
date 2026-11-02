@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [],
+  imports: [RouterLink],
   selector: 'app-pagos-componente',
   styleUrl: './pagos-componente.css',
   templateUrl: './pagos-componente.html',
