@@ -15,6 +15,7 @@ import { VendedorMisProductos } from './componentes/vendedor-mis-productos/vende
 import { VendedorGestorDePedidos } from './componentes/vendedor-gestor-de-pedidos/vendedor-gestor-de-pedidos';
 import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen';
 import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/vendedor-mis-productos-b';
+import { authGuard } from './core/auth/auth-guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -24,14 +25,18 @@ export const routes: Routes = [
   {
     path: 'carrito',
     component: Carrito,
+    canActivate: [authGuard],
+    data: { role: 'COMPRADOR' },
   },
   {
     path: 'pagos',
-    component: PagosComponente
+    component: PagosComponente,
   },
   {
     path: 'perfil-comprador',
     component: CompradorLayoutComponente,
+    canActivate: [authGuard],
+    data: { role: 'COMPRADOR' },
     children: [
       {
         path: '',
