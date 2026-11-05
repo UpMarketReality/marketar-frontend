@@ -1,29 +1,64 @@
+
 <div class="app_layout">
-  <!-- Barra Lateral -->
+
+  <!-- BARRA LATERAL DEL VENDEDOR -->
   <aside class="side_bar">
+
     <nav class="side_nav">
-      <a routerLink = "/perfil-vendedor/productos" class="nav_item active_item">
-        <span class="nav_icon">🏷️</span> Mis productos
+
+      <!-- MIS PRODUCTOS -->
+      <a routerLink="/perfil-vendedor/productos"
+         routerLinkActive="active_item"
+         class="nav_item">
+        <span class="nav_icon">🏷️</span>
+        Mis productos
       </a>
-      <a routerLink="/perfil-vendedor/resumen" class="nav_item">
-        <span class="nav_icon">📊</span> Resumen
+
+      <!-- RESUMEN GENERAL -->
+      <a routerLink="/perfil-vendedor/resumen"
+         routerLinkActive="active_item"
+         class="nav_item">
+        <span class="nav_icon">📊</span>
+        Resumen
       </a>
-      <a routerLink="/perfil-vendedor/gestor-pedidos" class="nav_item">
-        <span class="nav_icon">📦</span> Gestor de pedidos
+
+      <!-- GESTOR DE PEDIDOS -->
+      <a routerLink="/perfil-vendedor/gestor-pedidos"
+         routerLinkActive="active_item"
+         class="nav_item">
+        <span class="nav_icon">📦</span>
+        Gestor de pedidos
       </a>
-      <a  class="nav_item">
-        <span class="nav_icon">📄</span> Cotizaciones y finanzas
+
+      <!-- COTIZACIONES Y FINANZAS -->
+      <!-- Pendiente de integrar su componente -->
+      <a class="nav_item">
+        <span class="nav_icon">📄</span>
+        Cotizaciones y finanzas
       </a>
-      <a  class="nav_item">
-        <span class="nav_icon">👤</span> Perfil
+
+      <!-- MAR-13: PERFIL DEL VENDEDOR -->
+      <a routerLink="/perfil-vendedor/perfil"
+         routerLinkActive="active_item"
+         class="nav_item">
+        <span class="nav_icon">👤</span>
+        Perfil
       </a>
+
     </nav>
+
+    <!-- CERRAR SESION -->
     <div class="logout_container">
-      <a href="#" class="logout_link">Cerrar sesión</a>
+      <a href="#" class="logout_link">
+        Cerrar sesión
+      </a>
     </div>
+
   </aside>
 
+  <!-- CONTENIDO PRINCIPAL -->
   <main id="contenido_main_vendedor">
     <router-outlet></router-outlet>
   </main>
+
 </div>
