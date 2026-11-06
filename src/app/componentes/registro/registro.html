@@ -1,0 +1,516 @@
+
+<section class="registro-page">
+  <div class="registro-container">
+
+    <!-- IMAGEN IZQUIERDA -->
+    <div class="registro-imagen">
+      <div class="registro-imagen-contenido">
+        <h2>
+          Guarda tus diseños 3D y pruébalos
+          en tu sala en cualquier momento
+        </h2>
+        <p>
+          Accede a tu catálogo personalizado y conecta
+          con los mejores artesanos y fabricantes locales.
+        </p>
+      </div>
+    </div>
+
+    <!-- PANEL DERECHO -->
+    <div class="registro-panel">
+
+      <!-- PESTAÑAS -->
+      <div class="registro-tabs">
+        <a routerLink="/inicio-sesion"
+           class="registro-tab">
+          Iniciar Sesión
+        </a>
+
+        <span class="registro-tab activo"
+              aria-current="page">
+          Registrarse
+        </span>
+      </div>
+
+      <h1>Crea tu cuenta</h1>
+
+      <p class="registro-subtitulo">
+        Únete a MarketAR como cliente o empieza
+        a ofrecer tus productos como vendedor.
+      </p>
+
+      <p class="registro-pregunta">
+        ¿Qué uso le darás a tu cuenta?
+      </p>
+
+      <!-- TIPOS DE CUENTA -->
+      <div class="registro-tipos">
+
+        <button type="button"
+                class="registro-tipo"
+                [class.seleccionado]="tipoCuenta === 'comprador'"
+                [attr.aria-pressed]="tipoCuenta === 'comprador'"
+                (click)="cambiarTipo('comprador')">
+
+          <span class="tipo-icono">
+            <svg viewBox="0 0 24 24"
+                 fill="currentColor"
+                 aria-hidden="true">
+              <circle cx="12" cy="7" r="4" />
+              <path d="M4 21v-2a8 8 0 0 1 16 0v2z" />
+            </svg>
+          </span>
+
+          Para mí
+        </button>
+
+        <button type="button"
+                class="registro-tipo"
+                [class.seleccionado]="tipoCuenta === 'vendedor'"
+                [attr.aria-pressed]="tipoCuenta === 'vendedor'"
+                (click)="cambiarTipo('vendedor')">
+
+          <span class="tipo-icono">
+            <svg viewBox="0 0 24 24"
+                 fill="currentColor"
+                 aria-hidden="true">
+              <path d="M3 9h18l-2-5H5L3 9z" />
+              <path d="M5 11v9h14v-9h-2v4H7v-4H5z" />
+            </svg>
+          </span>
+
+          Para mi empresa
+        </button>
+
+      </div>
+
+      <!-- =====================================
+           REGISTRO DE COMPRADOR
+           ===================================== -->
+      @if (tipoCuenta === 'comprador') {
+
+      <form class="registro-formulario"
+            (ngSubmit)="registrarComprador()"
+            novalidate>
+
+        <!-- NOMBRE -->
+        <div class="registro-grupo">
+          <label for="nombre">
+            Nombre completo
+          </label>
+
+          <div class="registro-input-icono">
+            <svg viewBox="0 0 24 24"
+                 aria-hidden="true">
+              <rect x="4" y="3" width="16"
+                    height="18" rx="2" />
+              <circle cx="12" cy="9" r="2" />
+              <path d="M8 16c0-2 8-2 8 0M8 5h8" />
+            </svg>
+
+            <input id="nombre"
+                   name="nombre"
+                   type="text"
+                   [(ngModel)]="comprador.nombre"
+                   placeholder="Tu nombre y apellido"
+                   autocomplete="name"
+                   [class.input-error]="intentoRegistro && !comprador.nombre.trim()"
+                   [attr.aria-invalid]="intentoRegistro && !comprador.nombre.trim()"
+                   required>
+          </div>
+
+          @if (intentoRegistro && !comprador.nombre.trim()) {
+          <small class="registro-error">
+            El nombre completo es obligatorio.
+          </small>
+          }
+        </div>
+
+        <!-- CORREO -->
+        <div class="registro-grupo">
+          <label for="correo">
+            Correo electrónico
+          </label>
+
+          <div class="registro-input-icono">
+            <svg viewBox="0 0 24 24"
+                 aria-hidden="true">
+              <rect x="3" y="5" width="18"
+                    height="14" rx="2" />
+              <path d="m3 7 9 6 9-6" />
+            </svg>
+
+            <input id="correo"
+                   name="correo"
+                   type="email"
+                   [(ngModel)]="comprador.correo"
+                   placeholder="nombre@ejemplo.com"
+                   autocomplete="email"
+                   [class.input-error]="intentoRegistro && !correoValido(comprador.correo)"
+                   [attr.aria-invalid]="intentoRegistro && !correoValido(comprador.correo)"
+                   required>
+          </div>
+
+          @if (intentoRegistro && !correoValido(comprador.correo)) {
+          <small class="registro-error">
+            Ingresa un correo electrónico válido.
+          </small>
+          }
+        </div>
+
+        <!-- CONTRASEÑAS -->
+        <div class="registro-fila">
+
+          <div class="registro-grupo">
+            <label for="clave">
+              Contraseña
+            </label>
+
+            <div class="registro-input-icono">
+              <svg viewBox="0 0 24 24"
+                   aria-hidden="true">
+                <rect x="5" y="10" width="14"
+                      height="11" rx="2" />
+                <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+              </svg>
+
+              <input id="clave"
+                     name="clave"
+                     type="password"
+                     [(ngModel)]="comprador.clave"
+                     placeholder="Crea una clave"
+                     autocomplete="new-password"
+                     minlength="8"
+                     maxlength="64"
+                     [class.input-error]="intentoRegistro && !claveValida(comprador.clave)"
+                     [attr.aria-invalid]="intentoRegistro && !claveValida(comprador.clave)"
+                     required>
+            </div>
+
+            @if (intentoRegistro && !claveValida(comprador.clave)) {
+            <small class="registro-error">
+              La clave debe tener entre 8 y 64 caracteres.
+            </small>
+            }
+          </div>
+
+          <div class="registro-grupo">
+            <label for="confirmarClave">
+              Confirmar clave
+            </label>
+
+            <div class="registro-input-icono">
+              <svg viewBox="0 0 24 24"
+                   aria-hidden="true">
+                <rect x="5" y="10" width="14"
+                      height="11" rx="2" />
+                <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+              </svg>
+
+              <input id="confirmarClave"
+                     name="confirmarClave"
+                     type="password"
+                     [(ngModel)]="comprador.confirmarClave"
+                     placeholder="Repite la clave"
+                     autocomplete="new-password"
+                     [class.input-error]="intentoRegistro && (!comprador.confirmarClave || !clavesCoinciden(comprador.clave, comprador.confirmarClave))"
+                     [attr.aria-invalid]="intentoRegistro && (!comprador.confirmarClave || !clavesCoinciden(comprador.clave, comprador.confirmarClave))"
+                     required>
+            </div>
+
+            @if (intentoRegistro && !comprador.confirmarClave) {
+            <small class="registro-error">
+              Confirma tu contraseña.
+            </small>
+            } @else if (intentoRegistro && !clavesCoinciden(comprador.clave, comprador.confirmarClave)) {
+            <small class="registro-error">
+              Las contraseñas no coinciden.
+            </small>
+            }
+          </div>
+
+        </div>
+
+        <!-- BOTÓN COMPRADOR -->
+        <button type="submit"
+                class="registro-boton">
+          Registrarme gratis
+        </button>
+
+      </form>
+
+      } @else {
+
+      <!-- =====================================
+           REGISTRO DE EMPRESA
+           ===================================== -->
+
+      <form class="registro-formulario"
+            (ngSubmit)="registrarVendedor()"
+            novalidate>
+
+        <!-- RUC Y NOMBRE EMPRESA EN UNA FILA -->
+        <div class="registro-fila registro-fila-empresa">
+
+          <div class="registro-grupo">
+            <label for="ruc">
+              RUC de la empresa
+            </label>
+
+            <div class="registro-input-icono">
+              <svg viewBox="0 0 24 24"
+                   aria-hidden="true">
+                <rect x="4" y="3"
+                      width="16" height="18" rx="2" />
+                <path d="M8 7h8M8 11h8M8 15h5" />
+              </svg>
+
+              <input id="ruc"
+                     name="ruc"
+                     type="text"
+                     [(ngModel)]="vendedor.ruc"
+                     placeholder="Ej: 20123456789"
+                     inputmode="numeric"
+                     pattern="[0-9]{11}"
+                     maxlength="11"
+                     [class.input-error]="intentoRegistro && !rucValido(vendedor.ruc)"
+                     [attr.aria-invalid]="intentoRegistro && !rucValido(vendedor.ruc)"
+                     required>
+            </div>
+
+            @if (intentoRegistro && !rucValido(vendedor.ruc)) {
+            <small class="registro-error">
+              Ingresa un RUC de 11 dígitos.
+            </small>
+            }
+          </div>
+
+          <div class="registro-grupo">
+            <label for="empresa">
+              Nombre del Taller / Empresa
+            </label>
+
+            <div class="registro-input-icono">
+              <svg viewBox="0 0 24 24"
+                   aria-hidden="true">
+                <path d="M3 10h18l-2-6H5z" />
+                <path d="M5 10v10h14V10M9 20v-6h6v6" />
+              </svg>
+
+              <input id="empresa"
+                     name="empresa"
+                     type="text"
+                     [(ngModel)]="vendedor.empresa"
+                     placeholder="Ej: DecoSAC"
+                     [class.input-error]="intentoRegistro && !vendedor.empresa.trim()"
+                     [attr.aria-invalid]="intentoRegistro && !vendedor.empresa.trim()"
+                     required>
+            </div>
+
+            @if (intentoRegistro && !vendedor.empresa.trim()) {
+            <small class="registro-error">
+              Ingresa el nombre de tu empresa.
+            </small>
+            }
+          </div>
+
+        </div>
+
+        <!-- REPRESENTANTE -->
+        <div class="registro-grupo">
+          <label for="representante">
+            Nombre del Representante
+          </label>
+
+          <div class="registro-input-icono">
+            <svg viewBox="0 0 24 24"
+                 aria-hidden="true">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
+            </svg>
+
+            <input id="representante"
+                   name="representante"
+                   type="text"
+                   [(ngModel)]="vendedor.representante"
+                   placeholder="Nombre completo"
+                   autocomplete="name"
+                   [class.input-error]="intentoRegistro && !vendedor.representante.trim()"
+                   [attr.aria-invalid]="intentoRegistro && !vendedor.representante.trim()"
+                   required>
+          </div>
+
+          @if (intentoRegistro && !vendedor.representante.trim()) {
+          <small class="registro-error">
+            El nombre del representante es obligatorio.
+          </small>
+          }
+        </div>
+
+        <!-- CORREO DE EMPRESA -->
+        <div class="registro-grupo">
+          <label for="correoEmpresa">
+            Correo electrónico
+          </label>
+
+          <div class="registro-input-icono">
+            <svg viewBox="0 0 24 24"
+                 aria-hidden="true">
+              <rect x="3" y="5"
+                    width="18" height="14" rx="2" />
+              <path d="m3 7 9 6 9-6" />
+            </svg>
+
+            <input id="correoEmpresa"
+                   name="correoEmpresa"
+                   type="email"
+                   [(ngModel)]="vendedor.correo"
+                   placeholder="nombre@ejemplo.com"
+                   autocomplete="email"
+                   [class.input-error]="intentoRegistro && !correoValido(vendedor.correo)"
+                   [attr.aria-invalid]="intentoRegistro && !correoValido(vendedor.correo)"
+                   required>
+          </div>
+
+          @if (intentoRegistro && !correoValido(vendedor.correo)) {
+          <small class="registro-error">
+            Ingresa un correo electrónico válido.
+          </small>
+          }
+        </div>
+
+        <!-- CONTRASEÑAS DE EMPRESA -->
+        <div class="registro-fila">
+
+          <div class="registro-grupo">
+            <label for="claveEmpresa">
+              Contraseña
+            </label>
+
+            <div class="registro-input-icono">
+              <svg viewBox="0 0 24 24"
+                   aria-hidden="true">
+                <rect x="5" y="10"
+                      width="14" height="11" rx="2" />
+                <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+              </svg>
+
+              <input id="claveEmpresa"
+                     name="claveEmpresa"
+                     type="password"
+                     [(ngModel)]="vendedor.clave"
+                     placeholder="Crea una clave"
+                     autocomplete="new-password"
+                     minlength="8"
+                     maxlength="64"
+                     [class.input-error]="intentoRegistro && !claveValida(vendedor.clave)"
+                     [attr.aria-invalid]="intentoRegistro && !claveValida(vendedor.clave)"
+                     required>
+            </div>
+
+            @if (intentoRegistro && !claveValida(vendedor.clave)) {
+            <small class="registro-error">
+              La clave debe tener entre 8 y 64 caracteres.
+            </small>
+            }
+          </div>
+
+          <div class="registro-grupo">
+            <label for="confirmarEmpresa">
+              Confirmar clave
+            </label>
+
+            <div class="registro-input-icono">
+              <svg viewBox="0 0 24 24"
+                   aria-hidden="true">
+                <rect x="5" y="10"
+                      width="14" height="11" rx="2" />
+                <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+              </svg>
+
+              <input id="confirmarEmpresa"
+                     name="confirmarEmpresa"
+                     type="password"
+                     [(ngModel)]="vendedor.confirmarClave"
+                     placeholder="Repite la clave"
+                     autocomplete="new-password"
+                     [class.input-error]="intentoRegistro && (!vendedor.confirmarClave || !clavesCoinciden(vendedor.clave, vendedor.confirmarClave))"
+                     [attr.aria-invalid]="intentoRegistro && (!vendedor.confirmarClave || !clavesCoinciden(vendedor.clave, vendedor.confirmarClave))"
+                     required>
+            </div>
+
+            @if (intentoRegistro && !vendedor.confirmarClave) {
+            <small class="registro-error">
+              Confirma tu contraseña.
+            </small>
+            } @else if (intentoRegistro && !clavesCoinciden(vendedor.clave, vendedor.confirmarClave)) {
+            <small class="registro-error">
+              Las contraseñas no coinciden.
+            </small>
+            }
+          </div>
+
+        </div>
+
+        <!-- BOTÓN EMPRESA -->
+        <button type="submit"
+                class="registro-boton">
+          Registrar mi empresa
+        </button>
+
+        <!-- TÉRMINOS Y PRIVACIDAD -->
+        <p class="registro-legal">
+          Al continuar, aceptas nuestros
+          <button type="button"
+                  class="registro-enlace-legal"
+                  (click)="mostrarInformacionLegal()">
+            Términos de servicio
+          </button>
+          y
+          <button type="button"
+                  class="registro-enlace-legal"
+                  (click)="mostrarInformacionLegal()">
+            Política de privacidad
+          </button>.
+        </p>
+
+        @if (mensajeLegal) {
+        <p class="registro-aviso-legal" role="status">
+          {{ mensajeLegal }}
+        </p>
+        }
+
+      </form>
+
+      }
+
+      <!-- MENSAJE DEL FORMULARIO -->
+      @if (mensajeEstado) {
+      <div class="registro-mensaje"
+           [class.registro-mensaje-error]="intentoRegistro && (
+               tipoCuenta === 'comprador'
+                 ? !comprador.nombre.trim() ||
+                   !correoValido(comprador.correo) ||
+                   !claveValida(comprador.clave) ||
+                   !comprador.confirmarClave ||
+                   !clavesCoinciden(comprador.clave, comprador.confirmarClave)
+                 : !rucValido(vendedor.ruc) ||
+                   !vendedor.empresa.trim() ||
+                   !vendedor.representante.trim() ||
+                   !correoValido(vendedor.correo) ||
+                   !claveValida(vendedor.clave) ||
+                   !vendedor.confirmarClave ||
+                   !clavesCoinciden(vendedor.clave, vendedor.confirmarClave)
+             )"
+           role="status"
+           aria-live="polite">
+        {{ mensajeEstado }}
+      </div>
+      }
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER COMPARTIDO -->
+<app-footer></app-footer>
