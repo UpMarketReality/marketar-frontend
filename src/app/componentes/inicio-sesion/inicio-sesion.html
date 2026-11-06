@@ -1,67 +1,187 @@
 
 <section class="login-page">
   <div class="login-container">
-    <div class="login-brand">
-      <div class="login-logo">
-        <svg xmlns="http://www.w3.org/2000/svg"
-             width="28"
-             height="28"
-             viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="1.8"
-             stroke-linecap="round"
-             stroke-linejoin="round"
-             aria-hidden="true">
-          <path d="M12 2 21 7 21 17 12 22 3 17 3 7Z" />
-          <path d="m3 7 9 5 9-5" />
-          <path d="M12 12v10" />
-        </svg>
+
+    <!-- IMAGEN IZQUIERDA -->
+    <div class="login-imagen">
+      <div class="login-imagen-contenido">
+        <h2>Bienvenido de nuevo a MarketAR</h2>
+        <p>
+          Accede a tu perfil para continuar creando,
+          cotizando y comprando muebles únicos a tu medida.
+        </p>
       </div>
-      <h1>MARKET <span>AR</span></h1>
-      <p>Bienvenido de nuevo a MarketAR</p>
     </div>
 
-    <div class="login-card">
-      <h2>Iniciar sesión</h2>
-      <p class="login-subtitle">Ingresa tus datos para acceder a tu cuenta</p>
+    <!-- PANEL DERECHO -->
+    <div class="login-panel">
 
-      <form>
-        <div class="form-group">
-          <label for="login-email">Correo electrónico</label>
-          <input type="email"
-                 id="login-email"
-                 name="email"
-                 placeholder="Ingresa tu correo electrónico"
-                 autocomplete="email"
-                 required />
-        </div>
+      <!-- PESTAÑAS -->
+      <nav class="login-tabs" aria-label="Acceso a MarketAR">
 
-        <div class="form-group">
-          <label for="login-password">Contraseña</label>
-          <input type="password"
-                 id="login-password"
-                 name="password"
-                 placeholder="Ingresa tu contraseña"
-                 autocomplete="current-password"
-                 required />
-        </div>
+        <span class="login-tab activo" aria-current="page">
+          Iniciar Sesión
+        </span>
 
-        <div class="login-options">
-          <label class="remember-me">
-            <input type="checkbox" name="remember" />
-            Recordarme
+        <a routerLink="/registro" class="login-tab">
+          Registrarse
+        </a>
+
+      </nav>
+
+      <h1>Iniciar Sesión</h1>
+
+      <p class="login-subtitle">
+        Ingresa tus credenciales para acceder a tu cuenta.
+      </p>
+
+      <!-- FORMULARIO -->
+      <form class="login-formulario"
+            #loginForm="ngForm"
+            (ngSubmit)="iniciarSesion(loginForm)"
+            novalidate>
+
+        <!-- CORREO ELECTRONICO -->
+        <div class="login-grupo">
+
+          <label for="login-email">
+            Correo electrónico
           </label>
-          <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+
+          <div class="login-input-con-icono">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 aria-hidden="true">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+            </svg>
+
+            <input type="email"
+                   id="login-email"
+                   name="email"
+                   placeholder="juan.perez@ejemplo.com"
+                   autocomplete="email"
+                   [(ngModel)]="email"
+                   #emailControl="ngModel"
+                   (ngModelChange)="limpiarMensaje()"
+                   [attr.aria-invalid]="
+                (emailControl.touched || enviado) &&
+                emailControl.invalid
+              "
+                   aria-describedby="login-email-error"
+                   required
+                   email>
+
+          </div>
+
+          @if ((emailControl.touched || enviado) &&
+          emailControl.errors?.['required']) {
+          <p class="login-error" id="login-email-error">
+            El correo electrónico es obligatorio.
+          </p>
+          } @else if (
+          (emailControl.touched || enviado) &&
+          emailControl.errors?.['email']
+          ) {
+          <p class="login-error" id="login-email-error">
+            Ingresa un correo electrónico válido.
+          </p>
+          }
+
         </div>
 
-        <button type="button" class="login-button">Iniciar sesión</button>
+        <!-- CONTRASEÑA -->
+        <div class="login-grupo">
+
+          <div class="login-label-fila">
+
+            <label for="login-password">
+              Contraseña
+            </label>
+
+            <button type="button"
+                    class="forgot-password"
+                    (click)="recuperarContrasena()">
+              ¿Olvidaste tu contraseña?
+            </button>
+
+          </div>
+
+          <div class="login-input-con-icono">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 aria-hidden="true">
+              <rect x="5" y="10"
+                    width="14" height="11" rx="2"></rect>
+              <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+            </svg>
+
+            <input type="password"
+                   id="login-password"
+                   name="password"
+                   placeholder="Ingresa tu contraseña"
+                   autocomplete="current-password"
+                   [(ngModel)]="password"
+                   #passwordControl="ngModel"
+                   (ngModelChange)="limpiarMensaje()"
+                   [attr.aria-invalid]="
+                (passwordControl.touched || enviado) &&
+                passwordControl.invalid
+              "
+                   aria-describedby="login-password-error"
+                   required>
+
+          </div>
+
+          @if ((passwordControl.touched || enviado) &&
+          passwordControl.errors?.['required']) {
+          <p class="login-error" id="login-password-error">
+            La contraseña es obligatoria.
+          </p>
+          }
+
+        </div>
+
+        <!-- BOTON INICIAR SESION -->
+        <button type="submit"
+                class="login-button">
+          Iniciar Sesión
+        </button>
+
+        <!-- MENSAJES DEL FORMULARIO -->
+        @if (mensaje) {
+        <div class="login-mensaje"
+             [class.login-mensaje-error]="tipoMensaje === 'error'"
+             [class.login-mensaje-info]="tipoMensaje === 'info'"
+             role="status"
+             aria-live="polite">
+          {{ mensaje }}
+        </div>
+        }
+
       </form>
 
+      <!-- ENLACE A REGISTRO -->
       <p class="register-text">
-        ¿No tienes una cuenta?
-        <a href="#">Regístrate aquí</a>
+        ¿Aún no tienes cuenta?
+        <a routerLink="/registro">
+          Regístrate gratis
+        </a>
       </p>
+
     </div>
   </div>
 </section>
+
+<!-- FOOTER COMPARTIDO -->
+<app-footer></app-footer>
