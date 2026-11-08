@@ -22,6 +22,9 @@ import { VendedorGestorDePedidos } from './componentes/vendedor-gestor-de-pedido
 import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen';
 import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/vendedor-mis-productos-b';
 
+// SEGURIDAD DE DEVELOP
+import { authGuard } from './core/auth/auth-guard';
+
 // MAR-12: COTIZACIONES Y FINANZAS DEL VENDEDOR
 import { VendedorCotizaciones } from './componentes/vendedor-cotizaciones/vendedor-cotizaciones';
 
@@ -30,7 +33,7 @@ export const routes: Routes = [
   // RUTA INICIAL
   {
     path: '',
-    redirectTo: 'home1',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
 
@@ -44,26 +47,41 @@ export const routes: Routes = [
     component: EmpiezaACrear
   },
   {
+    path: 'home',
+    component: Home1
+  },
+  {
     path: 'home1',
     component: Home1
   },
 
-  // CARRITO Y PAGOS
+  // CARRITO DE COMPRAS
   {
     path: 'carrito',
     component: Carrito,
-    children: [
-      {
-        path: 'pagos',
-        component: PagosComponente
-      }
-    ]
+    canActivate: [authGuard],
+    data: { role: 'COMPRADOR' }
+  },
+
+  // PAGOS - RUTA PRINCIPAL DE DEVELOP
+  {
+    path: 'pagos',
+    component: PagosComponente
+  },
+
+  // COMPATIBILIDAD CON LA RUTA ANTERIOR
+  {
+    path: 'carrito/pagos',
+    redirectTo: 'pagos',
+    pathMatch: 'full'
   },
 
   // PERFIL DEL COMPRADOR
   {
     path: 'perfil-comprador',
     component: CompradorLayoutComponente,
+    canActivate: [authGuard],
+    data: { role: 'COMPRADOR' },
     children: [
       {
         path: '',
