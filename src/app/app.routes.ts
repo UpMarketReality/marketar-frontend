@@ -15,6 +15,7 @@ import { VendedorMisProductos } from './componentes/vendedor-mis-productos/vende
 import { VendedorGestorDePedidos } from './componentes/vendedor-gestor-de-pedidos/vendedor-gestor-de-pedidos';
 import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen';
 import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/vendedor-mis-productos-b';
+import { authGuard } from './core/auth/auth-guard';
 
 // MAR-13: PERFIL DEL VENDEDOR
 import { VendedorPerfil } from './componentes/vendedor-perfil/vendedor-perfil';
@@ -38,8 +39,14 @@ export const routes: Routes = [
     component: Home1
   },
   {
+    path: 'home',
+    component: Home1
+  },
+  {
     path: 'carrito',
     component: Carrito,
+    canActivate: [authGuard],
+    data: { role: 'COMPRADOR' },
     children: [
       {
         path: 'pagos',
@@ -47,11 +54,17 @@ export const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'pagos',
+    component: PagosComponente
+  },
 
   // PERFIL DEL COMPRADOR
   {
     path: 'perfil-comprador',
     component: CompradorLayoutComponente,
+    canActivate: [authGuard],
+    data: { role: 'COMPRADOR' },
     children: [
       {
         path: '',
