@@ -1,7 +1,6 @@
 
 <div class="app_layout">
-
-  <!-- BARRA LATERAL DEL VENDEDOR -->
+  <!-- Barra lateral del vendedor -->
   <aside class="side_bar">
 
     <nav class="side_nav">
@@ -30,6 +29,10 @@
         Gestor de pedidos
       </a>
 
+      <!-- MAR-12: COTIZACIONES Y FINANZAS -->
+      <a routerLink="/perfil-vendedor/cotizaciones"
+         routerLinkActive="active_item"
+         class="nav_item">
       <!-- COTIZACIONES Y FINANZAS -->
       <!-- Pendiente de integrar su componente -->
       <a class="nav_item">
@@ -37,7 +40,7 @@
         Cotizaciones y finanzas
       </a>
 
-      <!-- MAR-13: PERFIL DEL VENDEDOR -->
+      <!-- MAR-13: PERFIL PUBLICO DEL VENDEDOR -->
       <a routerLink="/perfil-vendedor/perfil"
          routerLinkActive="active_item"
          class="nav_item">
@@ -56,7 +59,7 @@
 
   </aside>
 
-  <!-- CONTENIDO PRINCIPAL -->
+  <!-- CONTENIDO PRINCIPAL DEL VENDEDOR -->
   <main id="contenido_main_vendedor">
     <router-outlet></router-outlet>
   </main>
