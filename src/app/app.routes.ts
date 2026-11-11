@@ -60,7 +60,13 @@ export const routes: Routes = [
     path: 'carrito',
     component: Carrito,
     canActivate: [authGuard],
-    data: { role: 'COMPRADOR' }
+    data: { role: 'COMPRADOR' },
+    children: [
+      {
+        path: 'pagos',
+        component: PagosComponente
+      }
+    ]
   },
 
   // PAGOS - RUTA PRINCIPAL DE DEVELOP
@@ -153,4 +159,11 @@ export const routes: Routes = [
     ]
   }
 
+      // MAR-13: PERFIL PUBLICO DEL VENDEDOR
+      {
+        path: 'perfil',
+        component: VendedorPerfil
+      }
+    ]
+  }
 ];

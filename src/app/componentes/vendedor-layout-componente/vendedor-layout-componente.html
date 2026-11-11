@@ -2,6 +2,7 @@
 <div class="app_layout">
   <!-- Barra lateral del vendedor -->
   <aside class="side_bar">
+
     <nav class="side_nav">
 
       <!-- MIS PRODUCTOS -->
@@ -32,6 +33,9 @@
       <a routerLink="/perfil-vendedor/cotizaciones"
          routerLinkActive="active_item"
          class="nav_item">
+      <!-- COTIZACIONES Y FINANZAS -->
+      <!-- Pendiente de integrar su componente -->
+      <a class="nav_item">
         <span class="nav_icon">📄</span>
         Cotizaciones y finanzas
       </a>
@@ -52,10 +56,12 @@
         Cerrar sesión
       </a>
     </div>
+
   </aside>
 
   <!-- CONTENIDO PRINCIPAL DEL VENDEDOR -->
   <main id="contenido_main_vendedor">
     <router-outlet></router-outlet>
   </main>
+
 </div>
