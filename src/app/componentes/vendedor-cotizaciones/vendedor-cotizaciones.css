@@ -1,0 +1,1057 @@
+
+/* ==========================================
+   MARKETAR - MAR-12
+   COTIZACIONES Y FINANZAS DEL VENDEDOR
+   DISEÑO BASADO EN FIGMA
+   ========================================== */
+
+/* CONFIGURACION GENERAL */
+
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #1e293b;
+}
+
+  :host *,
+  :host *::before,
+  :host *::after {
+    box-sizing: border-box;
+  }
+
+.iconos-definicion {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.cotizaciones-vendedor {
+  width: 100%;
+  min-height: 100vh;
+  padding: 30px 27px 50px;
+  background: #f0f4f8;
+}
+
+/* ICONOS */
+
+.cv-icono {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: middle;
+}
+
+.cv-icono-turquesa {
+  color: #00bfb3;
+}
+
+/* ENCABEZADO PRINCIPAL */
+
+.cv-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 27px;
+}
+
+.cv-tabs-principales {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 13px;
+  border-bottom: 1px solid #dae2eb;
+}
+
+  .cv-tabs-principales button {
+    appearance: none;
+    min-height: 54px;
+    padding: 8px 14px 13px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    background: transparent;
+    color: #94a3b8;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+    .cv-tabs-principales button.activo {
+      color: #202c3e;
+      border-bottom-color: #00bfb3;
+    }
+
+    .cv-tabs-principales button:hover {
+      color: #00a99d;
+    }
+
+.cv-acciones-superiores {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  padding-top: 7px;
+}
+
+/* BOTONES */
+
+.cv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 35px;
+  padding: 9px 15px;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.3;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.cv-btn-primario {
+  background: #00bfb3;
+  color: white;
+  border: 1px solid #00bfb3;
+}
+
+  .cv-btn-primario:hover:not(:disabled) {
+    background: #009e95;
+    border-color: #009e95;
+  }
+
+.cv-btn-blanco {
+  background: #ffffff;
+  color: #243449;
+  border: 1px solid #d6e0eb;
+}
+
+  .cv-btn-blanco:hover {
+    background: #f1f5f9;
+  }
+
+.cv-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.cv-btn-ancho {
+  width: 100%;
+}
+
+/* ACCESIBILIDAD */
+
+.cv-btn:focus-visible,
+.cv-tabs-principales button:focus-visible,
+.cv-tabs-secundarias button:focus-visible {
+  outline: 3px solid #5eead4;
+  outline-offset: 2px;
+}
+
+/* MENSAJES DEL SISTEMA */
+
+.cv-mensaje {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #99e5d9;
+  border-radius: 6px;
+  background: #e6faf5;
+  color: #087d70;
+  font-size: 12px;
+}
+
+.cv-mensaje-error {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #b91c1c;
+}
+
+.cv-mensaje button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 19px;
+  cursor: pointer;
+}
+
+/* PESTAÑAS SECUNDARIAS */
+
+.cv-tabs-secundarias {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #dbe3ed;
+  margin-bottom: 21px;
+  overflow-x: auto;
+}
+
+  .cv-tabs-secundarias button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 46px;
+    padding: 10px 15px 12px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    background: transparent;
+    color: #64748b;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+    .cv-tabs-secundarias button.activo {
+      color: #00bfb3;
+      border-bottom-color: #00bfb3;
+    }
+
+    .cv-tabs-secundarias button:hover {
+      color: #00a99d;
+    }
+
+/* CONTADORES */
+
+.cv-contador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  background: #e2e8f0;
+  color: #475569;
+  border-radius: 20px;
+  font-size: 10px;
+}
+
+.cv-contador-verde {
+  color: #00a99d;
+  background: #e1faf6;
+}
+
+.cv-contador-aceptado {
+  color: #159447;
+  background: #dcfce7;
+}
+
+/* DISTRIBUCION DE COLUMNAS */
+
+.cv-grid-cotizaciones {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(310px, 1fr);
+  align-items: start;
+  gap: 20px;
+}
+
+.cv-grid-finanzas {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+  align-items: start;
+  gap: 20px;
+}
+
+/* TARJETAS */
+
+.cv-tarjeta,
+.cv-indicador {
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid #e4eaf2;
+  border-radius: 9px;
+  box-shadow: 0 5px 13px rgba(15, 23, 42, 0.06);
+}
+
+.cv-tarjeta {
+  overflow: hidden;
+}
+
+.cv-tarjeta-titulo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  min-height: 49px;
+  padding: 15px 17px;
+  font-size: 13px;
+  font-weight: 700;
+  border-bottom: 1px solid #edf1f5;
+}
+
+/* TABLAS */
+
+.cv-tabla-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.cv-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  text-align: left;
+}
+
+  .cv-tabla thead {
+    background: #f7f9fb;
+  }
+
+  .cv-tabla th {
+    padding: 13px 15px;
+    border-bottom: 1px solid #dfe7ef;
+    color: #718198;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .cv-tabla td {
+    padding: 13px 15px;
+    border-bottom: 1px solid #e6edf5;
+    color: #334155;
+    line-height: 1.5;
+  }
+
+  .cv-tabla tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+.cv-fila-seleccionable {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+  .cv-fila-seleccionable:hover {
+    background: #f4fbfa;
+  }
+
+.cv-tabla .cv-fila-activa {
+  background: #e5faf7;
+}
+
+.cv-fila-seleccionable:focus-visible {
+  outline: 2px solid #00bfb3;
+  outline-offset: -2px;
+}
+
+.cv-id {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cv-fecha {
+  white-space: nowrap;
+}
+
+.cv-cliente {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.cv-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.cv-vacio {
+  padding: 35px !important;
+  text-align: center;
+  color: #94a3b8 !important;
+}
+
+/* ESTADOS DE COTIZACIONES */
+
+.cv-estado {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: #e2e8f0;
+  color: #64748b;
+}
+
+.cv-estado-amarillo {
+  background: #fff8bd;
+  color: #d65318;
+}
+
+.cv-estado-azul {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.cv-estado-verde {
+  background: #e8f9ee;
+  color: #168b48;
+}
+
+.cv-estado-rojo {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.cv-estado-naranja {
+  background: #fff3e7;
+  color: #e68a20;
+}
+
+/* DETALLE DE COTIZACION */
+
+.cv-detalle {
+  padding: 19px 18px;
+}
+
+.cv-detalle-encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+  .cv-detalle-encabezado h2 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .cv-detalle-encabezado p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 10px;
+  }
+
+.cv-linea {
+  border-bottom: 1px dashed #e2e8f0;
+  margin: 18px 0 14px;
+}
+
+.cv-detalle h3 {
+  margin: 0 0 9px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cv-proyecto-detalle {
+  font-size: 10px;
+  color: #64748b;
+  margin: 0 0 13px;
+}
+
+/* FORMULARIOS */
+
+.cv-formulario-doble {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.cv-campo {
+  min-width: 0;
+  margin-bottom: 14px;
+}
+
+  .cv-campo label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #334155;
+  }
+
+  .cv-campo input,
+  .cv-campo textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 11px;
+    border: 1px solid #dce5ee;
+    border-radius: 5px;
+    background: #ffffff;
+    font-family: inherit;
+    font-size: 11px;
+    color: #334155;
+  }
+
+  .cv-campo input {
+    min-height: 35px;
+  }
+
+  .cv-campo textarea {
+    min-height: 90px;
+    line-height: 1.5;
+    resize: vertical;
+  }
+
+    .cv-campo input:focus,
+    .cv-campo textarea:focus {
+      outline: none;
+      border-color: #00bfb3;
+      box-shadow: 0 0 0 3px rgba(0, 191, 179, 0.12);
+    }
+
+    .cv-campo input:disabled,
+    .cv-campo textarea:disabled {
+      background: #f8fafc;
+      color: #64748b;
+    }
+
+.cv-input-icono {
+  position: relative;
+}
+
+  .cv-input-icono .cv-icono {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    color: #94a3b8;
+    pointer-events: none;
+  }
+
+  .cv-input-icono input {
+    padding-left: 31px;
+  }
+
+/* BOTONES DEL FORMULARIO */
+
+.cv-acciones-propuesta {
+  display: grid;
+  grid-template-columns: 0.9fr 1.6fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.cv-detalle-procesado {
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.cv-detalle-vacio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 210px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+  .cv-detalle-vacio .cv-icono {
+    width: 30px;
+    height: 30px;
+  }
+
+/* MODAL NUEVA PROPUESTA */
+
+.cv-modal-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.cv-modal {
+  width: 100%;
+  max-width: 450px;
+  padding: 22px;
+  border-radius: 11px;
+  background: white;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.18);
+}
+
+.cv-modal-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+  .cv-modal-cabecera h2 {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  .cv-modal-cabecera button {
+    background: transparent;
+    border: 0;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+.cv-ayuda {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 15px 0 20px;
+}
+
+.cv-modal-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* INDICADORES FINANCIEROS */
+
+.cv-indicadores {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 5px 0 23px;
+}
+
+.cv-indicador {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 90px;
+  padding: 18px 15px;
+}
+
+  .cv-indicador > div:last-child {
+    min-width: 0;
+  }
+
+  .cv-indicador p {
+    margin: 0 0 8px;
+    color: #8492a6;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .cv-indicador strong {
+    display: block;
+    font-size: clamp(15px, 1.5vw, 21px);
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+.cv-indicador-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 39px;
+  height: 39px;
+  border-radius: 50%;
+}
+
+  .cv-indicador-icono .cv-icono {
+    width: 19px;
+    height: 19px;
+  }
+
+.cv-ico-dinero {
+  color: #00bfb3;
+  background: #e3faf5;
+}
+
+.cv-ico-tiempo {
+  color: #3b82f6;
+  background: #eff6ff;
+}
+
+.cv-ico-grafico {
+  color: #9659f9;
+  background: #f5f0ff;
+}
+
+.cv-ico-comision {
+  color: #f04452;
+  background: #fff0f1;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.cv-texto-turquesa {
+  color: #00bfb3 !important;
+}
+
+/* HISTORIAL DE MOVIMIENTOS */
+
+.cv-tabs-finanzas {
+  margin-top: 12px;
+}
+
+.cv-historial-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 17px;
+  border-bottom: 1px solid #e6edf5;
+}
+
+  .cv-historial-cabecera h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+.cv-filtro-fecha {
+  padding: 8px 12px;
+  color: #475569;
+  background: #ffffff;
+  border: 1px solid #dbe3ed;
+  border-radius: 5px;
+  font-size: 10px;
+}
+
+.cv-tabla-finanzas th,
+.cv-tabla-finanzas td {
+  padding: 13px;
+}
+
+.cv-concepto {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
+}
+
+.cv-mov-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 23px;
+  height: 23px;
+  flex-shrink: 0;
+  color: #159447;
+  background: #e8f9ee;
+  border-radius: 50%;
+}
+
+  .cv-mov-icono .cv-icono {
+    width: 13px;
+    height: 13px;
+  }
+
+.cv-mov-comision {
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+.cv-mov-retiro {
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.cv-referencia {
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.cv-enlace-ref {
+  color: #00bfb3;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.cv-monto {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* PANEL LATERAL FINANCIERO */
+
+.cv-finanzas-lateral {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  min-width: 0;
+}
+
+/* TARJETA DE SALDO */
+
+.cv-saldo {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  min-height: 132px;
+  padding: 23px;
+  border-radius: 9px;
+  background: linear-gradient(120deg, #202c3e, #34445d);
+  color: #ffffff;
+}
+
+  .cv-saldo::after {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    right: -25px;
+    top: -30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.045);
+  }
+
+  .cv-saldo span {
+    color: #c5cfde;
+    font-size: 11px;
+    letter-spacing: 0.4px;
+    font-weight: 600;
+  }
+
+  .cv-saldo strong {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+/* RETIRAR FONDOS */
+
+.cv-retiro {
+  padding: 19px;
+}
+
+  .cv-retiro h2 {
+    margin: 0 0 18px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+.cv-resumen-retiro {
+  padding: 13px;
+  border: 1px dashed #d8e4ee;
+  border-radius: 7px;
+  background: #f8fafc;
+  margin-bottom: 12px;
+}
+
+  .cv-resumen-retiro > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 11px;
+  }
+
+    .cv-resumen-retiro > div:last-child {
+      border-bottom: none;
+    }
+
+  .cv-resumen-retiro span {
+    color: #64748b;
+  }
+
+  .cv-resumen-retiro strong {
+    color: #334155;
+    font-weight: 700;
+  }
+
+.cv-acciones-retiro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.cv-nota-retiro,
+.cv-nota-demo {
+  margin: 12px 0 0;
+  color: #94a3b8;
+  font-size: 10px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+  .cv-nota-retiro strong {
+    color: #334155;
+  }
+
+.cv-nota-demo {
+  color: #b45309;
+}
+
+/* RESPONSIVE: TABLET */
+
+@media (max-width: 1200px) {
+
+  .cv-grid-cotizaciones,
+  .cv-grid-finanzas {
+    grid-template-columns: minmax(0, 1.6fr) minmax(290px, 1fr);
+  }
+
+  .cv-indicadores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* RESPONSIVE: PANTALLAS MEDIANAS */
+
+@media (max-width: 950px) {
+
+  .cotizaciones-vendedor {
+    padding: 24px 20px;
+  }
+
+  .cv-grid-cotizaciones,
+  .cv-grid-finanzas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cv-tabla {
+    min-width: 650px;
+  }
+
+  .cv-detalle {
+    max-width: 100%;
+  }
+}
+
+/* RESPONSIVE: CELULAR */
+
+@media (max-width: 600px) {
+
+  .cotizaciones-vendedor {
+    padding: 17px 12px 35px;
+  }
+
+  .cv-cabecera {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cv-tabs-principales button {
+    padding: 10px 8px 12px;
+    font-size: 13px;
+  }
+
+  .cv-acciones-superiores {
+    justify-content: flex-end;
+  }
+
+    .cv-acciones-superiores .cv-btn {
+      flex: 1;
+    }
+
+  .cv-tabs-secundarias button {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+
+  .cv-indicadores {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-indicador strong {
+    font-size: 20px;
+  }
+
+  .cv-formulario-doble {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-saldo strong {
+    font-size: 28px;
+  }
+
+  .cv-detalle {
+    padding: 15px;
+  }
+
+  .cv-acciones-propuesta {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* IMPRESION */
+
+@media print {
+
+  .cv-acciones-superiores,
+  .cv-tabs-principales,
+  .cv-tabs-secundarias,
+  .cv-btn,
+  .cv-mensaje {
+    display: none !important;
+  }
+
+  .cotizaciones-vendedor {
+    background: white;
+    padding: 0;
+  }
+
+  .cv-grid-finanzas {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-tarjeta,
+  .cv-indicador {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}
+
+/* MOVIMIENTO REDUCIDO */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .cv-btn,
+  .cv-fila-seleccionable {
+    transition: none;
+  }
+}
