@@ -1,0 +1,509 @@
+<!-- ICONOS SVG REUTILIZABLES -->
+<svg xmlns="http://www.w3.org/2000/svg"
+     class="iconos-definiciones"
+     aria-hidden="true">
+
+  <symbol id="vp-eye" viewBox="0 0 24 24">
+    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+    <circle cx="12" cy="12" r="3" />
+  </symbol>
+
+  <symbol id="vp-save" viewBox="0 0 24 24">
+    <path d="M5 3h12l4 4v14H3V3h2Z" />
+    <path d="M7 3v7h10V3M7 21v-8h10v8" />
+  </symbol>
+
+  <symbol id="vp-image" viewBox="0 0 24 24">
+    <rect x="3" y="4" width="18" height="16" rx="2" />
+    <circle cx="8" cy="9" r="2" />
+    <path d="m3 17 6-5 4 3 3-4 5 6" />
+  </symbol>
+
+  <symbol id="vp-camera" viewBox="0 0 24 24">
+    <path d="M4 7h4l2-3h4l2 3h4v13H4V7Z" />
+    <circle cx="12" cy="13" r="4" />
+  </symbol>
+
+  <symbol id="vp-building" viewBox="0 0 24 24">
+    <rect x="3" y="7" width="18" height="14" rx="1" />
+    <path d="M7 7V3h10v4M8 12h2m4 0h2M8 16h2m4 0h2" />
+  </symbol>
+
+  <symbol id="vp-contact" viewBox="0 0 24 24">
+    <rect x="4" y="3" width="16" height="18" rx="2" />
+    <circle cx="12" cy="9" r="3" />
+    <path d="M7 18c0-4 10-4 10 0" />
+  </symbol>
+
+  <symbol id="vp-mail" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="m3 7 9 7 9-7" />
+  </symbol>
+
+  <symbol id="vp-phone" viewBox="0 0 24 24">
+    <path d="m6 3 4 4-2 3c1 3 3 5 6 6l3-2 4 4-3 3C10 22 2 14 3 6l3-3Z" />
+  </symbol>
+
+  <symbol id="vp-pin" viewBox="0 0 24 24">
+    <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" />
+    <circle cx="12" cy="10" r="3" />
+  </symbol>
+
+  <symbol id="vp-share" viewBox="0 0 24 24">
+    <circle cx="18" cy="5" r="3" />
+    <circle cx="6" cy="12" r="3" />
+    <circle cx="18" cy="19" r="3" />
+    <path d="m9 11 6-5m-6 8 6 4" />
+  </symbol>
+
+  <symbol id="vp-shield" viewBox="0 0 24 24">
+    <path d="m12 2 9 4v6c0 6-4 9-9 11-5-2-9-5-9-11V6l9-4Z" />
+    <path d="M12 6v12" />
+  </symbol>
+
+  <symbol id="vp-instagram" viewBox="0 0 24 24">
+    <rect x="3" y="3" width="18" height="18" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.5" cy="6.5" r="1"
+            fill="currentColor" stroke="none" />
+  </symbol>
+
+  <symbol id="vp-tiktok" viewBox="0 0 24 24">
+    <path d="M14 3v12a5 5 0 1 1-5-5" />
+    <path d="M14 3c1 4 3 6 7 6" />
+  </symbol>
+
+</svg>
+
+<div class="perfil-vendedor">
+
+  <!-- ENCABEZADO -->
+  <header class="perfil-encabezado">
+    <div>
+      <h1>Perfil Público</h1>
+      <p>Personaliza la información de tu taller para tus clientes.</p>
+    </div>
+
+    <div class="perfil-acciones">
+
+      <button type="button"
+              class="btn-secundario"
+              (click)="alternarVistaPrevia()">
+
+        <svg class="icono-boton" aria-hidden="true">
+          <use href="#vp-eye"></use>
+        </svg>
+
+        {{ mostrarVistaPrevia ? 'Cerrar vista previa' : 'Ver mi tienda' }}
+      </button>
+
+      <button type="button"
+              class="btn-guardar"
+              (click)="guardarCambios()">
+
+        <svg class="icono-boton" aria-hidden="true">
+          <use href="#vp-save"></use>
+        </svg>
+
+        Guardar Cambios
+      </button>
+
+    </div>
+  </header>
+
+  <!-- MENSAJES DE CONFIRMACION Y ERROR -->
+  @if (mensaje) {
+  <p class="mensaje-estado"
+     [class.mensaje-error]="tipoMensaje === 'error'"
+     role="status">
+    {{ mensaje }}
+  </p>
+  }
+
+  <!-- COLUMNAS PRINCIPALES -->
+  <div class="perfil-columnas">
+
+    <!-- COLUMNA IZQUIERDA -->
+    <div class="columna-principal">
+
+      <!-- IDENTIDAD VISUAL -->
+      <section class="perfil-tarjeta">
+
+        <h2 class="titulo-con-icono">
+          <svg class="icono-titulo" aria-hidden="true">
+            <use href="#vp-image"></use>
+          </svg>
+          Identidad Visual
+        </h2>
+
+        <div class="perfil-contenido">
+
+          <!-- PORTADA -->
+          <div class="portada">
+
+            <div class="portada-placeholder">
+
+              @if (portadaUrl) {
+              <img class="portada-foto"
+                   [src]="portadaUrl"
+                   alt="Portada seleccionada del taller">
+              } @else {
+              <span class="portada-texto">MARKET AR</span>
+              }
+
+              <label class="btn-cambiar-portada"
+                     for="archivoPortada">
+
+                <svg class="icono-boton" aria-hidden="true">
+                  <use href="#vp-camera"></use>
+                </svg>
+
+                Cambiar Portada
+              </label>
+
+              <input id="archivoPortada"
+                     class="archivo-portada"
+                     type="file"
+                     accept="image/png,image/jpeg,image/webp"
+                     aria-label="Seleccionar imagen de portada"
+                     (change)="cambiarPortada($event)">
+
+            </div>
+
+            <span class="portada-iniciales">
+              {{ iniciales }}
+            </span>
+
+          </div>
+
+          <!-- NOMBRE Y ESPECIALIDAD -->
+          <div class="campos-dobles">
+
+            <div class="campo">
+              <label for="nombre">
+                Nombre del Taller / Empresa
+              </label>
+
+              <div class="campo-con-icono">
+
+                <svg class="icono-campo" aria-hidden="true">
+                  <use href="#vp-building"></use>
+                </svg>
+
+                <input id="nombre"
+                       type="text"
+                       maxlength="100"
+                       [(ngModel)]="perfil.nombre">
+
+              </div>
+            </div>
+
+            <div class="campo">
+              <label for="especialidad">
+                Especialidad principal
+              </label>
+
+              <input id="especialidad"
+                     type="text"
+                     maxlength="100"
+                     [(ngModel)]="perfil.especialidad">
+            </div>
+
+          </div>
+
+          <!-- DESCRIPCION -->
+          <div class="campo">
+
+            <label for="descripcion">
+              Descripción de la empresa (Acerca de nosotros)
+            </label>
+
+            <textarea id="descripcion"
+                      rows="4"
+                      maxlength="1000"
+                      [(ngModel)]="perfil.descripcion"></textarea>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- INFORMACION DE CONTACTO -->
+      <section class="perfil-tarjeta">
+
+        <h2 class="titulo-con-icono">
+
+          <svg class="icono-titulo" aria-hidden="true">
+            <use href="#vp-contact"></use>
+          </svg>
+
+          Información de Contacto
+        </h2>
+
+        <div class="perfil-contenido">
+
+          <div class="campos-dobles">
+
+            <!-- CORREO -->
+            <div class="campo">
+
+              <label for="correo">
+                Correo electrónico público
+              </label>
+
+              <div class="campo-con-icono">
+
+                <svg class="icono-campo" aria-hidden="true">
+                  <use href="#vp-mail"></use>
+                </svg>
+
+                <input id="correo"
+                       type="email"
+                       maxlength="254"
+                       [(ngModel)]="perfil.correo">
+
+              </div>
+            </div>
+
+            <!-- TELEFONO -->
+            <div class="campo">
+
+              <label for="telefono">
+                Teléfono / WhatsApp
+              </label>
+
+              <div class="campo-con-icono">
+
+                <svg class="icono-campo" aria-hidden="true">
+                  <use href="#vp-phone"></use>
+                </svg>
+
+                <input id="telefono"
+                       type="tel"
+                       maxlength="30"
+                       [(ngModel)]="perfil.telefono">
+
+              </div>
+            </div>
+
+          </div>
+
+          <!-- DIRECCION -->
+          <div class="campo">
+
+            <label for="direccion">
+              Dirección del Taller (Opcional)
+            </label>
+
+            <div class="campo-con-icono">
+
+              <svg class="icono-campo" aria-hidden="true">
+                <use href="#vp-pin"></use>
+              </svg>
+
+              <input id="direccion"
+                     type="text"
+                     maxlength="200"
+                     [(ngModel)]="perfil.direccion">
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="columna-lateral">
+
+      <!-- REDES SOCIALES -->
+      <section class="perfil-tarjeta">
+
+        <h2 class="titulo-con-icono">
+
+          <svg class="icono-titulo" aria-hidden="true">
+            <use href="#vp-share"></use>
+          </svg>
+
+          Redes Sociales
+        </h2>
+
+        <div class="perfil-contenido">
+
+          <!-- INSTAGRAM -->
+          <div class="campo">
+
+            <label for="instagram">Instagram</label>
+
+            <div class="campo-con-icono">
+
+              <svg class="icono-campo" aria-hidden="true">
+                <use href="#vp-instagram"></use>
+              </svg>
+
+              <input id="instagram"
+                     type="text"
+                     placeholder="@usuario"
+                     [(ngModel)]="perfil.instagram">
+
+            </div>
+          </div>
+
+          <!-- FACEBOOK -->
+          <div class="campo">
+
+            <label for="facebook">Facebook</label>
+
+            <div class="campo-con-icono">
+
+              <span class="icono-facebook"
+                    aria-hidden="true">f</span>
+
+              <input id="facebook"
+                     type="text"
+                     placeholder="URL o usuario"
+                     [(ngModel)]="perfil.facebook">
+
+            </div>
+          </div>
+
+          <!-- TIKTOK -->
+          <div class="campo">
+
+            <label for="tiktok">TikTok</label>
+
+            <div class="campo-con-icono">
+
+              <svg class="icono-campo" aria-hidden="true">
+                <use href="#vp-tiktok"></use>
+              </svg>
+
+              <input id="tiktok"
+                     type="text"
+                     placeholder="@usuario"
+                     [(ngModel)]="perfil.tiktok">
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- POLITICAS DEL TALLER -->
+      <section class="perfil-tarjeta">
+
+        <h2 class="titulo-con-icono">
+
+          <svg class="icono-titulo" aria-hidden="true">
+            <use href="#vp-shield"></use>
+          </svg>
+
+          Políticas del Taller
+        </h2>
+
+        <div class="perfil-contenido">
+
+          <!-- TIEMPO DE FABRICACION -->
+          <div class="campo">
+
+            <label for="fabricacion">
+              Tiempo promedio de fabricación
+            </label>
+
+            <input id="fabricacion"
+                   type="text"
+                   [(ngModel)]="perfil.tiempoFabricacion">
+
+          </div>
+
+          <!-- GARANTIA -->
+          <div class="campo">
+
+            <label for="garantia">
+              Política de Garantía
+            </label>
+
+            <input id="garantia"
+                   type="text"
+                   [(ngModel)]="perfil.garantia">
+
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- VISTA PREVIA DE LA TIENDA -->
+  @if (mostrarVistaPrevia) {
+
+  <section class="perfil-tarjeta vista-previa">
+
+    <h2>Vista previa de la tienda</h2>
+
+    <div class="perfil-contenido">
+
+      <!-- PORTADA DE LA VISTA PREVIA -->
+      @if (portadaUrl) {
+      <img class="vista-previa-portada"
+           [src]="portadaUrl"
+           alt="Portada del taller">
+      }
+
+      <h3>{{ perfil.nombre }}</h3>
+
+      <p>
+        <strong>{{ perfil.especialidad }}</strong>
+      </p>
+
+      <p>{{ perfil.descripcion }}</p>
+
+      <p>
+        {{ perfil.correo }} · {{ perfil.telefono }}
+      </p>
+
+      <p>{{ perfil.direccion }}</p>
+
+      <!-- REDES SOCIALES -->
+      <h4>Redes Sociales</h4>
+
+      @if (perfil.instagram) {
+      <p>Instagram: {{ perfil.instagram }}</p>
+      }
+
+      @if (perfil.facebook) {
+      <p>Facebook: {{ perfil.facebook }}</p>
+      }
+
+      @if (perfil.tiktok) {
+      <p>TikTok: {{ perfil.tiktok }}</p>
+      }
+
+      <!-- POLITICAS -->
+      <h4>Políticas del Taller</h4>
+
+      <p>
+        Tiempo de fabricación:
+        {{ perfil.tiempoFabricacion }}
+      </p>
+
+      <p>
+        Garantía:
+        {{ perfil.garantia }}
+      </p>
+
+      <button type="button"
+              class="btn-secundario"
+              (click)="cerrarVistaPrevia()">
+
+        Cerrar vista previa
+      </button>
+
+    </div>
+  </section>
+
+  }
+
+</div>

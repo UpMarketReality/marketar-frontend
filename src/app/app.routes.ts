@@ -23,6 +23,12 @@ import { VendedorGestorDePedidos } from './componentes/vendedor-gestor-de-pedido
 import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen';
 import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/vendedor-mis-productos-b';
 
+// SEGURIDAD DE DEVELOP
+import { authGuard } from './core/auth/auth-guard';
+
+// MAR-12: COTIZACIONES Y FINANZAS DEL VENDEDOR
+import { VendedorCotizaciones } from './componentes/vendedor-cotizaciones/vendedor-cotizaciones';
+
 export const routes: Routes = [
 
   // RUTA INICIAL
@@ -59,6 +65,8 @@ export const routes: Routes = [
   {
     path: 'carrito',
     component: Carrito,
+    canActivate: [authGuard],
+    data: { role: 'COMPRADOR' },
     children: [
       {
         path: 'pagos',
@@ -71,6 +79,8 @@ export const routes: Routes = [
   {
     path: 'perfil-comprador',
     component: CompradorLayoutComponente,
+    canActivate: [authGuard],
+    data: { role: 'COMPRADOR' },
     children: [
       {
         path: '',
@@ -101,23 +111,33 @@ export const routes: Routes = [
     path: 'perfil-vendedor',
     component: VendedorLayoutComponente,
     children: [
+
+      // REDIRECCION INICIAL
       {
         path: '',
         redirectTo: 'productos',
         pathMatch: 'full'
       },
+
+      // MIS PRODUCTOS
       {
         path: 'productos',
         component: VendedorMisProductos
       },
+
+      // AGREGAR NUEVO PRODUCTO
       {
         path: 'nuevo-producto',
         component: VendedorMisProductosB
       },
+
+      // GESTOR DE PEDIDOS
       {
         path: 'gestor-pedidos',
         component: VendedorGestorDePedidos
       },
+
+      // RESUMEN GENERAL
       {
         path: 'resumen',
         component: VendedorResumen

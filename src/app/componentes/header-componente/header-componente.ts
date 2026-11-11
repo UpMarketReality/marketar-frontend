@@ -3,7 +3,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { PerfilCompradorDatosComponente } from '../perfil-comprador-datos-componente/perfil-comprador-datos-componente';
 
 @Component({
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink],
   standalone: true,
   selector: 'app-header-componente',
   styleUrl: './header-componente.css',
