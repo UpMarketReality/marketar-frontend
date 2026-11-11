@@ -1,0 +1,949 @@
+<!-- ICONOS SVG REUTILIZABLES -->
+<svg class="iconos-definicion"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true">
+
+  <symbol id="vc-plus" viewBox="0 0 24 24">
+    <path d="M12 5v14M5 12h14" />
+  </symbol>
+
+  <symbol id="vc-send" viewBox="0 0 24 24">
+    <path d="m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13" />
+  </symbol>
+
+  <symbol id="vc-inbox" viewBox="0 0 24 24">
+    <path d="M4 4h16l2 12v4H2v-4L4 4Z" />
+    <path d="M2 15h7l2 3h2l2-3h7" />
+  </symbol>
+
+  <symbol id="vc-tag" viewBox="0 0 24 24">
+    <path d="M3 3h9l9 9-9 9-9-9V3Z" />
+    <circle cx="8" cy="8" r="1" />
+  </symbol>
+
+  <symbol id="vc-calendar" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="16" rx="2" />
+    <path d="M7 3v4M17 3v4M3 10h18" />
+  </symbol>
+
+  <symbol id="vc-money" viewBox="0 0 24 24">
+    <rect x="2" y="5" width="20" height="14" rx="2" />
+    <circle cx="12" cy="12" r="4" />
+    <path d="M6 12h.01M18 12h.01" />
+  </symbol>
+
+  <symbol id="vc-clock" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 6v6l4 2" />
+  </symbol>
+
+  <symbol id="vc-chart" viewBox="0 0 24 24">
+    <path d="M4 20V4M4 20h16M7 15l5-5 4 3 4-7" />
+  </symbol>
+
+  <symbol id="vc-list" viewBox="0 0 24 24">
+    <path d="M9 6h12M9 12h12M9 18h12M3 6h2M3 12h2M3 18h2" />
+  </symbol>
+
+  <symbol id="vc-file" viewBox="0 0 24 24">
+    <path d="M6 2h8l5 5v15H6V2Z" />
+    <path d="M14 2v6h5M9 12h7M9 16h7" />
+  </symbol>
+
+  <symbol id="vc-download" viewBox="0 0 24 24">
+    <path d="M12 3v13m-5-5 5 5 5-5M4 17v4h16v-4" />
+  </symbol>
+
+  <symbol id="vc-arrow-down" viewBox="0 0 24 24">
+    <path d="M12 4v16m-6-6 6 6 6-6" />
+  </symbol>
+
+  <symbol id="vc-arrow-up" viewBox="0 0 24 24">
+    <path d="M12 20V4m-6 6 6-6 6 6" />
+  </symbol>
+
+  <symbol id="vc-bank" viewBox="0 0 24 24">
+    <path d="m3 9 9-6 9 6H3ZM5 10v9m5-9v9m5-9v9m5-9v9M3 21h18" />
+  </symbol>
+
+  <symbol id="vc-x" viewBox="0 0 24 24">
+    <path d="M5 5 19 19M19 5 5 19" />
+  </symbol>
+</svg>
+
+<div class="cotizaciones-vendedor">
+
+  <!-- CABECERA PRINCIPAL -->
+  <header class="cv-cabecera">
+
+    <nav class="cv-tabs-principales"
+         aria-label="Módulos del vendedor">
+
+      <button type="button"
+              [class.activo]="pestanaPrincipal === 'cotizaciones'"
+              (click)="cambiarPrincipal('cotizaciones')">
+        Cotizaciones
+      </button>
+
+      <button type="button"
+              [class.activo]="pestanaPrincipal === 'finanzas'"
+              (click)="cambiarPrincipal('finanzas')">
+        Finanzas y Liquidaciones
+      </button>
+
+    </nav>
+
+    <div class="cv-acciones-superiores">
+
+      @if (pestanaPrincipal === 'cotizaciones') {
+
+      <button type="button"
+              class="cv-btn cv-btn-primario"
+              (click)="abrirNuevaPropuesta()">
+
+        <svg class="cv-icono">
+          <use href="#vc-plus" />
+        </svg>
+
+        Nueva Propuesta
+      </button>
+
+      } @else {
+
+      <button type="button"
+              class="cv-btn cv-btn-blanco"
+              (click)="exportarCSV()">
+
+        <svg class="cv-icono">
+          <use href="#vc-download" />
+        </svg>
+
+        Exportar CSV
+      </button>
+
+      <button type="button"
+              class="cv-btn cv-btn-blanco"
+              (click)="reporteFiscal()">
+
+        <svg class="cv-icono">
+          <use href="#vc-file" />
+        </svg>
+
+        Reporte Fiscal
+      </button>
+      }
+
+    </div>
+  </header>
+
+  <!-- NOTIFICACIONES -->
+  @if (mensaje) {
+  <div class="cv-mensaje"
+       [class.cv-mensaje-error]="tipoMensaje === 'error'"
+       role="status">
+
+    {{ mensaje }}
+
+    <button type="button"
+            (click)="mensaje = ''"
+            aria-label="Cerrar mensaje">
+      ×
+    </button>
+  </div>
+  }
+
+  <!-- ======================================
+       PANTALLA A: COTIZACIONES
+       ====================================== -->
+  @if (pestanaPrincipal === 'cotizaciones') {
+
+  <!-- PESTAÑAS DE ESTADO -->
+  <nav class="cv-tabs-secundarias"
+       aria-label="Estados de cotizaciones">
+
+    <button type="button"
+            [class.activo]="pestanaCotizacion === 'nuevas'"
+            (click)="cambiarCotizacion('nuevas')">
+
+      Nuevas Solicitudes
+
+      <span class="cv-contador cv-contador-verde">
+        {{ contar('Nueva Solicitud') }}
+      </span>
+    </button>
+
+    <button type="button"
+            [class.activo]="pestanaCotizacion === 'enviadas'"
+            (click)="cambiarCotizacion('enviadas')">
+
+      Enviadas
+
+      <span class="cv-contador">
+        {{ contar('Enviada') }}
+      </span>
+    </button>
+
+    <button type="button"
+            [class.activo]="pestanaCotizacion === 'aceptadas'"
+            (click)="cambiarCotizacion('aceptadas')">
+
+      Aceptadas
+
+      <span class="cv-contador cv-contador-aceptado">
+        {{ contar('Aceptada') }}
+      </span>
+    </button>
+
+    <button type="button"
+            [class.activo]="pestanaCotizacion === 'rechazadas'"
+            (click)="cambiarCotizacion('rechazadas')">
+
+      Rechazadas
+
+      <span class="cv-contador">
+        {{ contar('Rechazada') }}
+      </span>
+    </button>
+
+  </nav>
+
+  <div class="cv-grid-cotizaciones">
+
+    <!-- TABLA DE COTIZACIONES -->
+    <section class="cv-tarjeta cv-tabla-tarjeta">
+
+      <h2 class="cv-tarjeta-titulo">
+
+        <svg class="cv-icono cv-icono-turquesa">
+          <use href="#vc-inbox" />
+        </svg>
+
+        {{ tituloCotizaciones }}
+      </h2>
+
+      <div class="cv-tabla-scroll">
+
+        <table class="cv-tabla">
+
+          <thead>
+            <tr>
+              <th>ID SOLICITUD</th>
+              <th>CLIENTE</th>
+              <th>PROYECTO</th>
+              <th>FECHA</th>
+              <th>ESTADO</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (
+            solicitud of cotizacionesFiltradas;
+            track solicitud.id
+            ) {
+
+            <tr class="cv-fila-seleccionable"
+                [class.cv-fila-activa]="
+                      cotizacionSeleccionada?.id === solicitud.id
+                    "
+                (click)="seleccionarCotizacion(solicitud)"
+                (keydown.enter)="seleccionarCotizacion(solicitud)"
+                (keydown.space)="seleccionarCotizacion(solicitud); $event.preventDefault()"
+                tabindex="0"
+                [attr.aria-label]="
+                      'Seleccionar solicitud ' + solicitud.id
+                    ">
+
+              <td class="cv-id">
+                #{{ solicitud.id }}
+              </td>
+
+              <td>
+                <div class="cv-cliente">
+
+                  <span class="cv-avatar">
+                    {{ solicitud.iniciales }}
+                  </span>
+
+                  {{ solicitud.cliente }}
+                </div>
+              </td>
+
+              <td>
+                {{ solicitud.proyecto }}
+              </td>
+
+              <td class="cv-fecha">
+                {{ solicitud.fecha }}
+              </td>
+
+              <td>
+
+                <span class="cv-estado"
+                      [class.cv-estado-amarillo]="
+                            solicitud.estado === 'Nueva Solicitud'
+                          "
+                      [class.cv-estado-azul]="
+                            solicitud.estado === 'Enviada'
+                          "
+                      [class.cv-estado-verde]="
+                            solicitud.estado === 'Aceptada'
+                          "
+                      [class.cv-estado-rojo]="
+                            solicitud.estado === 'Rechazada'
+                          ">
+
+                  {{ solicitud.estado }}
+                </span>
+              </td>
+
+            </tr>
+
+            } @empty {
+
+            <tr>
+              <td colspan="5" class="cv-vacio">
+                No hay solicitudes en esta categoría.
+              </td>
+            </tr>
+
+            }
+
+          </tbody>
+        </table>
+
+      </div>
+    </section>
+
+    <!-- PANEL DERECHO: DETALLE -->
+    <section class="cv-tarjeta cv-detalle">
+
+      @if (cotizacionSeleccionada; as solicitud) {
+
+      <div class="cv-detalle-encabezado">
+
+        <div>
+          <h2>
+            Solicitud #{{ solicitud.id }}
+          </h2>
+
+          <p>
+            Recibido {{ solicitud.fecha }}
+          </p>
+        </div>
+
+        <span class="cv-estado"
+              [class.cv-estado-amarillo]="
+                    solicitud.estado === 'Nueva Solicitud'
+                  "
+              [class.cv-estado-azul]="
+                    solicitud.estado === 'Enviada'
+                  "
+              [class.cv-estado-verde]="
+                    solicitud.estado === 'Aceptada'
+                  "
+              [class.cv-estado-rojo]="
+                    solicitud.estado === 'Rechazada'
+                  ">
+
+          {{
+                solicitud.estado === 'Nueva Solicitud'
+                  ? 'Por Responder'
+                  : solicitud.estado
+          }}
+
+        </span>
+
+      </div>
+
+      <div class="cv-linea"></div>
+
+      <h3>Armar Propuesta</h3>
+
+      <p class="cv-proyecto-detalle">
+        {{ solicitud.cliente }} · {{ solicitud.proyecto }}
+      </p>
+
+      <div class="cv-formulario-doble">
+
+        <!-- PRECIO -->
+        <div class="cv-campo">
+
+          <label for="precioEstimado">
+            Precio Estimado (S/)
+          </label>
+
+          <div class="cv-input-icono">
+
+            <svg class="cv-icono">
+              <use href="#vc-tag" />
+            </svg>
+
+            <input id="precioEstimado"
+                   type="number"
+                   min="0.01"
+                   step="0.01"
+                   placeholder="0.00"
+                   [disabled]="
+                         solicitud.estado !== 'Nueva Solicitud'
+                       "
+                   [(ngModel)]="precioEstimado">
+
+          </div>
+        </div>
+
+        <!-- DIAS -->
+        <div class="cv-campo">
+
+          <label for="diasFabricacion">
+            Días de Fabricación
+          </label>
+
+          <div class="cv-input-icono">
+
+            <svg class="cv-icono">
+              <use href="#vc-calendar" />
+            </svg>
+
+            <input id="diasFabricacion"
+                   type="number"
+                   min="1"
+                   step="1"
+                   placeholder="Ej: 15"
+                   [disabled]="
+                         solicitud.estado !== 'Nueva Solicitud'
+                       "
+                   [(ngModel)]="diasFabricacion">
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CONDICIONES -->
+      <div class="cv-campo">
+
+        <label for="condiciones">
+          Condiciones / Notas al cliente
+        </label>
+
+        <textarea id="condiciones"
+                  rows="4"
+                  placeholder="Escribe aquí las condiciones de tu propuesta..."
+                  [disabled]="
+                        solicitud.estado !== 'Nueva Solicitud'
+                      "
+                  [(ngModel)]="condiciones"></textarea>
+
+      </div>
+
+      <!-- BOTONES DE SOLICITUD NUEVA -->
+      @if (solicitud.estado === 'Nueva Solicitud') {
+
+      <div class="cv-acciones-propuesta">
+
+        <button type="button"
+                class="cv-btn cv-btn-blanco"
+                (click)="declinarCotizacion()">
+
+          <svg class="cv-icono">
+            <use href="#vc-x" />
+          </svg>
+
+          Declinar
+        </button>
+
+        <button type="button"
+                class="cv-btn cv-btn-primario"
+                (click)="enviarCotizacion()">
+
+          <svg class="cv-icono">
+            <use href="#vc-send" />
+          </svg>
+
+          Enviar Cotización
+        </button>
+
+      </div>
+
+      } @else {
+
+      <div class="cv-detalle-procesado">
+
+        Esta cotización se encuentra en estado
+        <strong>{{ solicitud.estado }}</strong>.
+
+      </div>
+
+      }
+
+      } @else {
+
+      <div class="cv-detalle-vacio">
+
+        <svg class="cv-icono">
+          <use href="#vc-inbox" />
+        </svg>
+
+        <p>
+          Selecciona una solicitud para ver sus detalles.
+        </p>
+
+      </div>
+
+      }
+
+    </section>
+
+  </div>
+
+  <!-- MODAL NUEVA PROPUESTA -->
+  @if (mostrarNuevaPropuesta) {
+
+  <div class="cv-modal-fondo"
+       (click)="cerrarNuevaPropuesta()"
+       (keydown.escape)="cerrarNuevaPropuesta()"
+       tabindex="-1">
+
+    <section class="cv-modal"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="tituloNuevaPropuesta"
+             (click)="$event.stopPropagation()"
+             (keydown.escape)="cerrarNuevaPropuesta()">
+
+      <div class="cv-modal-cabecera">
+
+        <h2 id="tituloNuevaPropuesta">
+          Nueva Propuesta
+        </h2>
+
+        <button type="button"
+                (click)="cerrarNuevaPropuesta()"
+                aria-label="Cerrar">
+          ×
+        </button>
+
+      </div>
+
+      <p class="cv-ayuda">
+        Crea una nueva solicitud de demostración
+        para preparar una cotización.
+      </p>
+
+      <div class="cv-campo">
+
+        <label for="nuevoCliente">
+          Nombre del cliente
+        </label>
+
+        <input id="nuevoCliente"
+               type="text"
+               placeholder="Ej: María Castro"
+               [(ngModel)]="nuevoCliente">
+
+      </div>
+
+      <div class="cv-campo">
+
+        <label for="nuevoProyecto">
+          Nombre del proyecto
+        </label>
+
+        <input id="nuevoProyecto"
+               type="text"
+               placeholder="Ej: Mesa de centro personalizada"
+               [(ngModel)]="nuevoProyecto">
+
+      </div>
+
+      <div class="cv-modal-acciones">
+
+        <button type="button"
+                class="cv-btn cv-btn-blanco"
+                (click)="cerrarNuevaPropuesta()">
+          Cancelar
+        </button>
+
+        <button type="button"
+                class="cv-btn cv-btn-primario"
+                (click)="crearNuevaPropuesta()">
+          Crear Propuesta
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  }
+
+  }
+
+  <!-- ======================================
+       PANTALLA B: FINANZAS
+       ====================================== -->
+  @if (pestanaPrincipal === 'finanzas') {
+
+  <!-- INDICADORES FINANCIEROS -->
+  <div class="cv-indicadores">
+
+    <!-- DISPONIBLE -->
+    <article class="cv-indicador">
+
+      <div class="cv-indicador-icono cv-ico-dinero">
+        <svg class="cv-icono">
+          <use href="#vc-money" />
+        </svg>
+      </div>
+
+      <div>
+        <p>DISPONIBLE PARA RETIRO</p>
+
+        <strong class="cv-texto-turquesa">
+          S/ {{ disponibleRetiro | number:'1.2-2' }}
+        </strong>
+      </div>
+
+    </article>
+
+    <!-- EN TRANSITO -->
+    <article class="cv-indicador">
+
+      <div class="cv-indicador-icono cv-ico-tiempo">
+        <svg class="cv-icono">
+          <use href="#vc-clock" />
+        </svg>
+      </div>
+
+      <div>
+        <p>EN TRÁNSITO (PENDIENTE)</p>
+
+        <strong>
+          S/ {{ enTransito | number:'1.2-2' }}
+        </strong>
+      </div>
+
+    </article>
+
+    <!-- VENTAS BRUTAS -->
+    <article class="cv-indicador">
+
+      <div class="cv-indicador-icono cv-ico-grafico">
+        <svg class="cv-icono">
+          <use href="#vc-chart" />
+        </svg>
+      </div>
+
+      <div>
+        <p>VENTAS BRUTAS (MES)</p>
+
+        <strong>
+          S/ {{ ventasBrutas | number:'1.2-2' }}
+        </strong>
+      </div>
+
+    </article>
+
+    <!-- COMISIONES -->
+    <article class="cv-indicador">
+
+      <div class="cv-indicador-icono cv-ico-comision">
+        <span>%</span>
+      </div>
+
+      <div>
+        <p>COMISIONES PAGADAS</p>
+
+        <strong>
+          S/ {{ comisionesPagadas | number:'1.2-2' }}
+        </strong>
+      </div>
+
+    </article>
+
+  </div>
+
+  <!-- PESTAÑAS FINANCIERAS -->
+  <nav class="cv-tabs-secundarias cv-tabs-finanzas"
+       aria-label="Secciones financieras">
+
+    <button type="button"
+            [class.activo]="
+                pestanaFinanzas === 'movimientos'
+              "
+            (click)="cambiarFinanzas('movimientos')">
+
+      Historial de Movimientos
+    </button>
+
+    <button type="button"
+            [class.activo]="
+                pestanaFinanzas === 'retiros'
+              "
+            (click)="cambiarFinanzas('retiros')">
+
+      Retiros y Facturación
+    </button>
+
+  </nav>
+
+  <div class="cv-grid-finanzas">
+
+    <!-- TABLA DE MOVIMIENTOS -->
+    <section class="cv-tarjeta cv-historial">
+
+      <div class="cv-historial-cabecera">
+
+        <h2>
+
+          <svg class="cv-icono cv-icono-turquesa">
+            <use href="#vc-list" />
+          </svg>
+
+          {{
+              pestanaFinanzas === 'movimientos'
+                ? 'Últimas Transacciones'
+                : 'Retiros y Facturación'
+          }}
+
+        </h2>
+
+        <span class="cv-filtro-fecha">
+          Octubre 2026
+        </span>
+
+      </div>
+
+      <div class="cv-tabla-scroll">
+
+        <table class="cv-tabla cv-tabla-finanzas">
+
+          <thead>
+            <tr>
+              <th>FECHA</th>
+              <th>CONCEPTO</th>
+              <th>REF. PEDIDO</th>
+              <th>MONTO</th>
+              <th>ESTADO</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (
+            movimiento of movimientos;
+            track $index
+            ) {
+
+            @if (
+            pestanaFinanzas === 'movimientos' ||
+            movimiento.tipo === 'retiro'
+            ) {
+
+            <tr>
+
+              <td>
+                {{ movimiento.fecha }}
+              </td>
+
+              <td>
+                <div class="cv-concepto">
+
+                  <span class="cv-mov-icono"
+                        [class.cv-mov-comision]="
+                                movimiento.tipo === 'comision'
+                              "
+                        [class.cv-mov-retiro]="
+                                movimiento.tipo === 'retiro'
+                              ">
+
+                    @if (movimiento.tipo === 'ingreso') {
+
+                    <svg class="cv-icono">
+                      <use href="#vc-arrow-down" />
+                    </svg>
+
+                    } @else if (
+                    movimiento.tipo === 'comision'
+                    ) {
+
+                    <svg class="cv-icono">
+                      <use href="#vc-arrow-up" />
+                    </svg>
+
+                    } @else {
+
+                    <svg class="cv-icono">
+                      <use href="#vc-bank" />
+                    </svg>
+
+                    }
+
+                  </span>
+
+                  {{ movimiento.concepto }}
+
+                </div>
+              </td>
+
+              <td>
+                <span class="cv-referencia"
+                      [class.cv-enlace-ref]="
+                              movimiento.tipo !== 'retiro'
+                            ">
+
+                  #{{ movimiento.referencia }}
+                </span>
+              </td>
+
+              <td class="cv-monto">
+                {{ formatearMonto(movimiento.monto) }}
+              </td>
+
+              <td>
+
+                <span class="cv-estado"
+                      [class.cv-estado-naranja]="
+                              movimiento.estado === 'En Tránsito' ||
+                              movimiento.estado === 'Pendiente'
+                            "
+                      [class.cv-estado-verde]="
+                              movimiento.estado === 'Cobrado' ||
+                              movimiento.estado === 'Acreditado' ||
+                              movimiento.estado === 'Completado'
+                            ">
+
+                  {{ movimiento.estado }}
+                </span>
+
+              </td>
+
+            </tr>
+
+            }
+
+            } @empty {
+
+            <tr>
+              <td colspan="5" class="cv-vacio">
+                No hay movimientos registrados.
+              </td>
+            </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+    <!-- PANEL DERECHO FINANCIERO -->
+    <div class="cv-finanzas-lateral">
+
+      <!-- SALDO -->
+      <article class="cv-saldo">
+
+        <span>SALDO EN MARKETAR</span>
+
+        <strong>
+          S/ {{ disponibleRetiro | number:'1.2-2' }}
+        </strong>
+
+      </article>
+
+      <!-- RETIRAR FONDOS -->
+      <section class="cv-tarjeta cv-retiro">
+
+        <h2>Retirar Fondos</h2>
+
+        <div class="cv-resumen-retiro">
+
+          <div>
+            <span>Monto a retirar:</span>
+
+            <strong class="cv-texto-turquesa">
+              S/ {{ disponibleRetiro | number:'1.2-2' }}
+            </strong>
+          </div>
+
+          <div>
+            <span>Costo de transferencia:</span>
+            <strong>S/ 0.00</strong>
+          </div>
+
+          <div>
+            <span>Tiempo estimado:</span>
+            <strong>24 a 48 hrs hábiles</strong>
+          </div>
+
+        </div>
+
+        @if (mostrarFormularioRetiro) {
+
+        <div class="cv-campo cv-campo-retiro">
+
+          <label for="montoRetirar">
+            Monto del retiro simulado (S/)
+          </label>
+
+          <input id="montoRetirar"
+                 type="number"
+                 min="0.01"
+                 step="0.01"
+                 [max]="disponibleRetiro"
+                 [(ngModel)]="montoRetirar">
+
+        </div>
+
+        <div class="cv-acciones-retiro">
+
+          <button type="button"
+                  class="cv-btn cv-btn-blanco"
+                  (click)="cancelarRetiro()">
+            Cancelar
+          </button>
+
+          <button type="button"
+                  class="cv-btn cv-btn-primario"
+                  (click)="solicitarRetiro()">
+            Confirmar
+          </button>
+
+        </div>
+
+        } @else {
+
+        <button type="button"
+                class="cv-btn cv-btn-primario cv-btn-ancho"
+                [disabled]="disponibleRetiro <= 0"
+                (click)="abrirRetiro()">
+
+          Solicitar Retiro
+        </button>
+
+        }
+
+        <p class="cv-nota-retiro">
+          El próximo desembolso automático de demostración
+          está programado para el
+          <strong>01 Nov, 2026.</strong>
+        </p>
+
+        <p class="cv-nota-demo">
+          Simulación: no se realizan transferencias bancarias.
+        </p>
+
+      </section>
+
+    </div>
+
+  </div>
+
+  }
+
+</div>

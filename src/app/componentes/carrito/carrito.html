@@ -1,43 +1,3 @@
-<!-- TOP BAR -->
-<div class="top-bar">
-  <div class="container top-bar-inner">
-    <div class="top-bar-left">
-      <img src="https://flagcdn.com/w20/pe.png" alt="Perú" width="16" height="11">
-      <span>Envíos y fabricación a nivel nacional</span>
-    </div>
-    <div class="top-bar-right">
-      <a href="#">Quiero Vender</a>
-      <a href="#">Ayuda</a>
-      <a href="#">Sobre nosotros</a>
-      <a href="#">Contáctanos</a>
-    </div>
-  </div>
-</div>
-
-<!-- HEADER -->
-<header>
-  <div class="container header-container">
-    <nav class="header-links">
-      <a href="#">Empieza a Crear</a>
-      <a href="#">Ver Catálogo</a>
-      <a href="#">Mis Diseños</a>
-    </nav>
-
-    <div class="logo">
-      <div class="logo-icon">
-        <i class="fa-solid fa-cube"></i>
-      </div>
-      MARKET <span class="text-primary">AR</span>
-    </div>
-
-    <div class="header-icons">
-      <i class="fa-solid fa-cloud-arrow-up"></i>
-      <i class="fa-regular fa-user"></i>
-      <i class="fa-solid fa-cart-shopping"></i>
-    </div>
-  </div>
-</header>
-
 <!-- MAIN CART CONTENT -->
 <main class="cart-page">
   <div class="container">
@@ -184,7 +144,10 @@
             <span class="text-primary">S/ 4,300.00</span>
           </div>
 
-          <button class="btn-checkout">Proceder al Pago <i class="fa-solid fa-arrow-right"></i></button>
+          <button
+            routerLink="/pagos"
+            routerLinkActive="activo"
+            class="btn-checkout">Proceder al Pago <i class="fa-solid fa-arrow-right"></i></button>
 
           <div class="secure-payment">
             <i class="fa-solid fa-lock"></i> Pago seguro y encriptado
