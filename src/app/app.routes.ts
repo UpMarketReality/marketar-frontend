@@ -28,14 +28,14 @@ import { authGuard } from './core/auth/auth-guard';
 
 // MAR-12: COTIZACIONES Y FINANZAS DEL VENDEDOR
 import { VendedorCotizaciones } from './componentes/vendedor-cotizaciones/vendedor-cotizaciones';
+import { VendedorPerfil } from './componentes/vendedor-perfil/vendedor-perfil';
 
 export const routes: Routes = [
-
   // RUTA INICIAL
   {
     path: '',
     redirectTo: 'home1',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
 
   // RUTAS GENERALES
@@ -43,22 +43,22 @@ export const routes: Routes = [
   // MAR-10: INICIO DE SESION
   {
     path: 'inicio-sesion',
-    component: InicioSesion
+    component: InicioSesion,
   },
 
   // MAR-11: REGISTRO DE COMPRADOR Y VENDEDOR
   {
     path: 'registro',
-    component: Registro
+    component: Registro,
   },
 
   {
     path: 'empieza-acrear',
-    component: EmpiezaACrear
+    component: EmpiezaACrear,
   },
   {
     path: 'home1',
-    component: Home1
+    component: Home1,
   },
 
   // CARRITO Y PAGOS
@@ -70,9 +70,9 @@ export const routes: Routes = [
     children: [
       {
         path: 'pagos',
-        component: PagosComponente
-      }
-    ]
+        component: PagosComponente,
+      },
+    ],
   },
 
   // PERFIL DEL COMPRADOR
@@ -85,25 +85,25 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'datos',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'datos',
-        component: PerfilCompradorDatosComponente
+        component: PerfilCompradorDatosComponente,
       },
       {
         path: 'direccion',
-        component: PerfilCompradorDireccionComponente
+        component: PerfilCompradorDireccionComponente,
       },
       {
         path: 'pedidos',
-        component: PerfilCompradorPedidosComponente
+        component: PerfilCompradorPedidosComponente,
       },
       {
         path: 'cotizacion',
-        component: PerfilCompradorCotizacionesComponente
-      }
-    ]
+        component: PerfilCompradorCotizacionesComponente,
+      },
+    ],
   },
 
   // PERFIL DEL VENDEDOR
@@ -111,38 +111,40 @@ export const routes: Routes = [
     path: 'perfil-vendedor',
     component: VendedorLayoutComponente,
     children: [
-
       // REDIRECCION INICIAL
       {
         path: '',
-        redirectTo: 'productos',
-        pathMatch: 'full'
+        component: VendedorPerfil,
+        pathMatch: 'full',
       },
 
       // MIS PRODUCTOS
       {
         path: 'productos',
-        component: VendedorMisProductos
+        component: VendedorMisProductos,
       },
 
       // AGREGAR NUEVO PRODUCTO
       {
         path: 'nuevo-producto',
-        component: VendedorMisProductosB
+        component: VendedorMisProductosB,
       },
 
       // GESTOR DE PEDIDOS
       {
         path: 'gestor-pedidos',
-        component: VendedorGestorDePedidos
+        component: VendedorGestorDePedidos,
       },
 
       // RESUMEN GENERAL
       {
         path: 'resumen',
-        component: VendedorResumen
-      }
-    ]
-  }
-
+        component: VendedorResumen,
+      },
+      {
+        path: 'cotizaciones',
+        component: VendedorCotizaciones,
+      },
+    ],
+  },
 ];
