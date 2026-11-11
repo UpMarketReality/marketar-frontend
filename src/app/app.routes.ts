@@ -17,21 +17,49 @@ import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen
 import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/vendedor-mis-productos-b';
 import { authGuard } from './core/auth/auth-guard';
 
+// MAR-13: PERFIL DEL VENDEDOR
+import { VendedorPerfil } from './componentes/vendedor-perfil/vendedor-perfil';
+
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'inicio-sesion', component: InicioSesion },
-  { path: 'empieza-acrear', component: EmpiezaACrear },
-  { path: 'home', component: Home1 },
+  {
+    path: '',
+    redirectTo: 'home1',
+    pathMatch: 'full'
+  },
+  {
+    path: 'inicio-sesion',
+    component: InicioSesion
+  },
+  {
+    path: 'empieza-acrear',
+    component: EmpiezaACrear
+  },
+  {
+    path: 'home1',
+    component: Home1
+  },
+  {
+    path: 'home',
+    component: Home1
+  },
   {
     path: 'carrito',
     component: Carrito,
     canActivate: [authGuard],
     data: { role: 'COMPRADOR' },
+    children: [
+      {
+        path: 'pagos',
+        component: PagosComponente
+      }
+    ]
   },
   {
     path: 'pagos',
-    component: PagosComponente,
+    component: PagosComponente
   },
+
+  // PERFIL DEL COMPRADOR
   {
     path: 'perfil-comprador',
     component: CompradorLayoutComponente,
@@ -41,26 +69,28 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'datos',
-        pathMatch: 'full',
+        pathMatch: 'full'
       },
       {
         path: 'datos',
-        component: PerfilCompradorDatosComponente,
+        component: PerfilCompradorDatosComponente
       },
       {
         path: 'direccion',
-        component: PerfilCompradorDireccionComponente,
+        component: PerfilCompradorDireccionComponente
       },
       {
         path: 'pedidos',
-        component: PerfilCompradorPedidosComponente,
+        component: PerfilCompradorPedidosComponente
       },
       {
         path: 'cotizacion',
-        component: PerfilCompradorCotizacionesComponente,
-      },
-    ],
+        component: PerfilCompradorCotizacionesComponente
+      }
+    ]
   },
+
+  // PERFIL DEL VENDEDOR
   {
     path: 'perfil-vendedor',
     component: VendedorLayoutComponente,
@@ -68,24 +98,30 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'productos',
-        pathMatch: 'full',
+        pathMatch: 'full'
       },
       {
         path: 'productos',
-        component: VendedorMisProductos,
+        component: VendedorMisProductos
       },
       {
         path: 'nuevo-producto',
-        component: VendedorMisProductosB,
+        component: VendedorMisProductosB
       },
       {
         path: 'gestor-pedidos',
-        component: VendedorGestorDePedidos,
+        component: VendedorGestorDePedidos
       },
       {
         path: 'resumen',
-        component: VendedorResumen,
+        component: VendedorResumen
       },
-    ],
-  },
+
+      // MAR-13: PERFIL PUBLICO DEL VENDEDOR
+      {
+        path: 'perfil',
+        component: VendedorPerfil
+      }
+    ]
+  }
 ];
