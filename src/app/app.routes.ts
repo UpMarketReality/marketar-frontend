@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 
 // COMPONENTES GENERALES
 import { InicioSesion } from './componentes/inicio-sesion/inicio-sesion';
+import { Registro } from './componentes/registro/registro';
 import { Carrito } from './componentes/carrito/carrito';
 import { EmpiezaACrear } from './componentes/empieza-acrear/empieza-acrear';
 import { Home1 } from './componentes/home1/home1';
@@ -33,29 +34,34 @@ export const routes: Routes = [
   // RUTA INICIAL
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'home1',
     pathMatch: 'full'
   },
 
   // RUTAS GENERALES
+
+  // MAR-10: INICIO DE SESION
   {
     path: 'inicio-sesion',
     component: InicioSesion
   },
+
+  // MAR-11: REGISTRO DE COMPRADOR Y VENDEDOR
+  {
+    path: 'registro',
+    component: Registro
+  },
+
   {
     path: 'empieza-acrear',
     component: EmpiezaACrear
-  },
-  {
-    path: 'home',
-    component: Home1
   },
   {
     path: 'home1',
     component: Home1
   },
 
-  // CARRITO DE COMPRAS
+  // CARRITO Y PAGOS
   {
     path: 'carrito',
     component: Carrito,
@@ -67,19 +73,6 @@ export const routes: Routes = [
         component: PagosComponente
       }
     ]
-  },
-
-  // PAGOS - RUTA PRINCIPAL DE DEVELOP
-  {
-    path: 'pagos',
-    component: PagosComponente
-  },
-
-  // COMPATIBILIDAD CON LA RUTA ANTERIOR
-  {
-    path: 'carrito/pagos',
-    redirectTo: 'pagos',
-    pathMatch: 'full'
   },
 
   // PERFIL DEL COMPRADOR
@@ -148,22 +141,8 @@ export const routes: Routes = [
       {
         path: 'resumen',
         component: VendedorResumen
-      },
-
-      // MAR-12: COTIZACIONES Y FINANZAS
-      {
-        path: 'cotizaciones',
-        component: VendedorCotizaciones
-      }
-
-    ]
-  }
-
-      // MAR-13: PERFIL PUBLICO DEL VENDEDOR
-      {
-        path: 'perfil',
-        component: VendedorPerfil
       }
     ]
   }
+
 ];
