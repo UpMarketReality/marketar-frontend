@@ -22,6 +22,7 @@ import { VendedorMisProductos } from './componentes/vendedor-mis-productos/vende
 import { VendedorGestorDePedidos } from './componentes/vendedor-gestor-de-pedidos/vendedor-gestor-de-pedidos';
 import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen';
 import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/vendedor-mis-productos-b';
+import { Catalogo } from './componentes/catalogo/catalogo';
 
 // SEGURIDAD DE DEVELOP
 import { authGuard } from './core/auth/auth-guard';
@@ -147,4 +148,7 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'catalogo', component: Catalogo,
+  }
 ];
