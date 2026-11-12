@@ -1,29 +1,66 @@
+
 <div class="app_layout">
-  <!-- Barra Lateral -->
+  <!-- Barra lateral del vendedor -->
   <aside class="side_bar">
+
     <nav class="side_nav">
-      <a routerLink = "/perfil-vendedor/productos" class="nav_item active_item">
-        <span class="nav_icon">🏷️</span> Mis productos
+      <!-- MAR-13: PERFIL PUBLICO DEL VENDEDOR -->
+      <a routerLink="/perfil-vendedor"
+         routerLinkActive="active_item"
+         class="nav_item">
+        <span class="nav_icon">👤</span>
+        Perfil
       </a>
-      <a routerLink="/perfil-vendedor/resumen" class="nav_item">
-        <span class="nav_icon">📊</span> Resumen
+
+      <!-- MIS PRODUCTOS -->
+      <a routerLink="/perfil-vendedor/productos"
+         routerLinkActive="active_item"
+         class="nav_item">
+        <span class="nav_icon">🏷️</span>
+        Mis productos
       </a>
-      <a routerLink="/perfil-vendedor/gestor-pedidos" class="nav_item">
-        <span class="nav_icon">📦</span> Gestor de pedidos
+
+      <!-- RESUMEN GENERAL -->
+      <a routerLink="/perfil-vendedor/resumen"
+         routerLinkActive="active_item"
+         class="nav_item">
+        <span class="nav_icon">📊</span>
+        Resumen
       </a>
-      <a  class="nav_item">
-        <span class="nav_icon">📄</span> Cotizaciones y finanzas
+
+      <!-- GESTOR DE PEDIDOS -->
+      <a routerLink="/perfil-vendedor/gestor-pedidos"
+         routerLinkActive="active_item"
+         class="nav_item">
+        <span class="nav_icon">📦</span>
+        Gestor de pedidos
       </a>
-      <a  class="nav_item">
-        <span class="nav_icon">👤</span> Perfil
+
+      <!-- MAR-12: COTIZACIONES Y FINANZAS -->
+      <a routerLink="/perfil-vendedor/cotizaciones"
+         routerLinkActive="active_item"
+         class="nav_item">
+      <!-- COTIZACIONES Y FINANZAS -->
+      <!-- Pendiente de integrar su componente -->
+        <span class="nav_icon">📄</span>
+        Cotizaciones y finanzas
       </a>
+
+
     </nav>
+
+    <!-- CERRAR SESION -->
     <div class="logout_container">
-      <a href="#" class="logout_link">Cerrar sesión</a>
+      <a href="#" class="logout_link">
+        Cerrar sesión
+      </a>
     </div>
+
   </aside>
 
+  <!-- CONTENIDO PRINCIPAL DEL VENDEDOR -->
   <main id="contenido_main_vendedor">
     <router-outlet></router-outlet>
   </main>
+
 </div>

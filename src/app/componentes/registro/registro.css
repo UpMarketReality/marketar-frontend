@@ -1,0 +1,536 @@
+
+/* ==========================================
+   MARKETAR - MAR-11: REGISTRO
+   Diseño basado en Figma
+   ========================================== */
+
+:host {
+  display: block;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+/* PÁGINA PRINCIPAL */
+
+.registro-page {
+  min-height: 75vh;
+  background: #f7f9fc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 70px 24px;
+  box-sizing: border-box;
+}
+
+/* TARJETA PRINCIPAL */
+
+.registro-container {
+  width: 100%;
+  max-width: 1000px;
+  min-height: 530px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  background: #ffffff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+/* ==========================================
+   IMAGEN IZQUIERDA
+   ========================================== */
+
+.registro-imagen {
+  position: relative;
+  min-height: 530px;
+  display: flex;
+  align-items: flex-end;
+  padding: 35px;
+  box-sizing: border-box;
+  background-color: #151b28;
+  background-image: linear-gradient( to bottom, rgba(10, 15, 27, 0.05), rgba(10, 15, 27, 0.90) ), url('/images/registro-camera.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.registro-imagen-contenido {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  max-width: 390px;
+}
+
+  .registro-imagen-contenido h2 {
+    font-size: 29px;
+    font-weight: 800;
+    line-height: 1.16;
+    letter-spacing: -0.6px;
+    margin: 0 0 15px;
+  }
+
+  .registro-imagen-contenido p {
+    font-size: 14px;
+    color: #e1e5ec;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+/* ==========================================
+   PANEL DERECHO
+   ========================================== */
+
+.registro-panel {
+  min-width: 0;
+  padding: 35px 42px;
+  background: #ffffff;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.registro-tabs {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #e7edf3;
+  margin-bottom: 28px;
+}
+
+.registro-tab {
+  flex: 1;
+  text-decoration: none;
+  text-align: center;
+  padding: 12px 5px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #52627a;
+  border-bottom: 2px solid transparent;
+}
+
+  .registro-tab.activo {
+    color: #00bdb5;
+    border-bottom-color: #00bdb5;
+  }
+
+  .registro-tab:not(.activo):hover {
+    color: #00bdb5;
+  }
+
+/* TÍTULO */
+
+.registro-panel h1 {
+  font-size: 25px;
+  font-weight: 800;
+  color: #172338;
+  margin: 0 0 9px;
+}
+
+.registro-subtitulo {
+  font-size: 13px;
+  color: #71809a;
+  line-height: 1.5;
+  margin: 0 0 23px;
+}
+
+/* ==========================================
+   TIPO DE CUENTA
+   ========================================== */
+
+.registro-pregunta {
+  font-size: 13px;
+  font-weight: 700;
+  color: #172338;
+  margin: 0 0 12px;
+}
+
+.registro-tipos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.registro-tipo {
+  min-height: 72px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 8px;
+  color: #52627a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+  .registro-tipo:hover {
+    border-color: #00bdb5;
+  }
+
+  .registro-tipo.seleccionado {
+    border-color: #00bdb5;
+    background: #e8fbfa;
+    color: #00aaa3;
+    box-shadow: 0 2px 7px rgba(0, 189, 181, 0.1);
+  }
+
+/* ICONOS */
+
+.tipo-icono {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+  .tipo-icono svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+    fill: currentColor;
+  }
+
+/* ==========================================
+   FORMULARIOS
+   ========================================== */
+
+.registro-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.registro-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+  .registro-grupo label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #172338;
+  }
+
+  .registro-grupo input {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid #e5eaf0;
+    border-radius: 7px;
+    background-color: #f7f9fc;
+    color: #172338;
+    font-size: 13px;
+    font-family: inherit;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+    .registro-grupo input::placeholder {
+      color: #9baac0;
+      opacity: 1;
+    }
+
+    .registro-grupo input:focus {
+      border-color: #00bdb5;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0, 189, 181, 0.09);
+    }
+
+/* ==========================================
+   ICONOS EN CAMPOS
+   ========================================== */
+
+.registro-input-icono {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+  .registro-input-icono svg {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: #94a3b8;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+.registro-grupo .registro-input-icono input {
+  width: 100%;
+  padding-left: 39px;
+}
+
+.registro-input-icono:focus-within svg {
+  stroke: #00bdb5;
+}
+
+/* ==========================================
+   FILAS DE DOS COLUMNAS
+   ========================================== */
+
+.registro-fila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+/* NUEVO: RUC Y NOMBRE DE EMPRESA */
+
+.registro-fila-empresa {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 12px;
+  row-gap: 10px;
+  align-items: start;
+}
+
+  .registro-fila-empresa .registro-grupo {
+    min-width: 0;
+  }
+
+  .registro-fila-empresa label {
+    min-height: 16px;
+  }
+
+/* ==========================================
+   VALIDACIONES
+   ========================================== */
+
+.registro-grupo .registro-input-icono input.input-error {
+  border-color: #ef4444;
+  background: #fffafa;
+}
+
+  .registro-grupo .registro-input-icono input.input-error:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.10);
+  }
+
+.registro-error {
+  display: block;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #dc2626;
+}
+
+.registro-mensaje {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 1px solid #99e5d9;
+  border-radius: 7px;
+  background: #e8f9f6;
+  color: #007e75;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.registro-mensaje-error {
+  border-color: #fecaca;
+  background: #fff1f2;
+  color: #b91c1c;
+}
+
+/* ==========================================
+   BOTÓN DE REGISTRO
+   ========================================== */
+
+.registro-boton {
+  width: 100%;
+  min-height: 46px;
+  border: none;
+  border-radius: 7px;
+  background: #00bdb5;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 189, 181, 0.18);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 4px;
+}
+
+  .registro-boton:hover {
+    background: #00a9a2;
+    box-shadow: 0 4px 12px rgba(0, 189, 181, 0.22);
+  }
+
+  .registro-boton:active {
+    background: #00958f;
+  }
+
+/* ==========================================
+   NUEVO: TÉRMINOS Y PRIVACIDAD
+   ========================================== */
+
+.registro-legal {
+  margin: 0;
+  color: #71809a;
+  font-size: 10px;
+  line-height: 1.5;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.registro-enlace-legal {
+  display: inline;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #172338;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+  .registro-enlace-legal:hover {
+    color: #00aaa3;
+  }
+
+.registro-aviso-legal {
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #99e5d9;
+  border-radius: 7px;
+  background: #e8f9f6;
+  color: #007e75;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* ==========================================
+   ACCESIBILIDAD
+   ========================================== */
+
+.registro-tipo:focus-visible,
+.registro-tab:focus-visible,
+.registro-boton:focus-visible,
+.registro-enlace-legal:focus-visible {
+  outline: 3px solid rgba(0, 189, 181, 0.45);
+  outline-offset: 3px;
+}
+
+/* ==========================================
+   TABLET
+   ========================================== */
+
+@media (max-width: 850px) {
+
+  .registro-container {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .registro-panel {
+    padding: 30px 25px;
+  }
+
+  .registro-imagen {
+    padding: 25px;
+  }
+
+  .registro-imagen-contenido h2 {
+    font-size: 24px;
+  }
+
+  .registro-fila-empresa {
+    gap: 10px;
+  }
+
+  .registro-grupo input {
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   MÓVIL
+   ========================================== */
+
+@media (max-width: 650px) {
+
+  .registro-page {
+    padding: 25px 15px;
+    align-items: flex-start;
+  }
+
+  .registro-container {
+    max-width: 480px;
+    grid-template-columns: minmax(0, 1fr);
+    border-radius: 12px;
+  }
+
+  .registro-imagen {
+    min-height: 230px;
+    padding: 25px;
+  }
+
+  .registro-imagen-contenido h2 {
+    font-size: 22px;
+  }
+
+  .registro-imagen-contenido p {
+    font-size: 12px;
+  }
+
+  .registro-panel {
+    padding: 27px 22px 32px;
+  }
+
+    .registro-panel h1 {
+      font-size: 23px;
+    }
+
+  .registro-fila,
+  .registro-fila-empresa {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+/* ==========================================
+   MÓVILES PEQUEÑOS
+   ========================================== */
+
+@media (max-width: 380px) {
+
+  .registro-panel {
+    padding: 24px 16px;
+  }
+
+  .registro-fila,
+  .registro-fila-empresa {
+    grid-template-columns: 1fr;
+  }
+
+  .registro-tipos {
+    gap: 8px;
+  }
+
+  .registro-tipo {
+    font-size: 11px;
+  }
+
+  .registro-legal {
+    font-size: 10px;
+  }
+}

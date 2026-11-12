@@ -1,0 +1,90 @@
+<section class="login-page">
+  <div class="login-container">
+    <div class="login-brand">
+      <div class="login-logo">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="28"
+             height="28"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.8"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M12 2 21 7 21 17 12 22 3 17 3 7Z" />
+          <path d="m3 7 9 5 9-5" />
+          <path d="M12 12v10" />
+        </svg>
+      </div>
+      <h1>MARKET <span>AR</span></h1>
+      <p>Bienvenido de nuevo a MarketAR</p>
+    </div>
+
+    <div class="login-card">
+      <h2>Iniciar sesión</h2>
+      <p class="login-subtitle">Ingresa tus datos para acceder a tu cuenta</p>
+
+      <form (ngSubmit)="iniciarSesion()" #loginForm="ngForm">
+
+        <div class="form-group">
+          <label for="login-email">Correo electrónico</label>
+          <input
+            type="email"
+            id="login-email"
+            name="correo"
+            [(ngModel)]="correo"
+            placeholder="Ingresa tu correo electrónico"
+            autocomplete="username"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Contraseña</label>
+          <input
+            type="password"
+            id="login-password"
+            name="password"
+            [(ngModel)]="password"
+            placeholder="Ingresa tu contraseña"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+
+        <div class="login-options">
+          <label class="remember-me">
+            <input type="checkbox" name="remember" />
+            Recordarme
+          </label>
+          <a href="#" class="forgot-password">
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+
+        <!-- Mensaje de error -->
+        @if (errorMessage) {
+          <p class="login-error" role="alert">
+            {{ errorMessage }}
+          </p>
+        }
+
+        <!-- Botón para iniciar sesión -->
+        <button
+          type="submit"
+          class="login-button"
+          [disabled]="loginForm.invalid || cargando"
+        >
+          {{ cargando ? 'Iniciando sesión...' : 'Iniciar sesión' }}
+        </button>
+
+      </form>
+
+      <p class="register-text">
+        ¿No tienes una cuenta?
+        <a href="#">Regístrate aquí</a>
+      </p>
+    </div>
+  </div>
+</section>
