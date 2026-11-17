@@ -30,6 +30,7 @@ import { authGuard } from './core/auth/auth-guard';
 // MAR-12: COTIZACIONES Y FINANZAS DEL VENDEDOR
 import { VendedorCotizaciones } from './componentes/vendedor-cotizaciones/vendedor-cotizaciones';
 import { VendedorPerfil } from './componentes/vendedor-perfil/vendedor-perfil';
+import { DisenosGuardados } from './componentes/disenos-guardados/disenos-guardados';
 
 export const routes: Routes = [
   // RUTA INICIAL
@@ -60,6 +61,10 @@ export const routes: Routes = [
   {
     path: 'home1',
     component: Home1,
+  },
+  {
+    path: 'mis-diseños',
+    component: DisenosGuardados,
   },
 
   // CARRITO Y PAGOS
