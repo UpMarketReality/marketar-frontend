@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { RequestDTO } from '../../model/request-dto';
 import { ResponseDto } from '../../model/response-dto';
 import { UsuarioDto } from '../../model/usuario-dto';
+import { environment } from '../../../environments/environment';
 
 const TokenKey = 'access_token';
 
@@ -12,7 +13,7 @@ const TokenKey = 'access_token';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  readonly apiUrl = 'http://localhost:8080/api/v1';
+  readonly apiUrl = environment.apiUrl + '/v1';
 
   private storageKey = 'marketar_session';
 
