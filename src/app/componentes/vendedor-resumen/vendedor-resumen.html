@@ -1,1 +1,103 @@
-<p>vendedor-resumen works!</p>
+<section class="view_section">
+  <h1 class="page_title">Resumen General</h1>
+
+  <!-- Tarjetas de estadísticas -->
+  <div class="stats_grid">
+    @for (s of estadisticas; track s.etiqueta) {
+      <mat-card appearance="outlined" class="stat_card">
+        <mat-card-content class="stat_content">
+          <div [class]="'stat_icon stat_icon_' + s.tono">
+            <mat-icon>{{ s.icono }}</mat-icon>
+          </div>
+          <div class="stat_text">
+            <span class="stat_label">{{ s.etiqueta }}</span>
+            <span class="stat_value">{{ s.valor }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+
+  <div class="main_grid">
+
+    <!-- Pedidos recientes -->
+    <mat-card appearance="outlined" class="panel_card">
+      <div class="panel_header">
+        <span class="panel_title">
+          <mat-icon class="panel_title_icon">assignment</mat-icon>
+          Pedidos Recientes
+        </span>
+        <button matButton="text" type="button" aria-label="Filtrar pedidos">
+          <mat-icon>filter_alt</mat-icon>
+        </button>
+      </div>
+
+      <div class="tabla_wrap">
+        <table mat-table [dataSource]="pedidos" class="tabla_pedidos">
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID Pedido</th>
+            <td mat-cell *matCellDef="let p" class="celda_id">{{ p.id }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="mueble">
+            <th mat-header-cell *matHeaderCellDef>Mueble</th>
+            <td mat-cell *matCellDef="let p">{{ p.mueble }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="entrega">
+            <th mat-header-cell *matHeaderCellDef>Entrega est.</th>
+            <td mat-cell *matCellDef="let p" class="celda_entrega">{{ p.entrega }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let p">
+              <span [class]="'badge badge_' + p.estado">{{ etiquetaEstado(p.estado) }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef class="col_acciones">Acciones</th>
+            <td mat-cell *matCellDef="let p" class="col_acciones">
+              <button matButton="text" type="button" aria-label="Más opciones">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+        </table>
+      </div>
+    </mat-card>
+
+    <!-- Resumen de liquidación -->
+    <mat-card appearance="outlined" class="panel_card">
+      <div class="panel_header">
+        <span class="panel_title">
+          <mat-icon class="panel_title_icon">show_chart</mat-icon>
+          Resumen de Liquidación
+        </span>
+        <button matButton="text" type="button" aria-label="Descargar resumen">
+          <mat-icon>download</mat-icon>
+        </button>
+      </div>
+
+      <div class="liq_list">
+        @for (l of liquidacion; track l.etiqueta) {
+          <div class="liq_row">
+            <span class="liq_label">{{ l.etiqueta }}</span>
+            <span class="liq_value" [class.liq_value_negativo]="l.negativo">{{ l.valor }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="liq_total">
+        <span class="liq_total_label">Total a depositar</span>
+        <span class="liq_total_value">{{ totalDepositar }}</span>
+      </div>
+    </mat-card>
+
+  </div>
+</section>
