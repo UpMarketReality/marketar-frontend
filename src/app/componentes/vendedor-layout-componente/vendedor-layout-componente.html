@@ -1,3 +1,4 @@
+
 <div class="app_layout">
   <!-- Barra lateral del vendedor -->
   <aside class="side_bar">
@@ -17,7 +18,7 @@
       <!-- MIS PRODUCTOS -->
       <a mat-list-item
          routerLink="/perfil-vendedor/productos"
-         routerLinkActive="item_activo"
+         [class.item_activo]="productosActivo()"
          class="nav_item">
         <mat-icon matListItemIcon>sell</mat-icon>
         Mis productos
