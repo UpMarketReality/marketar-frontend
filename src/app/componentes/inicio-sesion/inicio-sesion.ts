@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RequestDTO } from '../../model/request-dto';
 
 @Component({
   imports: [FormsModule],
@@ -9,6 +10,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './inicio-sesion.css',
   templateUrl: './inicio-sesion.html',
 })
+
+
 export class InicioSesion {
   // Servicios de Angular y autenticación
   private authService = inject(AuthService);
@@ -19,19 +22,25 @@ export class InicioSesion {
   correo: string = '';
   password: string = '';
 
+
   // Variables para controlar la interfaz
   errorMessage: string = '';
   cargando: boolean = false;
 
   // Método que se ejecuta al enviar el formulario
+  private request: RequestDTO;
   iniciarSesion(): void {
     if (this.cargando) return;
 
     this.errorMessage = '';
     this.cargando = true;
 
+    this.request = new RequestDTO();
+    this.request.correo = this.correo;
+    this.request.password = this.password;
+
     // Llamamos al servicio que se conecta con Spring Boot
-    this.authService.login(this.correo, this.password).subscribe({
+    this.authService.login(this.request).subscribe({
       // Si el backend autentica correctamente
       next: (response) => {
         this.cargando = false;
