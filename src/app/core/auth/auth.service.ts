@@ -1,20 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { map, Observable} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { RequestDTO } from '../../model/request-dto';
+import { ResponseDto } from '../../model/response-dto';
+import { UsuarioDto } from '../../model/usuario-dto';
 
-export interface UserDTO {
-  userId: number;
-  name: string;
-  email: string;
-  role: string;
-}
-
-export interface LoginResponse {
-  jwt: string;
-  roles: string[];
-  expiresAt: string;
-  user: UserDTO;
-}
+const TokenKey = 'access_token';
 
 @Injectable({
   providedIn: 'root',
@@ -25,20 +16,32 @@ export class AuthService {
 
   private storageKey = 'marketar_session';
 
-  login(correo: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, { correo, password }).pipe(
-      tap((response) => {
-        sessionStorage.setItem(this.storageKey, JSON.stringify(response));
-      }),
-    );
+  login(request: RequestDTO): Observable<ResponseDto> {
+    return this.http
+      .post<ResponseDto>(`${this.apiUrl}/auth/login`, request, { observe: 'response' })
+      .pipe(
+        map((response) => {
+          const data = response.body;
+
+          // Comprobamos que el backend devuelva el JWT
+          if (!data || !data.jwt) {
+            throw new Error('El backend no devolvió un JWT');
+          }
+
+          // Guardamos toda la respuesta del usuario
+          sessionStorage.setItem(this.storageKey, JSON.stringify(data));
+
+          return data;
+        }),
+      );
   }
-  getSession(): LoginResponse | null {
+  getSession(): ResponseDto | null {
     const saved = sessionStorage.getItem(this.storageKey);
 
     if (!saved) return null;
 
     try {
-      const session = JSON.parse(saved) as LoginResponse;
+      const session = JSON.parse(saved) as ResponseDto;
 
       // Verificar que tenga JWT y no haya expirado.
       if (!session.jwt || !session.expiresAt || !(Date.parse(session.expiresAt) > Date.now())) {
@@ -61,7 +64,7 @@ export class AuthService {
     return this.getSession()?.jwt ?? null;
   }
 
-  getUser(): UserDTO | null {
+  getUser(): UsuarioDto | null {
     return this.getSession()?.user ?? null;
   }
 
