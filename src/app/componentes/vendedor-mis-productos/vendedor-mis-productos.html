@@ -3,59 +3,106 @@
   <section class="view_section">
     <h1 class="page_title">Mis Productos</h1>
 
-    <div class="tabs_container">
-      <a routerLink="/perfil-vendedor/productos"><button class="tab_btn active_tab">🗂️ Catálogo Activo</button></a>
-      <a routerLink="/perfil-vendedor/nuevo-producto" style="text-decoration:none;"><button class="tab_btn">Añadir Nuevo</button></a>
-    </div>
+    <nav mat-tab-nav-bar class="tabs_nav" aria-label="Secciones de mis productos">
+      <a mat-tab-link
+         routerLink="/perfil-vendedor/productos"
+         routerLinkActive
+         #rlaCatalogo="routerLinkActive"
+         [active]="rlaCatalogo.isActive">
+        <mat-icon>inventory_2</mat-icon>
+        Catálogo Activo
+      </a>
+      <a mat-tab-link
+         routerLink="/perfil-vendedor/nuevo-producto"
+         routerLinkActive
+         #rlaNuevo="routerLinkActive"
+         [active]="rlaNuevo.isActive">
+        <mat-icon>add_box</mat-icon>
+        Añadir Nuevo
+      </a>
+    </nav>
+
     <div class="toolbar_container">
-      <div class="search_box">
-        <span>🔍</span>
-        <input type="text" placeholder="Buscar por nombre o ID..." class="search_input">
-      </div>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search_field">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput type="search" placeholder="Buscar por nombre o ID...">
+      </mat-form-field>
+
       <div class="filter_actions">
-        <select class="dropdown_select"><option>Todos (12)</option></select>
-        <select class="dropdown_select"><option>Más recientes</option></select>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-select value="todos" aria-label="Filtrar por estado">
+            <mat-option value="todos">Todos (12)</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-select value="recientes" aria-label="Ordenar productos">
+            <mat-option value="recientes">Más recientes</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
 
     <div class="product_grid">
-      <div class="product_card">
+      <mat-card appearance="outlined" class="product_card">
         <div class="product_image_wrapper">
-          <span class="status_pill pill_active">🟢 Activo</span>
-          <img src="placeholder.jpg" alt="Armario" class="product_img">
+          <mat-chip class="status_chip" highlighted>
+            <mat-icon matChipAvatar class="status_dot">circle</mat-icon>
+            Activo
+          </mat-chip>
+          <img mat-card-image src="placeholder.jpg" alt="Armario" class="product_img">
         </div>
-        <div class="product_info">
-          <span class="product_category">ARMARIOS & CLOSETS</span>
-          <h4 class="product_name">Armario Bella y la Bestia de Melamina</h4>
+
+        <mat-card-content class="product_info">
+          <p class="product_category">Armarios & Closets</p>
+          <h3 mat-card-title class="product_name">Armario Bella y la Bestia de Melamina</h3>
           <div class="product_meta">
             <span class="product_price">S/ 2,400.00</span>
             <span class="product_stock">Stock: 5</span>
           </div>
-        </div>
-        <div class="product_actions">
-          <button class="card_btn">✏️ Editar</button>
-          <button class="card_btn">🗑️ Eliminar</button>
-        </div>
-      </div>
+        </mat-card-content>
 
-      <div class="product_card">
+        <mat-card-actions class="product_actions">
+          <button matButton="outlined" class="card_btn">
+            <mat-icon>edit</mat-icon>
+            Editar
+          </button>
+          <button matButton="outlined" class="card_btn card_btn_danger">
+            <mat-icon>delete</mat-icon>
+            Eliminar
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="product_card">
         <div class="product_image_wrapper">
-          <span class="status_pill pill_active">🟢 Activo</span>
-          <img src="placeholder.jpg" alt="Escritorio" class="product_img">
+          <mat-chip class="status_chip" highlighted>
+            <mat-icon matChipAvatar class="status_dot">circle</mat-icon>
+            Activo
+          </mat-chip>
+          <img mat-card-image src="placeholder.jpg" alt="Escritorio" class="product_img">
         </div>
-        <div class="product_info">
-          <span class="product_category">ESCRITORIOS</span>
-          <h4 class="product_name">Escritorio Minimalista Roble Claro</h4>
+
+        <mat-card-content class="product_info">
+          <p class="product_category">Escritorios</p>
+          <h3 mat-card-title class="product_name">Escritorio Minimalista Roble Claro</h3>
           <div class="product_meta">
             <span class="product_price">S/ 1,450.00</span>
             <span class="product_stock">Stock: 2</span>
           </div>
-        </div>
-        <div class="product_actions">
-          <button class="card_btn">✏️ Editar</button>
-          <button class="card_btn">🗑️ Eliminar</button>
-        </div>
-      </div>
+        </mat-card-content>
+
+        <mat-card-actions class="product_actions">
+          <button matButton="outlined" class="card_btn">
+            <mat-icon>edit</mat-icon>
+            Editar
+          </button>
+          <button matButton="outlined" class="card_btn card_btn_danger">
+            <mat-icon>delete</mat-icon>
+            Eliminar
+          </button>
+        </mat-card-actions>
+      </mat-card>
     </div>
   </section>
 </main>

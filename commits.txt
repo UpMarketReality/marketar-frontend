@@ -1,0 +1,68 @@
+d1ec3fa | origin/feature/iniciosesion.service | arreglo del autenticathor |  | 2026-11-05
+ca4d223 |  | implementacion del autenticathor |  | 2026-11-02
+2494f86 |  | creacion de archivos ts para el authenticator |  | 2026-11-02
+0e43d74 |  | arreglando app routes |  | 2026-11-02
+f829a45 |  | conexcion entre componentes: carrito, home, pagos |  | 2026-11-02
+b58a114 | HEAD -> main, origin/main, origin/develop, origin/HEAD, develop | Merge pull request #17 from UpMarketReality/feature/MAR-10-inicio-sesion | feat(MAR-10): implementar interfaz de inicio de sesion | 2026-11-01
+c2dad1d | origin/feature/catalogo | Componente catalogo, diseño completado |  | 2026-10-31
+e6337ed | origin/feature/MAR-10-inicio-sesion | feat(MAR-10): implementar interfaz de inicio de sesion |  | 2026-10-30
+2c29f36 |  | Avance de diseño de componente catalogo |  | 2026-10-29
+5693158 | origin/feature/detalle-producto | Creacion de componente detalle-producto |  | 2026-10-28
+3b478c5 |  | n |  | 2026-10-28
+b9d1276 |  | Restablecimiento de rutas |  | 2026-10-28
+7b41a18 | origin/feature/disenos-guardados | Creacion de componente disenos-guardados |  | 2026-10-28
+1eeb7fc |  | Reestructuración del CSS | Se han adaptado las variables empleadas entre componentes desarrollados de manera individual por los miembros del equipo | 2026-10-28
+a8a1ddc |  | Add files via upload |  | 2026-10-28
+fd5a946 |  | Add files via upload |  | 2026-10-28
+e9c2743 |  | Add files via upload |  | 2026-10-28
+db98717 |  | Creacion de componente catalogo |  | 2026-10-28
+3872282 |  | Merge pull request #16 from UpMarketReality/feature/vendedor-mis_productos_B | Feature/vendedor mis productos b | 2026-10-27
+f54e317 | origin/feature/vendedor-mis_productos_B, feature/vendedor-mis_productos_B | Configuracion del .css y retoques en el .html de 'añadir nuevo' seccion productos - vendedor |  | 2026-10-27
+0fd7962 |  | Modificacion de .html y .css de la seccion productos - catalogo activo |  | 2026-10-27
+8b50839 |  | Creacion de la estructura .html para la seccion de nuevos productos para el vendedor |  | 2026-10-26
+4a70ecf |  | Merge pull request #15 from UpMarketReality/feature/vendedor-mis_productos_B | Creacion del componente 'mis_productos_b' para la seccion de vendedor | 2026-10-26
+59581bd |  | Creacion del componente 'mis_productos_b' para la seccion de vendedor |  | 2026-10-26
+9b55ae4 |  | Merge pull request #14 from UpMarketReality/feature/vendedor-gestor_de_pedidos | Feature/vendedor gestor de pedidos | 2026-10-26
+be056e2 | origin/feature/vendedor-gestor_de_pedidos, feature/vendedor-gestor_de_pedidos | Creacion de los estilos .css para la seccion 'gestor de pedidos' para el vendedor |  | 2026-10-26
+a6810c5 |  | Creacion de la estructura .html para la seccion 'gestor de pedidos' para el vendedor |  | 2026-10-26
+ed10245 |  | Merge pull request #13 from UpMarketReality/feature/vendedor-mis_productos | Agregado de estilos .css para la seccion de mis productos | 2026-10-26
+201f4ea | origin/feature/vendedor-mis_productos, feature/vendedor-mis_productos | Agregado de estilos .css para la seccion de mis productos |  | 2026-10-26
+42c2956 |  | error entre comits solucionado |  | 2026-10-26
+6fcf540 |  | Merge pull request #11 from UpMarketReality/feature/pagos | Feature/pagos | 2026-10-26
+2972b41 |  | Merge pull request #12 from UpMarketReality/feature/header | Feature/header | 2026-10-26
+e271206 | origin/feature/header | Merge branch 'main' into feature/header |  | 2026-10-26
+41a9434 | origin/feature/pagos | Merge branch 'main' into feature/pagos |  | 2026-10-26
+d2c8ecd |  | diseño final del header |  | 2026-10-26
+39dd29a |  | creación del componente pagos con su HTML, CSS y su conexcion en app.routes |  | 2026-10-26
+58097f8 |  | creación del componente pagos con su HTML, CSS y su conexcion en app.routes |  | 2026-10-26
+a3b22d7 |  | Merge pull request #10 from UpMarketReality/feature/vendedor-layout | Modificacion del html y adaptacion de las rutas para este sector | 2026-10-26
+5503083 | origin/feature/vendedor-layout, feature/vendedor-layout | Modificacion del html y adaptacion de las rutas para este sector |  | 2026-10-26
+715c051 |  | Merge pull request #9 from UpMarketReality/feature/vendedor-mis_productos | Creacion de la estructura html para la seccion de 'mis productos' del… | 2026-10-26
+637f2d5 |  | Creacion de la estructura html para la seccion de 'mis productos' del vendedor |  | 2026-10-26
+3044f84 |  | Merge pull request #8 from UpMarketReality/feature/vendedor-layout | Creacion de estilo .css para el layout del vendedor y  modificacion d… | 2026-10-26
+78b553b |  | Creacion de estilo .css para el layout del vendedor y  modificacion del html del mismo |  | 2026-10-26
+ed05218 |  | Merge pull request #7 from UpMarketReality/feature/vendedor-layout | creacion de la estructura 'layout' para el vendedor en html | 2026-10-26
+0581507 |  | creacion de la estructura 'layout' para el vendedor en html |  | 2026-10-26
+e6a89ae |  | Merge pull request #6 from UpMarketReality/feature/vendedor-layout | Creacion del componente 'layout' para el vendedor | 2026-10-26
+348e93d |  | Creacion del componente 'layout' para el vendedor |  | 2026-10-26
+7069d02 |  | Merge pull request #5 from UpMarketReality/feature/perfil-comprador | Feature/perfil comprador | 2026-10-25
+ed771af | origin/feature/perfil-comprador | html y css del apartado pedidos del comprador |  | 2026-10-25
+5aae66b |  | html y css del apartado direccion del comprador |  | 2026-10-25
+e7f4e13 |  | html y css del apartado datos del comprador |  | 2026-10-25
+918e69f |  | html y css de apartado cotizacion del comprador |  | 2026-10-25
+0346e82 |  | cree nuevo componente layoutcomprador |  | 2026-10-25
+0aefecb |  | arregle las rutas y el header, para nuevo componente layoutcomprador |  | 2026-10-25
+8e15643 |  | conexcion y creacion de ruta para perfil comprador |  | 2026-10-25
+b1c3502 |  | Merge pull request #4 from UpMarketReality/feature/vendedor-gestor_de_pedidos | Creacion del componente 'gestor_de_pedidos' para el vendedor | 2026-10-24
+4c716f5 |  | Creacion del componente 'gestor_de_pedidos' para el vendedor |  | 2026-10-24
+1bf8181 |  | Merge pull request #3 from UpMarketReality/feature/vendedor-resumen | Creacion del componente 'resumen' para vendedor | 2026-10-24
+50d82bb | origin/feature/vendedor-resumen, feature/vendedor-resumen | Creacion del componente 'resumen' para vendedor |  | 2026-10-24
+2f92fe5 |  | Merge pull request #2 from UpMarketReality/feature/vendedor-mis_productos | Creacion del componente 'mis_productos' para el vendedor | 2026-10-24
+197bebf |  | Creacion del componente 'mis_productos' para el vendedor |  | 2026-10-24
+96446a5 |  | Merge pull request #1 from UpMarketReality/feature/perfil-comprador | Feature/perfil comprador | 2026-10-24
+a59f50d |  | cree un componente para el header, además de su respectiva configuracion |  | 2026-10-24
+2d61510 |  | arreglo de errores |  | 2026-10-24
+8f98170 |  | creacion de los componentes para el perfil del usuario |  | 2026-10-24
+48ea511 |  | implementación del header |  | 2026-10-24
+9e9b8d1 |  | aaaa |  | 2026-10-23
+b6b3ec2 |  | initial commit |  | 2026-10-23
