@@ -10,7 +10,7 @@
   flex: 1;
   min-width: 0;
   width: 100%;
-  padding: 32px 40px;
+  padding: 0;
 }
 
 .view_section {
@@ -270,7 +270,7 @@
 
 @media (max-width: 900px) {
   .contenido_main_vendedor {
-    padding: 24px;
+    padding: 0;
   }
 
   .product_grid {
@@ -299,7 +299,7 @@
 
 @media (max-width: 600px) {
   .contenido_main_vendedor {
-    padding: 16px;
+    padding: 0;
   }
 
   .page_title {

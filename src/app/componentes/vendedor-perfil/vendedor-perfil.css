@@ -23,8 +23,9 @@
 .perfil-vendedor {
   width: 100%;
   min-height: 100%;
-  padding: 26px 24px;
-  background: #f0f4f8;
+  margin: 0;
+  padding: 0;
+  background: transparent;
 }
 
 /* DEFINICIONES SVG */
