@@ -1,180 +1,207 @@
-/* ================================
-   CONTENEDOR PRINCIPAL COMPARTIDO
-   ================================ */
+/* =========================================
+   VISTA: MIS PRODUCTOS - AÑADIR NUEVO
+   Diseño de referencia: formulario "Crear Nuevo Producto".
+   Paleta: teal #00bfb3, títulos #1e293b, etiquetas #334155,
+   bordes #e2e8f0, zonas de carga verde pastel #effdfa.
+   Componentes visuales: Angular Material
+========================================= */
 
 .contenido_main_vendedor {
   flex: 1;
   min-width: 0;
   width: 100%;
   padding: 32px 40px;
-  box-sizing: border-box;
 }
 
 .view_section {
   width: 100%;
   min-width: 0;
-  box-sizing: border-box;
 }
-
-/* ================================
-   TÍTULO Y PESTAÑAS
-   ================================ */
 
 .page_title {
   margin: 0 0 24px;
   font-size: 24px;
   font-weight: 700;
   line-height: 1.3;
-  color: #1f2937;
+  color: #1e293b;
 }
 
-.tabs_container {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  min-height: 43px;
+/* =========================================
+   PESTAÑAS (idénticas a Catálogo Activo)
+========================================= */
+
+.tabs_nav {
+  --mat-tab-active-label-text-color: #00bfb3;
+  --mat-tab-active-hover-label-text-color: #00bfb3;
+  --mat-tab-active-focus-label-text-color: #00bfb3;
+  --mat-tab-active-indicator-color: #00bfb3;
+  --mat-tab-active-indicator-height: 2px;
+  --mat-tab-inactive-label-text-color: #64748b;
+  --mat-tab-inactive-hover-label-text-color: #1e293b;
+  --mat-tab-divider-color: #e2e8f0;
+  --mat-tab-label-text-size: 14px;
+  --mat-tab-label-text-weight: 500;
+
+  /* Sin fondo gris al hacer clic o enfocar */
+  --mat-tab-active-ripple-color: transparent;
+  --mat-tab-inactive-ripple-color: transparent;
+  --mat-tab-active-focus-indicator-color: transparent;
+
   margin-bottom: 24px;
-  border-bottom: 1px solid #e5e7eb;
 }
 
-.tabs_container a {
-  display: inline-flex;
-  text-decoration: none;
+.tabs_nav a {
+  flex-grow: 0;
+  padding: 0 4px;
+  margin-right: 24px;
 }
 
-.tab_btn {
-  padding: 12px 0;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  background: transparent;
-  color: #6b7280;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  white-space: nowrap;
+.tabs_nav mat-icon {
+  margin-right: 8px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
 }
 
-.tab_btn:hover {
-  color: #2563eb;
-}
+/* =========================================
+   TARJETA DEL FORMULARIO
+========================================= */
 
-.tab_btn.active_tab {
-  color: #2563eb;
-  border-bottom-color: #2563eb;
-  font-weight: 600;
-}
-
-/* ================================
-   PANEL DEL FORMULARIO
-   ================================ */
-
-.panel_card {
-  width: 100%;
-  min-width: 0;
-  padding: 24px;
-  box-sizing: border-box;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+.form_card {
+  padding: 24px 28px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border-color: #e2e8f0;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgb(15 23 42 / 5%);
+  --mat-card-outlined-container-color: #ffffff;
+  --mat-card-outlined-container-outline-color: #e2e8f0;
 }
 
 .form_title {
-  margin: 0 0 24px;
-  color: #1f2937;
-  font-size: 20px;
+  margin: 0 0 22px;
+  color: #1e293b;
+  font-size: 18px;
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.3;
 }
-
-/* ================================
-   DISTRIBUCIÓN DEL FORMULARIO
-   ================================ */
 
 .form_layout {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
   gap: 32px;
-  align-items: start;
+  padding: 0;
 }
 
 .form_col_left,
 .form_col_right {
   display: flex;
   flex-direction: column;
-  gap: 22px;
   min-width: 0;
+  gap: 18px;
 }
 
 .form_group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   min-width: 0;
 }
 
 .form_label {
-  color: #374151;
-  font-size: 14px;
+  display: block;
+  margin-bottom: 7px;
+  color: #334155;
+  font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
 }
 
-/* ================================
-   ZONAS PARA SUBIR ARCHIVOS
-   ================================ */
+/* Etiquetas de la columna izquierda (Imágenes y Modelo 3D): teal oscuro de la paleta */
+.form_col_left .form_label {
+  color: #007e77;
+}
+
+.form_row_2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* =========================================
+   CAMPOS (mat-form-field con contorno)
+========================================= */
+
+.campo {
+  --mat-form-field-container-height: 38px;
+  --mat-form-field-container-vertical-padding: 10px;
+  --mat-form-field-container-text-size: 12px;
+  --mat-form-field-outlined-container-shape: 5px;
+  --mat-form-field-outlined-outline-color: #e2e8f0;
+  --mat-form-field-outlined-hover-outline-color: #cbd5e1;
+  --mat-form-field-outlined-focus-outline-color: #00bfb3;
+  --mat-form-field-outlined-focus-outline-width: 1px;
+  --mat-form-field-outlined-input-text-color: #334155;
+  --mat-form-field-outlined-input-text-placeholder-color: #94a3b8;
+  --mat-select-trigger-text-size: 12px;
+  --mat-select-enabled-trigger-text-color: #334155;
+  --mat-select-enabled-arrow-color: #64748b;
+
+  width: 100%;
+}
+
+/* Descripción: área más alta */
+.campo_area {
+  --mat-form-field-container-height: auto;
+  --mat-form-field-container-vertical-padding: 10px;
+}
+
+/* =========================================
+   ZONAS DE CARGA
+========================================= */
 
 .upload_zone {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 190px;
+  gap: 4px;
+  min-height: 180px;
   padding: 24px 16px;
-  box-sizing: border-box;
-  border: 2px dashed #cbd5e1;
-  border-radius: 10px;
-  background: #f9fafb;
+  border: 1.5px dashed #8ee4de;
+  border-radius: 9px;
+  background: #effdfa;
   text-align: center;
-  transition: border-color 0.2s, background-color 0.2s;
-}
-
-.upload_zone:hover {
-  border-color: #60a5fa;
-  background: #f8fbff;
 }
 
 .upload_icon {
-  margin-bottom: 12px;
-  font-size: 36px;
-  line-height: 1.2;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 4px;
+  font-size: 40px;
+  color: #00bfb3;
 }
 
 .upload_text {
-  margin: 0 0 6px;
-  color: #374151;
-  font-size: 14px;
-  line-height: 1.5;
+  margin: 0;
+  color: #1f2f2b;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .upload_subtext {
   margin: 0;
-  color: #9ca3af;
-  font-size: 12px;
-  line-height: 1.5;
+  color: #4f6760;
+  font-size: 11px;
 }
 
 .upload_link_text {
-  margin: 10px 0 0;
-  color: #6b7280;
-  font-size: 12px;
-  line-height: 1.5;
+  margin: 6px 0 0;
+  color: #4f6760;
+  font-size: 11px;
 }
 
 .upload_link {
-  color: #2563eb;
+  color: #00bfb3;
   font-weight: 600;
   text-decoration: none;
 }
@@ -183,129 +210,53 @@
   text-decoration: underline;
 }
 
-/* ================================
-   INPUTS, SELECTS Y TEXTAREA
-   ================================ */
-
-.form_input,
-.form_textarea {
-  width: 100%;
-  min-width: 0;
-  padding: 11px 12px;
-  box-sizing: border-box;
-  border: 1px solid #d1d5db;
-  border-radius: 7px;
-  outline: none;
-  background: #ffffff;
-  color: #1f2937;
-  font-family: inherit;
-  font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.form_input {
-  height: 42px;
-}
-
-.form_textarea {
-  min-height: 120px;
-  resize: vertical;
-  line-height: 1.5;
-}
-
-.form_input::placeholder,
-.form_textarea::placeholder {
-  color: #9ca3af;
-}
-
-.form_input:focus,
-.form_textarea:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
-}
-
-/* Filas con dos campos */
-
-.form_row_2 {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  min-width: 0;
-}
-
-.form_row_2 .form_group {
-  min-width: 0;
-}
-
-/* ================================
-   BOTONES INFERIORES
-   ================================ */
+/* =========================================
+   PIE DEL FORMULARIO (botones Material)
+========================================= */
 
 .form_footer_actions {
+  --mat-button-outlined-label-text-color: #334155;
+  --mat-button-outlined-outline-color: #e2e8f0;
+  --mat-button-outlined-container-height: 40px;
+  --mat-button-outlined-container-shape: 5px;
+  --mat-button-outlined-label-text-size: 13px;
+  --mat-button-outlined-label-text-weight: 600;
+
+  --mat-button-filled-container-color: #00bfb3;
+  --mat-button-filled-label-text-color: #ffffff;
+  --mat-button-filled-container-height: 40px;
+  --mat-button-filled-container-shape: 5px;
+  --mat-button-filled-label-text-size: 13px;
+  --mat-button-filled-label-text-weight: 600;
+
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 12px;
-  margin-top: 28px;
-  padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
+  margin-top: 24px;
+  padding: 20px 0 0;
+  border-top: 1px solid #e2e8f0;
 }
 
-.btn_outline,
-.btn_primary {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 42px;
-  padding: 10px 20px;
-  border-radius: 7px;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+.form_footer_actions mat-icon {
+  margin-right: 6px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
-.btn_outline {
-  border: 1px solid #d1d5db;
-  background: #ffffff;
-  color: #374151;
-}
+/* =========================================
+   DISEÑO RESPONSIVO
+========================================= */
 
-.btn_outline:hover {
-  background: #f9fafb;
-  border-color: #9ca3af;
-}
-
-.btn_primary {
-  border: 1px solid #2563eb;
-  background: #2563eb;
-  color: #ffffff;
-}
-
-.btn_primary:hover {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
-}
-
-/* ================================
-   DISEÑO RESPONSIVE
-   ================================ */
-
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
   .contenido_main_vendedor {
     padding: 24px;
   }
 
   .form_layout {
     grid-template-columns: minmax(0, 1fr);
-    gap: 28px;
-  }
-
-  .form_col_left {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: 24px;
   }
 }
 
@@ -315,45 +266,20 @@
   }
 
   .page_title {
-    font-size: 21px;
+    font-size: 22px;
     margin-bottom: 20px;
   }
 
-  .tabs_container {
-    gap: 18px;
-    margin-bottom: 20px;
-    overflow-x: auto;
-  }
-
-  .tab_btn {
-    font-size: 13px;
-  }
-
-  .panel_card {
-    padding: 16px;
-  }
-
-  .form_title {
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
-
-  .form_col_left {
-    grid-template-columns: minmax(0, 1fr);
+  .form_card {
+    padding: 18px;
   }
 
   .form_row_2 {
     grid-template-columns: minmax(0, 1fr);
-    gap: 18px;
   }
 
   .form_footer_actions {
     flex-direction: column-reverse;
     align-items: stretch;
-  }
-
-  .btn_outline,
-  .btn_primary {
-    width: 100%;
   }
 }
