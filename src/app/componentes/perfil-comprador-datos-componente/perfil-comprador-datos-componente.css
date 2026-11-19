@@ -142,3 +142,22 @@ input[readonly] {
     width: 100%;
   }
 }
+
+
+.form-error {
+  color: #b42318;
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+
+.form-success {
+  color: #16703c;
+  font-size: 0.9rem;
+  margin: 12px 0;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
