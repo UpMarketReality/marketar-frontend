@@ -1,5 +1,5 @@
- <main class="catalogo">
-    <!-- encabezado principal-->
+<main class="catalogo">
+  <!-- encabezado principal-->
   <header class="encabezado">
     <h1>Catálogo de Diseños</h1>
     <p>
@@ -8,225 +8,150 @@
     </p>
   </header>
 
-  <!--buscados y filtros de búsqueda-->
+  <!--buscador y filtros de búsqueda-->
   <section class="panel-de-filtros">
     <!-- barra de búsqueda y ordenamiento -->
-     <div class="barra-herramientas">
-        <div class="buscador">
-            <span class="icono-lupa" aria-hidden="true">🔍</span>
+    <div class="barra-herramientas">
+      <mat-form-field class="buscador" appearance="outline" subscriptSizing="dynamic">
+        <mat-icon matPrefix svgIcon="search" class="icono-lupa"></mat-icon>
+        <input
+          matInput
+          type="text"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange($event)"
+          (keyup.enter)="onSearch()"
+          placeholder="Buscar por tipo de mueble, estilo o artesano..."
+          aria-label="Buscar Diseños" />
+        @if (searchQuery) {
+          <button matSuffix mat-icon-button type="button" aria-label="Limpiar búsqueda" (click)="clearSearch()">
+            <mat-icon svgIcon="close"></mat-icon>
+          </button>
+        }
+      </mat-form-field>
 
-            <input
-            type="text"
-            placeholder="Buscar por tipo de mueble, estilo o artesano..."
-            aria-label="Buscar Diseños">
-        </div>
-
-        <button class="selector-orden">
-            Odernar por: Más recientes
-        </button>
-     </div>
-
-     <!-- categorias-->
-      <nav class="categorias" aria-label="Categorias de busqueda">
-        <button class ="categoria activa">Todos</button>
-        <button class ="categoria">Armarios & Closets</button>
-        <button class ="categoria">Mesas de Noche</button>
-        <button class ="categoria">Sillones & Sofás</button>
-        <button class ="categoria">Escritorios</button>
-        <button class ="categoria">Comedores</button>
-        <button class ="categoria">Estanterías</button>
-      </nav>
-  </section>
-
-  <!--lista de productos (Novedosos)-->
-  <section class="productos">
-    <h2>Diseños Personalizados</h2>
-    <div class="tarjetas-de-productos">
-      
-    <!-- Producto 1-->
-     <article class="tarjeta-producto">
-      <div class="imagen-producto">
-        <button class="favorito" aria-label="Agregar a favoritos">❤️</button>
-        <button class="realidad-aumentada">📦Ver en AR</button>
-      </div>
-
-      <div class="informacion-producto">
-        <div class="valoracion">
-          <span class="estrellas">⭐⭐⭐⭐⭐</span>
-          <span class="valoracion-cantidad">(280)</span>
-        </div>
-        <h3>Armario Moderno</h3>
-        <div class="texto-precio">PRECIO ESTIMADO</div>
-        <p class="precio">s/ 5,000.00</p>
-        <button class="agregar-carrito">
-          Agregar al carrito
-        </button>
-      </div>
-     </article>
-
-     <!-- Producto 2-->
-     <article class="tarjeta-producto">
-      <div class="imagen-producto">
-        <button class="favorito" aria-label="Agregar a favoritos">❤️</button>
-        <button class="realidad-aumentada">📦Ver en AR</button>
-      </div>
-
-      <div class="informacion-producto">
-        <div class="valoracion">
-          <span class="estrellas">⭐⭐⭐⭐⭐</span>
-          <span class="valoracion-cantidad">(12)</span>
-        </div>
-        <h3>Mesa de Noche</h3>
-        <div class="texto-precio">PRECIO ESTIMADO</div>
-        <p class="precio">s/ 1,800.00</p>
-        <button class="agregar-carrito">
-          Agregar al carrito
-        </button>
-      </div>
-     </article>
-
-     <!-- Producto 3-->
-     <article class="tarjeta-producto">
-      <div class="imagen-producto">
-        <button class="favorito" aria-label="Agregar a favoritos">❤️</button>
-        <button class="realidad-aumentada">📦Ver en AR</button>
-      </div>
-
-      <div class="informacion-producto">
-        <div class="valoracion">
-          <span class="estrellas">⭐⭐⭐⭐⭐</span>
-          <span class="valoracion-cantidad">(47)</span>
-        </div>
-        <h3>Sillón Minimalista</h3>
-        <div class="texto-precio">PRECIO ESTIMADO</div>
-        <p class="precio">s/ 2,400.00</p>
-        <button class="agregar-carrito">
-          Agregar al carrito
-        </button>
-      </div>
-     </article>
-
-     <!-- Producto 4-->
-     <article class="tarjeta-producto">
-      <div class="imagen-producto">
-        <button class="favorito" aria-label="Agregar a favoritos">❤️</button>
-        <button class="realidad-aumentada">📦Ver en AR</button>
-      </div>
-
-      <div class="informacion-producto">
-        <div class="valoracion">
-          <span class="estrellas">⭐⭐⭐⭐⭐</span>
-          <span class="valoracion-cantidad">(95)</span>
-        </div>
-        <h3>Escritorio de Madera</h3>
-        <div class="texto-precio">PRECIO ESTIMADO</div>
-        <p class="precio">s/ 1,450.00</p>
-        <button class="agregar-carrito">
-          Agregar al carrito
-        </button>
-      </div>
-     </article>
+      <button mat-stroked-button class="selector-orden" type="button" [matMenuTriggerFor]="menuOrden">
+        <mat-icon svgIcon="sort"></mat-icon>
+        Ordenar por: {{ sortLabel }}
+      </button>
+      <mat-menu #menuOrden="matMenu" xPosition="before">
+        @for (option of sortOptions; track option.value) {
+          <button mat-menu-item type="button" (click)="setSort(option.value)">
+            <mat-icon svgIcon="check" [class.oculto]="sortOption !== option.value"></mat-icon>
+            <span>{{ option.label }}</span>
+          </button>
+        }
+      </mat-menu>
     </div>
+
+    <!-- categorias (se cargan desde GET /product-categories) -->
+    <mat-chip-listbox
+      class="categorias"
+      aria-label="Categorias de busqueda"
+      hideSingleSelectionIndicator
+      [value]="selectedChip"
+      (change)="onCategoryChange($event.value)">
+      <mat-chip-option class="categoria" [value]="allCategories" [selectable]="selectedChip !== allCategories">
+        Todos
+      </mat-chip-option>
+      @for (category of categories; track category.categoryId) {
+        <mat-chip-option class="categoria" [value]="category.categoryId" [selectable]="selectedChip !== category.categoryId">
+          {{ category.name }}
+        </mat-chip-option>
+      }
+    </mat-chip-listbox>
   </section>
 
-  <!--lista de productos (Lo más vendidos)-->
-  <section class="productos">
-    <h2>Lo más vendidos</h2>
-    <div class="tarjetas-de-productos">
-      <!-- Producto 1-->
-     <article class="tarjeta-producto">
-      <div class="imagen-producto">
-        <button class="favorito" aria-label="Agregar a favoritos">❤️</button>
-        <button class="realidad-aumentada">📦Ver en AR</button>
-      </div>
-
-      <div class="informacion-producto">
-        <div class="valoracion">
-          <span class="estrellas">⭐⭐⭐⭐⭐</span>
-          <span class="valoracion-cantidad">(280)</span>
-        </div>
-        <h3>Armario Moderno</h3>
-        <div class="texto-precio">PRECIO ESTIMADO</div>
-        <p class="precio">s/ 5,000.00</p>
-        <button class="agregar-carrito">
-          Agregar al carrito
-        </button>
-      </div>
-     </article>
-
-     <!-- Producto 2-->
-     <article class="tarjeta-producto">
-      <div class="imagen-producto">
-        <button class="favorito" aria-label="Agregar a favoritos">❤️</button>
-        <button class="realidad-aumentada">📦Ver en AR</button>
-      </div>
-
-      <div class="informacion-producto">
-        <div class="valoracion">
-          <span class="estrellas">⭐⭐⭐⭐⭐</span>
-          <span class="valoracion-cantidad">(12)</span>
-        </div>
-        <h3>Mesa de Noche</h3>
-        <div class="texto-precio">PRECIO ESTIMADO</div>
-        <p class="precio">s/ 1,800.00</p>
-        <button class="agregar-carrito">
-          Agregar al carrito
-        </button>
-      </div>
-     </article>
-
-     <!-- Producto 3-->
-     <article class="tarjeta-producto">
-      <div class="imagen-producto">
-        <button class="favorito" aria-label="Agregar a favoritos">❤️</button>
-        <button class="realidad-aumentada">📦Ver en AR</button>
-      </div>
-
-      <div class="informacion-producto">
-        <div class="valoracion">
-          <span class="estrellas">⭐⭐⭐⭐⭐</span>
-          <span class="valoracion-cantidad">(47)</span>
-        </div>
-        <h3>Sillón Minimalista</h3>
-        <div class="texto-precio">PRECIO ESTIMADO</div>
-        <p class="precio">s/ 2,400.00</p>
-        <button class="agregar-carrito">
-          Agregar al carrito
-        </button>
-      </div>
-     </article>
-
-     <!-- Producto 4-->
-     <article class="tarjeta-producto">
-      <div class="imagen-producto">
-        <button class="favorito" aria-label="Agregar a favoritos">❤️</button>
-        <button class="realidad-aumentada">📦Ver en AR</button>
-      </div>
-
-      <div class="informacion-producto">
-        <div class="valoracion">
-          <span class="estrellas">⭐⭐⭐⭐⭐</span>
-          <span class="valoracion-cantidad">(95)</span>
-        </div>
-        <h3>Escritorio de Madera</h3>
-        <div class="texto-precio">PRECIO ESTIMADO</div>
-        <p class="precio">s/ 1,450.00</p>
-        <button class="agregar-carrito">
-          Agregar al carrito
-        </button>
-      </div>
-     </article>
+  @if (loading) {
+    <div class="estado-carga">
+      <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+      <p>Cargando diseños del catálogo...</p>
     </div>
-  </section>
+  } @else if (errorMessage) {
+    <div class="estado-carga">
+      <p>{{ errorMessage }}</p>
+      <button mat-stroked-button type="button" (click)="loadProducts(currentPage)">Reintentar</button>
+    </div>
+  } @else {
+    <!--lista de productos (Novedosos)-->
+    <section class="productos">
+      <h2>Diseños Personalizados</h2>
+      <div class="tarjetas-de-productos">
+        @for (product of customProducts; track product.productId) {
+          <ng-container *ngTemplateOutlet="tarjeta; context: { $implicit: product }" />
+        } @empty {
+          <p>No se encontraron productos disponibles.</p>
+        }
+      </div>
 
-  <!--paginacion-->
-  <section class="paginacion" aria-label="Paginacion de productos">
-    <button type="button">< Anterior </button>
-    <button type="button" class="pagina-activa">1</button>
-    <button type="button">2</button>
-    <button type="button">3</button>
-    <span>...</span>
-    <button type="button">28</button>
-    <button type="button">Siguiente ></button>
-  </section>
+      <!--paginacion-->
+      @if (totalElements > 0) {
+        <mat-paginator
+          class="paginacion"
+          aria-label="Paginacion de productos"
+          [length]="totalElements"
+          [pageSize]="pageSize"
+          [pageIndex]="currentPage"
+          [hidePageSize]="true"
+          [showFirstLastButtons]="true"
+          (page)="onPageChange($event)">
+        </mat-paginator>
+      }
+    </section>
+
+    <!--lista de productos (Lo más vendidos)-->
+    <section class="productos">
+      <h2>Lo más vendidos</h2>
+      <div class="tarjetas-de-productos">
+        @for (product of bestSellerProducts; track product.productId) {
+          <ng-container *ngTemplateOutlet="tarjeta; context: { $implicit: product }" />
+        } @empty {
+          <p>No se encontraron productos en esta sección.</p>
+        }
+      </div>
+    </section>
+  }
 </main>
+
+<!-- Plantilla de la tarjeta de producto (mat-card) -->
+<ng-template #tarjeta let-product>
+  <mat-card appearance="outlined" class="tarjeta-producto">
+    <div class="imagen-producto" [style.backgroundImage]="getImageUrl(product)">
+      @if (!getImageUrl(product)) {
+        <mat-icon svgIcon="image" class="sin-imagen" aria-hidden="true"></mat-icon>
+      }
+      <button
+        mat-icon-button
+        type="button"
+        class="favorito"
+        [class.favorito--activo]="isFavorite(product)"
+        [attr.aria-pressed]="isFavorite(product)"
+        [attr.aria-label]="isFavorite(product) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+        [matTooltip]="isFavorite(product) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+        (click)="toggleFavorite(product)">
+        <mat-icon [svgIcon]="isFavorite(product) ? 'heart' : 'heart-outline'"></mat-icon>
+      </button>
+      <button mat-button type="button" class="realidad-aumentada" (click)="viewInAR(product)">
+        <mat-icon svgIcon="cube"></mat-icon>
+        Ver en AR
+      </button>
+    </div>
+
+    <mat-card-content class="informacion-producto">
+      <div class="valoracion" [attr.aria-label]="'Valoración ' + (product.rating ?? 0) + ' de 5'">
+        <span class="estrellas">
+          @for (star of stars(product.rating); track $index) {
+            <mat-icon [svgIcon]="starIcon(star)"></mat-icon>
+          }
+        </span>
+        <span class="valoracion-cantidad">({{ product.reviewCount ?? product.stock ?? 0 }})</span>
+      </div>
+      <h3>{{ product.name }}</h3>
+      <div class="texto-precio">PRECIO ESTIMADO</div>
+      <p class="precio">{{ (product.price ?? 0) | currency: 'PEN' : 's/ ' : '1.2-2' }}</p>
+      <button mat-flat-button type="button" class="agregar-carrito" (click)="addToCart(product)">
+        <mat-icon svgIcon="cart"></mat-icon>
+        Agregar al carrito
+      </button>
+    </mat-card-content>
+  </mat-card>
+</ng-template>

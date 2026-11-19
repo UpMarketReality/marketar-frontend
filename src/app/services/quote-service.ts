@@ -1,14 +1,14 @@
-import { inject, Injectable, Service } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { QuoteRequestDTO } from '../model/quote-request-dto';
+import { MOCK_QUOTE_REQUESTS, mockPage } from '../data/mock-data';
 import { CreateQuoteRequest } from '../model/create-quote-request';
 import { PageDTO } from '../model/page-dto';
 import { OfferRequest } from '../model/offer-request';
 import { OfferDTO } from '../model/offer-dto';
 import { OrderDTO } from '../model/order-dto';
-
-class QuoteRequestDTO {}
 
 @Injectable({
   providedIn: 'root',
@@ -59,6 +59,7 @@ export class QuoteService {
   //US25 (Andre realizado por David K.)
   // 1. GET /api/v1/quote-requests/me
   getMyQuoteRequests(page: number = 0, size: number = 20): Observable<PageDTO<QuoteRequestDTO>> {
+    if (environment.useMockData) return of(mockPage(MOCK_QUOTE_REQUESTS, page, size));
     const params = new HttpParams().set('page', page.toString()).set('size', size.toString());
 
     return this.http.get<PageDTO<QuoteRequestDTO>>(`${this.apiUrl}/quote-requests/me`, { params });
