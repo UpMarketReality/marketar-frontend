@@ -18,13 +18,15 @@ import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/ve
 import { authGuard } from './core/auth/auth-guard';
 import { DisenosGuardados } from './componentes/disenos-guardados/disenos-guardados';
 import { environment } from '../environments/environment';
+import { VendedorPerfil } from './componentes/vendedor-perfil/vendedor-perfil';
+import { VendedorCotizaciones } from './componentes/vendedor-cotizaciones/vendedor-cotizaciones';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', redirectTo: 'home1', pathMatch: 'full' },
   { path: 'inicio-sesion', component: InicioSesion },
   { path: 'empieza-acrear', component: EmpiezaACrear },
   { path: 'catalogo', component: Catalogo },
-  { path: 'home', component: Home1 },
+  { path: 'home1', component: Home1 },
   {
     path: 'disenos-guardados',
     component: DisenosGuardados,
@@ -77,7 +79,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'productos',
+        component: VendedorPerfil,
         pathMatch: 'full',
       },
       {
@@ -91,6 +93,10 @@ export const routes: Routes = [
       {
         path: 'gestor-pedidos',
         component: VendedorGestorDePedidos,
+      },
+      {
+        path:'cotizaciones',
+        component: VendedorCotizaciones,
       },
       {
         path: 'resumen',
