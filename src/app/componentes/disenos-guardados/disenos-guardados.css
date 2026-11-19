@@ -1,0 +1,414 @@
+/* =========================================
+   MIS DISEÑOS Y FAVORITOS
+   ========================================= */
+:host {
+  display: block;
+  --md-teal: var(--primary, #00c4b4);
+  --md-teal-hover: var(--primary-hover, #00a89a);
+  --md-teal-soft: #e3f9f7;
+  --md-ink: #1e293b;
+  --md-dark: #1e2a3b;
+  --md-muted: #64748b;
+  --md-line: #e2e8f0;
+  --md-star: #f5b301;
+  --md-orange: #f59e0b;
+  --md-success: #10b981;
+}
+
+.mis-disenos {
+  min-height: 100%;
+  padding: 44px 24px 96px;
+  background: #f7f9fb;
+}
+
+.mis-disenos__contenedor {
+  max-width: 990px;
+  margin: 0 auto;
+}
+
+/* Encabezado */
+.mis-disenos__encabezado h1 {
+  margin: 0 0 14px;
+  color: var(--md-ink);
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+}
+
+.mis-disenos__encabezado p {
+  margin: 0;
+  color: var(--md-muted);
+  font-size: 15px;
+}
+
+.mis-disenos__mensaje {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 40px;
+  padding: 28px;
+  border: 1px dashed var(--md-line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--md-muted);
+}
+
+.mis-disenos__mensaje p {
+  margin: 0;
+}
+
+/* =========================================
+   SECCIONES
+   ========================================= */
+.seccion {
+  margin-top: 38px;
+}
+
+.seccion + .seccion {
+  margin-top: 56px;
+}
+
+.seccion__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.seccion__titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--md-ink);
+  font-size: 23px;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+}
+
+.seccion__icono {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  color: var(--md-teal);
+}
+
+/* Botón "Ver todos" (mat-button) */
+.ver-todos.mat-mdc-button {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--md-teal-soft);
+  font-size: 13px;
+  font-weight: 700;
+  --mat-button-text-label-text-color: var(--md-teal);
+  --mat-button-text-icon-spacing: 6px;
+  --mat-button-text-icon-offset: 0;
+}
+
+.ver-todos mat-icon {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+  transition: transform 0.2s;
+}
+
+.ver-todos .icono--girado {
+  transform: rotate(180deg);
+}
+
+/* =========================================
+   REJILLA Y TARJETAS
+   ========================================= */
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.tarjeta.mat-mdc-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(30, 41, 59, 0.05);
+  transition: box-shadow 0.2s, transform 0.2s;
+  --mat-card-outlined-outline-color: var(--md-line);
+  --mat-card-outlined-container-shape: 10px;
+}
+
+.tarjeta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(30, 41, 59, 0.09);
+}
+
+.tarjeta__media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 170px;
+  background: #eef2f6;
+}
+
+.tarjeta__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tarjeta__sin-imagen {
+  width: 40px;
+  height: 40px;
+  color: #a8b4c4;
+}
+
+/* Corazón (favorito): mat-icon-button */
+.tarjeta__favorito {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: grid;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+  color: #cbd5e1;
+  --mat-icon-button-state-layer-size: 26px;
+  --mat-icon-button-icon-size: 15px;
+  --mat-icon-button-icon-color: #cbd5e1;
+}
+
+.tarjeta__favorito.mat-mdc-icon-button {
+  padding: 0;
+}
+
+.tarjeta__favorito mat-icon {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+  transition: transform 0.2s;
+}
+
+button.tarjeta__favorito:hover mat-icon {
+  transform: scale(1.12);
+}
+
+.tarjeta__favorito--activo {
+  color: #ef4444;
+  --mat-icon-button-icon-color: #ef4444;
+}
+
+/* Etiqueta superior derecha (Ver en AR = mat-button / Mi Diseño IA = span) */
+.tarjeta__etiqueta {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  min-width: 0;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--md-ink);
+  font-size: 10.5px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.1);
+  --mat-button-text-label-text-color: var(--md-ink);
+  --mat-button-text-icon-spacing: 4px;
+  --mat-button-text-icon-offset: 0;
+  --mat-button-text-horizontal-padding: 9px;
+}
+
+.tarjeta__etiqueta.mat-mdc-button {
+  height: 24px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.tarjeta__etiqueta mat-icon {
+  width: 12px;
+  height: 12px;
+  font-size: 12px;
+}
+
+button.tarjeta__etiqueta:hover {
+  --mat-button-text-label-text-color: var(--md-teal);
+}
+
+.tarjeta__etiqueta--ia {
+  color: var(--md-teal);
+}
+
+/* Cuerpo */
+.tarjeta__cuerpo.mat-mdc-card-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 16px 15px 15px;
+}
+
+.tarjeta__valoracion {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  margin-bottom: 8px;
+}
+
+.estrella {
+  width: 12px;
+  height: 12px;
+  color: var(--md-star);
+}
+
+.tarjeta__resenas {
+  margin-left: 5px;
+  color: var(--md-muted);
+  font-size: 11.5px;
+}
+
+.tarjeta__unico {
+  margin-bottom: 8px;
+  color: var(--md-teal);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.tarjeta__nombre {
+  display: -webkit-box;
+  min-height: 40px;
+  margin: 0 0 14px;
+  overflow: hidden;
+  color: var(--md-ink);
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.tarjeta__rotulo {
+  color: var(--md-muted);
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.tarjeta__precio {
+  margin: 2px 0 16px;
+  color: var(--md-teal);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+}
+
+.tarjeta__estado {
+  margin: 2px 0 18px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.estado--proceso {
+  color: var(--md-orange);
+}
+
+.estado--aceptada {
+  color: var(--md-success);
+}
+
+.estado--inactiva {
+  color: var(--md-muted);
+}
+
+/* Botones de la tarjeta (mat-flat-button) */
+.tarjeta__boton.mat-mdc-unelevated-button {
+  width: 100%;
+  height: 37px;
+  margin-top: auto;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 650;
+  --mat-button-filled-container-color: var(--md-teal);
+  --mat-button-filled-label-text-color: #fff;
+  --mat-button-filled-icon-spacing: 7px;
+  --mat-button-filled-icon-offset: 0;
+}
+
+.tarjeta__boton:hover {
+  --mat-button-filled-container-color: var(--md-teal-hover);
+}
+
+.tarjeta__boton mat-icon {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+}
+
+.tarjeta__boton--oscuro.mat-mdc-unelevated-button {
+  --mat-button-filled-container-color: var(--md-dark);
+}
+
+.tarjeta__boton--oscuro:hover {
+  --mat-button-filled-container-color: #0f172a;
+}
+
+/* Estados vacíos y enlaces */
+.vacio {
+  grid-column: 1 / -1;
+  padding: 28px;
+  border: 1px dashed var(--md-line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--md-muted);
+  text-align: center;
+}
+
+.vacio p {
+  margin: 0 0 8px;
+}
+
+/* Foco visible para teclado */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--md-teal);
+  outline-offset: 2px;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 960px) {
+  .rejilla {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .mis-disenos {
+    padding: 32px 16px 64px;
+  }
+
+  .mis-disenos__encabezado h1 {
+    font-size: 28px;
+  }
+
+  .rejilla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 440px) {
+  .rejilla {
+    grid-template-columns: 1fr;
+  }
+}
