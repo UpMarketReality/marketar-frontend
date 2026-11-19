@@ -75,5 +75,6 @@ export class AuthService {
 
   logout(): void {
     sessionStorage.removeItem(this.storageKey);
+    localStorage.removeItem('access_token');
   }
 }
