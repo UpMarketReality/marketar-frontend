@@ -1,136 +1,145 @@
-<main class="contenido_main_vendedor">
-  <div class="header_with_action">
+<section class="view_section">
+  <div class="header_row">
     <h1 class="page_title">Gestor de Pedidos y Fabricación</h1>
-    <button class="btn_outline">📄 Exportar Reporte</button>
+    <button matButton="outlined" type="button">
+      <mat-icon>description</mat-icon>
+      Exportar Reporte
+    </button>
   </div>
 
-  <div class="tabs_container sub_tabs">
-    <button class="tab_btn active_tab">Todos <span class="badge_count active_badge">12</span></button>
-    <button class="tab_btn">Pendientes <span class="badge_count">3</span></button>
-    <button class="tab_btn">En Fabricación <span class="badge_count">8</span></button>
-    <button class="tab_btn">Completados</button>
-  </div>
+  <!-- Pestañas -->
+  <nav mat-tab-nav-bar class="tabs_nav" aria-label="Filtrar pedidos">
+    @for (pestana of pestanas; track pestana.valor) {
+      <a mat-tab-link
+         [active]="filtroActivo === pestana.valor"
+         (click)="filtroActivo = pestana.valor">
+        {{ pestana.etiqueta }}
+        <span class="contador">{{ contar(pestana.valor) }}</span>
+      </a>
+    }
+  </nav>
 
-  <div class="two_col_layout">
-    <!-- Columna Izquierda: Tabla -->
-    <div class="panel_card">
+  <div class="main_grid">
+
+    <!-- Listado de pedidos -->
+    <mat-card appearance="outlined" class="panel_card">
       <div class="panel_header">
-        <h3 class="panel_title">🧾 Listado de Pedidos</h3>
-        <div class="search_box search_small">
-          <span>🔍</span>
-          <input type="text" placeholder="Buscar ID o Cliente..." class="search_input">
-        </div>
-      </div>
-      <table class="data_table table_hover">
-        <thead>
-        <tr>
-          <th>ID PEDIDO</th>
-          <th>CLIENTE</th>
-          <th>MUEBLE</th>
-          <th>ESTADO</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="active_row">
-          <td class="order_id">#MK-9021</td>
-          <td><div class="client_cell"><span class="avatar_mini bg_gray">JP</span> Juan Pérez</div></td>
-          <td>Armario Bella y la Bestia</td>
-          <td><span class="status_badge status_warning">En Fabricación</span></td>
-        </tr>
-        <tr>
-          <td class="order_id">#MK-8944</td>
-          <td><div class="client_cell"><span class="avatar_mini bg_blue">MC</span> María Castro</div></td>
-          <td>Escritorio Minimalista Roble</td>
-          <td><span class="status_badge status_success">Enviado</span></td>
-        </tr>
-        <tr>
-          <td class="order_id">#MK-8902</td>
-          <td><div class="client_cell"><span class="avatar_mini bg_gray">LT</span> Luis Torres</div></td>
-          <td>Juego de Comedor Abeto</td>
-          <td><span class="status_badge status_info">Aprobación Planos</span></td>
-        </tr>
-        <tr>
-          <td class="order_id">#MK-8871</td>
-          <td><div class="client_cell"><span class="avatar_mini bg_gray">AR</span> Ana Rojas</div></td>
-          <td>Estantería Modular Industrial</td>
-          <td><span class="status_badge status_success">Enviado</span></td>
-        </tr>
-        <tr>
-          <td class="order_id">#MK-8850</td>
-          <td><div class="client_cell"><span class="avatar_mini bg_gray">CM</span> Carlos Mendoza</div></td>
-          <td>Cómoda Moderna 4 Cajones</td>
-          <td><span class="status_badge status_warning">En Fabricación</span></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Columna Derecha: Detalle -->
-    <div class="panel_card detail_card">
-      <div class="detail_header">
-        <div>
-          <h2 class="detail_title">Pedido #MK-9021</h2>
-          <p class="detail_subtitle">Realizado el 05 Oct, 2026</p>
-        </div>
-        <span class="status_badge status_warning">En Fabricación</span>
+        <span class="panel_title">
+          <mat-icon class="panel_title_icon">receipt_long</mat-icon>
+          Listado de Pedidos
+        </span>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search_field">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput type="search" placeholder="Buscar ID o Cliente...">
+        </mat-form-field>
       </div>
 
-      <div class="product_brief">
-        <img src="placeholder.jpg" alt="Armario" class="brief_img">
-        <div class="brief_info">
-          <h4>Armario Bella y la Bestia de Melamina</h4>
-          <span class="brief_price">S/ 2,400.00</span>
-          <span class="brief_qty">Cant: 1 unidad</span>
-        </div>
-      </div>
+      <div class="tabla_wrap">
+        <table mat-table [dataSource]="pedidosFiltrados" class="tabla_pedidos">
 
-      <h4 class="section_subtitle">Progreso de Fabricación</h4>
-      <div class="stepper_container">
-        <div class="step_item completed">
-          <div class="step_dot"></div>
-          <div class="step_content">
-            <h5>Pedido y Pago Recibido</h5>
-            <p>05 Oct, 14:30 PM</p>
-          </div>
-        </div>
-        <div class="step_item completed">
-          <div class="step_dot"></div>
-          <div class="step_content">
-            <h5>Planos 3D Aprobados</h5>
-            <p>06 Oct, 09:15 AM</p>
-          </div>
-        </div>
-        <div class="step_item current">
-          <div class="step_dot"></div>
-          <div class="step_content">
-            <h5>En Fabricación (Corte y Armado)</h5>
-            <p>Progreso actual</p>
-          </div>
-        </div>
-        <div class="step_item pending">
-          <div class="step_dot"></div>
-          <div class="step_content">
-            <h5>Control de Calidad / Acabados</h5>
-            <p>Pendiente</p>
-          </div>
-        </div>
-        <div class="step_item pending last_step">
-          <div class="step_dot"></div>
-          <div class="step_content">
-            <h5>Listo para Envío</h5>
-            <p>Pendiente</p>
-          </div>
-        </div>
-      </div>
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID Pedido</th>
+            <td mat-cell *matCellDef="let p" class="celda_id">{{ p.id }}</td>
+          </ng-container>
 
-      <div class="client_info_box">
-        <p class="box_label">DATOS DEL CLIENTE</p>
-        <p>👤 Juan Pérez</p>
-        <p>📞 (+51) 987 123 456</p>
-        <p>📍 Av. Javier Prado Este 456, La Molina, Lima</p>
-      </div>
+          <ng-container matColumnDef="cliente">
+            <th mat-header-cell *matHeaderCellDef>Cliente</th>
+            <td mat-cell *matCellDef="let p">
+              <div class="cliente_celda">
+                <span class="avatar">{{ iniciales(p.cliente) }}</span>
+                {{ p.cliente }}
+              </div>
+            </td>
+          </ng-container>
 
-      <button class="btn_primary btn_full">Marcar Control de Calidad ✔️</button>
-    </div>
+          <ng-container matColumnDef="mueble">
+            <th mat-header-cell *matHeaderCellDef>Mueble</th>
+            <td mat-cell *matCellDef="let p">{{ p.mueble }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let p">
+              <span [class]="'badge badge_' + p.estado">{{ etiquetaEstado(p.estado) }}</span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+        </table>
+
+        @if (pedidosFiltrados.length === 0) {
+          <p class="sin_pedidos">{{ mensajeVacio }}</p>
+        }
+      </div>
+    </mat-card>
+
+    <!-- Detalle del pedido -->
+    <mat-card appearance="outlined" class="panel_card detalle_card">
+      @if (pedidoSeleccionado; as p) {
+        <div class="detalle_header">
+          <div>
+            <h2 class="detalle_titulo">Pedido {{ p.id }}</h2>
+            <p class="detalle_sub">Realizado el {{ p.fecha }}</p>
+          </div>
+          <span [class]="'badge badge_' + p.estado">{{ etiquetaEstado(p.estado) }}</span>
+        </div>
+
+        <div class="producto_resumen">
+          <div class="producto_icono">
+            <mat-icon>chair</mat-icon>
+          </div>
+          <div class="producto_texto">
+            <h3 class="producto_nombre">{{ p.mueble }}</h3>
+            <span class="precio">{{ p.precio }}</span>
+            <span class="cantidad">Cant: {{ p.cantidad }}</span>
+          </div>
+        </div>
+
+        <h3 class="subtitulo">Progreso de Fabricación</h3>
+        <div class="stepper">
+          @for (etapa of etapasFabricacion; track etapa; let i = $index) {
+            <div class="paso"
+                 [class.completado]="i < p.etapaActual"
+                 [class.actual]="i === p.etapaActual"
+                 [class.pendiente]="i > p.etapaActual">
+              <div class="paso_punto"></div>
+              <div class="paso_texto">
+                <span class="paso_titulo">{{ etapa }}</span>
+                <span class="paso_estado">
+                  {{ i < p.etapaActual ? 'Completado' : (i === p.etapaActual ? 'Progreso actual' : 'Pendiente') }}
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="cliente_box">
+          <p class="caja_titulo">DATOS DEL CLIENTE</p>
+          <p class="cliente_fila">
+            <mat-icon>person</mat-icon>
+            {{ p.cliente }}
+          </p>
+          <p class="cliente_fila">
+            <mat-icon>call</mat-icon>
+            {{ p.telefono }}
+          </p>
+          <p class="cliente_fila">
+            <mat-icon>location_on</mat-icon>
+            {{ p.direccion }}
+          </p>
+        </div>
+
+        <button matButton="filled" type="button" class="boton_completo">
+          Marcar Control de Calidad
+        </button>
+      } @else {
+        <div class="detalle_vacio">
+          <mat-icon>touch_app</mat-icon>
+          <p>Selecciona un pedido para ver su detalle.</p>
+        </div>
+      }
+    </mat-card>
+
   </div>
-</main>
+</section>
