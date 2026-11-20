@@ -2,8 +2,19 @@
 <div class="app_layout">
   <!-- Barra lateral del vendedor -->
   <aside class="side_bar">
-
-    <mat-nav-list class="side_nav" aria-label="Menú del vendedor">
+    <!-- LOGO MARKET AR -->
+    <div class="brand_container">
+      <span class="brand_mark">
+        <svg class="brand_icon" aria-hidden="true" viewBox="0 0 24 24">
+          <path d="m3 6 9-4 9 4v12l-9 4-9-4Zm0 0 9 4 9-4M12 10v12M7 4l10 4"/>
+        </svg>
+      </span>
+      <div class="brand_text">
+        <span class="brand_name">MARKET <strong>AR</strong></span>
+        <span class="brand_sub">Panel de vendedor</span>
+      </div>
+    </div>
+    <mat-nav-list class="side_nanv" aria-label="Menú del vendedor">
 
       <!-- MAR-13: PERFIL PUBLICO DEL VENDEDOR -->
       <a mat-list-item
@@ -53,6 +64,13 @@
       </a>
 
     </mat-nav-list>
+    <!-- VOLVER AL INICIO (tienda del comprador, sin cerrar sesión) -->
+    <div class="home_container">
+      <button matButton="text" type="button" class="home_btn" routerLink="/home1">
+        <mat-icon>home</mat-icon>
+        Volver al inicio
+      </button>
+    </div>
 
     <!-- CERRAR SESION -->
     <div class="logout_container">

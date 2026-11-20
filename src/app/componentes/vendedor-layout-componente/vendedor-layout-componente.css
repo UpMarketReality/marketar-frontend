@@ -110,6 +110,90 @@
   height: 18px;
 }
 
+/* Logo MARKET AR (mismo diseño que el encabezado general) */
+.brand_container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 8px;
+}
+
+.brand_mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid #00bfb3;
+  border-radius: 9px;
+  background: #effdfa;
+  color: #00bfb3;
+}
+
+.brand_icon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.brand_text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.brand_name {
+  color: #1e293b;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+}
+
+.brand_name strong {
+  color: #00bfb3;
+}
+
+.brand_sub {
+  color: #64748b;
+  font-size: 12px;
+}
+
+/* Volver al inicio: misma tarjeta que cerrar sesión, en teal */
+.home_container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgb(26 46 72 / 5%);
+  overflow: hidden;
+}
+
+.home_btn {
+  --mat-button-text-label-text-color: #007e77;
+  --mat-button-text-label-text-size: 13px;
+  --mat-button-text-label-text-weight: 500;
+
+  width: 100%;
+  justify-content: flex-start;
+  padding: 17px 22px;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.home_btn:hover {
+  background: #f3faf9;
+}
+
+.home_btn mat-icon {
+  margin-right: 8px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
 /* =========================================
    CONTENIDO DE LAS RUTAS HIJAS
 ========================================= */
