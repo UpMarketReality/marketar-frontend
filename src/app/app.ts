@@ -1,9 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {HeaderComponente} from './componentes/header-componente/header-componente';
 
 @Component({
-  imports: [RouterOutlet,HeaderComponente],
+  imports: [RouterOutlet],
   standalone: true,
   selector: 'app-root',
   styleUrl: './app.css',
@@ -12,3 +11,5 @@ import {HeaderComponente} from './componentes/header-componente/header-component
 export class App {
   protected readonly title = signal('frontendMarketar');
 }
+
+

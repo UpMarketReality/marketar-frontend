@@ -20,59 +20,10 @@ import { DisenosGuardados } from './componentes/disenos-guardados/disenos-guarda
 import { environment } from '../environments/environment';
 import { VendedorPerfil } from './componentes/vendedor-perfil/vendedor-perfil';
 import { VendedorCotizaciones } from './componentes/vendedor-cotizaciones/vendedor-cotizaciones';
+import { GeneralLayoutComponente } from './componentes/general-layout-componente/general-layout-componente';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home1', pathMatch: 'full' },
-  { path: 'inicio-sesion', component: InicioSesion },
-  { path: 'empieza-acrear', component: EmpiezaACrear },
-  { path: 'catalogo', component: Catalogo },
-  { path: 'home1', component: Home1 },
-  {
-    path: 'disenos-guardados',
-    component: DisenosGuardados,
-    // En modo mock (datos internos) no se exige sesión para poder probar la vista
-    canActivate: environment.useMockData ? [] : [authGuard],
-    data: { role: 'COMPRADOR' },
-  },
-  {
-    path: 'carrito',
-    component: Carrito,
-    canActivate: [authGuard],
-    data: { role: 'COMPRADOR' },
-  },
-  {
-    path: 'pagos',
-    component: PagosComponente,
-  },
-  {
-    path: 'perfil-comprador',
-    component: CompradorLayoutComponente,
-    canActivate: [authGuard],
-    data: { role: 'COMPRADOR' },
-    children: [
-      {
-        path: '',
-        redirectTo: 'datos',
-        pathMatch: 'full',
-      },
-      {
-        path: 'datos',
-        component: PerfilCompradorDatosComponente,
-      },
-      {
-        path: 'direccion',
-        component: PerfilCompradorDireccionComponente,
-      },
-      {
-        path: 'pedidos',
-        component: PerfilCompradorPedidosComponente,
-      },
-      {
-        path: 'cotizacion',
-        component: PerfilCompradorCotizacionesComponente,
-      },
-    ],
-  },
+  // PANEL DEL VENDEDOR: sin encabezado del comprador
   {
     path: 'perfil-vendedor',
     component: VendedorLayoutComponente,
@@ -95,12 +46,71 @@ export const routes: Routes = [
         component: VendedorGestorDePedidos,
       },
       {
-        path:'cotizaciones',
+        path: 'cotizaciones',
         component: VendedorCotizaciones,
       },
       {
         path: 'resumen',
         component: VendedorResumen,
+      },
+    ],
+  },
+
+  // SECCIÓN DEL COMPRADOR: con encabezado general
+  {
+    path: '',
+    component: GeneralLayoutComponente,
+    children: [
+      { path: '', redirectTo: 'home1', pathMatch: 'full' },
+      { path: 'inicio-sesion', component: InicioSesion },
+      { path: 'empieza-acrear', component: EmpiezaACrear },
+      { path: 'catalogo', component: Catalogo },
+      { path: 'home1', component: Home1 },
+      {
+        path: 'disenos-guardados',
+        component: DisenosGuardados,
+        // En modo mock (datos internos) no se exige sesión para poder probar la vista
+        canActivate: environment.useMockData ? [] : [authGuard],
+        data: { role: 'COMPRADOR' },
+      },
+      {
+        path: 'carrito',
+        component: Carrito,
+        canActivate: [authGuard],
+        data: { role: 'COMPRADOR' },
+      },
+      {
+        path: 'pagos',
+        component: PagosComponente,
+      },
+      {
+        path: 'perfil-comprador',
+        component: CompradorLayoutComponente,
+        canActivate: [authGuard],
+        data: { role: 'COMPRADOR' },
+        children: [
+          {
+            path: '',
+            redirectTo: 'datos',
+            pathMatch: 'full',
+          },
+          {
+            path: 'datos',
+            component: PerfilCompradorDatosComponente,
+          },
+          {
+            path: 'direccion',
+            component: PerfilCompradorDireccionComponente,
+          },
+          {
+            path: 'pedidos',
+            component: PerfilCompradorPedidosComponente,
+          },
+          {
+            path: 'cotizacion',
+            component: PerfilCompradorCotizacionesComponente,
+          },
+        ],
       },
     ],
   },
