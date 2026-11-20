@@ -1,78 +1,177 @@
+
 <main id="contenido" tabindex="-1">
-  <noscript
-  ><p class="demo-note">
-    Activa JavaScript para usar filtros, validaciones y acciones de
-    demostración.
-  </p></noscript
-  >
+
   <section class="panel" aria-labelledby="address-title">
+
     <div class="section-title">
       <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
         <path d="M1 5h13v12H1ZM14 9h5l4 5v3h-9" />
         <circle cx="6" cy="18" r="3" />
         <circle cx="18" cy="18" r="3" />
       </svg>
+
       <h1 id="address-title">Dirección de envío</h1>
     </div>
-    <form id="address-form">
+
+    @if (cargandoDireccion) {
+      <p role="status">Cargando dirección...</p>
+    }
+
+    @if (mensajeError) {
+      <p class="form-error" role="alert">
+        {{ mensajeError }}
+      </p>
+    }
+
+    @if (mensajeExito) {
+      <p class="form-success" role="status">
+        {{ mensajeExito }}
+      </p>
+    }
+
+    @if (mensajeAviso) {
+      <p class="form-warning" role="status">
+        {{ mensajeAviso }}
+      </p>
+    }
+
+    @if (!direccionCargada && !cargandoDireccion) {
+      <button
+        type="button"
+        class="button"
+        (click)="cargarDireccion()">
+        Reintentar
+      </button>
+    }
+
+    <form
+      id="address-form"
+      [formGroup]="direccionForm"
+      (ngSubmit)="guardarDireccion()"
+      novalidate>
+
       <div class="form-grid">
+
+        <!-- DIRECCIÓN -->
         <div class="field field--full">
-          <label for="street"
-          >Dirección (calle, número, departamento)</label
-          ><input
-          id="street"
-          name="street"
-          type="text"
-          placeholder="Ej.: Av. Javier Prado Este 123, Dpto. 402"
-          required
-          autocomplete="street-address"
-          maxlength="180"
-        />
+          <label for="street">
+            Dirección (calle, número, departamento)
+          </label>
+
+          <input
+            id="street"
+            type="text"
+            formControlName="calle"
+            placeholder="Ej.: Av. Javier Prado Este 123, Dpto. 402"
+            autocomplete="street-address"
+            maxlength="180"
+            required />
+
+          @if (direccionForm.controls.calle.touched &&
+          direccionForm.controls.calle.invalid) {
+            <small class="form-error">
+              Ingresa una dirección válida.
+            </small>
+          }
         </div>
+
+        <!-- REGIÓN -->
         <div class="field">
-          <label for="region">Departamento / Región</label
-          ><input
-          id="region"
-          name="region"
-          type="text"
-          value="Lima"
-          required
-          autocomplete="address-level1"
-          maxlength="60"
-        />
+          <label for="region">
+            Departamento / Región
+          </label>
+
+          <input
+            id="region"
+            type="text"
+            formControlName="region"
+            placeholder="Ej.: Lima"
+            autocomplete="address-level1"
+            maxlength="60"
+            required />
+
+          @if (direccionForm.controls.region.touched &&
+          direccionForm.controls.region.invalid) {
+            <small class="form-error">
+              Ingresa tu departamento o región.
+            </small>
+          }
         </div>
+
+        <!-- DISTRITO -->
         <div class="field">
-          <label for="district">Distrito</label
-          ><input
-          id="district"
-          name="district"
-          type="text"
-          placeholder="Ej.: Miraflores"
-          required
-          autocomplete="address-level3"
-          maxlength="60"
-        />
+          <label for="district">Distrito</label>
+
+          <input
+            id="district"
+            type="text"
+            formControlName="distrito"
+            placeholder="Ej.: Miraflores"
+            autocomplete="address-level3"
+            maxlength="60"
+            required />
+
+          @if (direccionForm.controls.distrito.touched &&
+          direccionForm.controls.distrito.invalid) {
+            <small class="form-error">
+              Ingresa tu distrito.
+            </small>
+          }
         </div>
+
+        <!-- REFERENCIA -->
         <div class="field field--full">
-          <label for="reference">Referencia de entrega (opcional)</label
-          ><input
-          id="reference"
-          name="reference"
-          type="text"
-          placeholder="Ej.: Frente al parque central, casa de rejas negras"
-          maxlength="200"
-        />
+          <label for="reference">
+            Referencia de entrega (opcional)
+          </label>
+
+          <input
+            id="reference"
+            type="text"
+            formControlName="referencia"
+            placeholder="Ej.: Frente al parque central, casa de rejas negras"
+            maxlength="200" />
+
+          @if (direccionForm.controls.referencia.touched &&
+          direccionForm.controls.referencia.invalid) {
+            <small class="form-error">
+              La referencia es demasiado larga.
+            </small>
+          }
         </div>
+
       </div>
+
+      <!-- LÍMITE DE ALMACENAMIENTO -->
+      <div class="address-info">
+        <small [class.form-error]="superaLimite">
+          Tamaño de dirección: {{ longitudDireccion }}/300 caracteres
+        </small>
+
+        @if (superaLimite) {
+          <small class="form-error">
+            Reduce la longitud de los campos para guardar.
+          </small>
+        }
+      </div>
+
       <div class="form-actions">
-        <button class="button button--primary" type="submit">
-          Guardar dirección
+        <button
+          class="button button--primary"
+          type="submit"
+          [disabled]="!direccionCargada ||
+                      guardandoDireccion ||
+                      direccionForm.invalid ||
+                      superaLimite">
+
+          {{ guardandoDireccion
+          ? 'Guardando...'
+          : 'Guardar dirección' }}
+
         </button>
       </div>
+
     </form>
   </section>
-  <p class="demo-note">
-    Vista de demostración · Datos de ejemplo. Los pagos y cambios de
-    cuenta requieren conexión con el servidor.
-  </p>
+
 </main>

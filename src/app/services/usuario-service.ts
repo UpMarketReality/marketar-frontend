@@ -5,6 +5,8 @@ import { PerfilUsuario } from '../model/perfilUsuario';
 import { ActualizarPerfilRequest } from '../model/actualizar-perfil-request';
 import { CambiarPasswordRequest } from '../model/cambiar-password-request';
 import { environment } from '../../environments/environment';
+import { DireccionCompradorResponse } from '../model/DireccionCompradorResponse';
+import { DireccionCompradorRequest } from '../model/DireccionCompradorRequest';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +34,24 @@ export class UsuarioService {
   // Cambiar contraseña
   cambiarPassword(datos: CambiarPasswordRequest): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/me/password`, datos);
+  }
+
+
+  // Obtener dirección del comprador autenticado
+  obtenerMiDireccion(): Observable<DireccionCompradorResponse> {
+    return this.http.get<DireccionCompradorResponse>(
+      `${this.apiUrl}/me/direccion`
+    );
+  }
+
+// Guardar o actualizar dirección
+  actualizarMiDireccion(
+    datos: DireccionCompradorRequest
+  ): Observable<DireccionCompradorResponse> {
+
+    return this.http.put<DireccionCompradorResponse>(
+      `${this.apiUrl}/me/direccion`,
+      datos
+    );
   }
 }
