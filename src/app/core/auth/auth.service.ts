@@ -24,20 +24,27 @@ export class AuthService {
         map((response) => {
           const data = response.body;
 
-          // Comprobamos que el backend devuelva el JWT
           if (!data || !data.jwt) {
-            throw new Error('El backend no devolvió un JWT');
+            throw new Error('No se recibió un JWT válido');
           }
 
-          // Guardamos toda la respuesta del usuario
-          sessionStorage.setItem(this.storageKey, JSON.stringify(data));
+          localStorage.setItem('marketar_session', JSON.stringify(data));
+
+          // Guardar la sesión en localStorage
+          this.saveSession(data);
 
           return data;
         }),
       );
   }
+
+  // GUARDAR SESIÓN
+  private saveSession(response: ResponseDto): void {
+    localStorage.setItem(TokenKey, JSON.stringify(response));
+  }
+
   getSession(): ResponseDto | null {
-    const saved = sessionStorage.getItem(this.storageKey);
+    const saved = sessionStorage.getItem(TokenKey);
 
     if (!saved) return null;
 
@@ -57,6 +64,7 @@ export class AuthService {
     }
   }
 
+  // COMPROBAR AUTENTICACIÓN
   isAuthenticated(): boolean {
     return this.getSession() !== null;
   }
@@ -74,7 +82,6 @@ export class AuthService {
   }
 
   logout(): void {
-    sessionStorage.removeItem(this.storageKey);
     localStorage.removeItem('access_token');
   }
 }

@@ -54,7 +54,7 @@ export class InicioSesion {
         const esRutaInterna =
           returnUrl?.startsWith('/') && !returnUrl.startsWith('//') && !returnUrl.startsWith('/\\');
 
-        const destino = esRutaInterna ? returnUrl! : '/home';
+        const destino = esRutaInterna ? returnUrl! : '/home1';
 
         // Redirigimos al usuario
         this.router.navigateByUrl(destino);
