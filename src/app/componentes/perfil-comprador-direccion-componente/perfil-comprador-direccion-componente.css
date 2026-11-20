@@ -121,6 +121,37 @@ input[readonly] {
   margin: 0;
 }
 
+.form-error {
+  color: #b42318;
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+
+.form-success {
+  color: #16703c;
+  font-size: 0.9rem;
+  margin: 12px 0;
+}
+
+.form-warning {
+  color: #976000;
+  font-size: 0.9rem;
+  margin: 12px 0;
+}
+
+.address-info {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
 /* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 900px). */
 @media (max-width: 900px) {
   /* TARJETA DEL FORMULARIO. */
