@@ -21,7 +21,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const role = route.data['role'] as string | undefined;
 
   if (role && !auth.hasRole(role)) {
-    return router.createUrlTree(['/home']);
+    return router.createUrlTree(['/home1']);
   }
 
   return true;

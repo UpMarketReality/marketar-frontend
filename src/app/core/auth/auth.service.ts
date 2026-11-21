@@ -28,8 +28,6 @@ export class AuthService {
             throw new Error('No se recibió un JWT válido');
           }
 
-          localStorage.setItem('marketar_session', JSON.stringify(data));
-
           // Guardar la sesión en localStorage
           this.saveSession(data);
 
@@ -44,7 +42,7 @@ export class AuthService {
   }
 
   getSession(): ResponseDto | null {
-    const saved = sessionStorage.getItem(TokenKey);
+    const saved = localStorage.getItem('marketar_session');
 
     if (!saved) return null;
 
