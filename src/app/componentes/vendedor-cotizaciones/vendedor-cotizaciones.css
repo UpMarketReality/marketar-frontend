@@ -1,1058 +1,507 @@
+/* =========================================
+   VISTA: COTIZACIONES Y FINANZAS (vendedor)
+   Paleta: teal #00bfb3, teal oscuro #007e77, verde pastel #effdfa,
+   activo #e3f9f7, títulos #1e293b, secundario #64748b, bordes #e2e8f0.
+   Componentes visuales: Angular Material
+========================================= */
 
-/* ==========================================
-   MARKETAR - MAR-12
-   COTIZACIONES Y FINANZAS DEL VENDEDOR
-   DISEÑO BASADO EN FIGMA
-   ========================================== */
-
-/* CONFIGURACION GENERAL */
-
-:host {
-  display: block;
+.view_section {
   width: 100%;
   min-width: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #1e293b;
 }
 
-  :host *,
-  :host *::before,
-  :host *::after {
-    box-sizing: border-box;
-  }
+/* =========================================
+   CABECERA
+========================================= */
 
-.iconos-definicion {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.cotizaciones-vendedor {
-  width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  background: transparent;
+.acciones {
+  display: flex;
+  gap: 12px;
 }
 
-/* ICONOS */
-
-.cv-icono {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vertical-align: middle;
+.cabecera button {
+  --mat-button-outlined-label-text-color: #007e77;
+  --mat-button-outlined-outline-color: #00bfb3;
+  --mat-button-outlined-hover-state-layer-color: #00bfb3;
 }
 
-.cv-icono-turquesa {
+.cabecera mat-icon {
+  margin-right: 8px;
+}
+
+.boton_nueva {
+  --mat-button-filled-container-color: #00bfb3;
+  --mat-button-filled-label-text-color: #ffffff;
+  --mat-button-filled-hover-state-layer-color: #ffffff;
+}
+
+/* Pestañas principales: Cotizaciones / Finanzas */
+.tabs_principales {
+  --mat-tab-active-label-text-color: #1e293b;
+  --mat-tab-active-hover-label-text-color: #1e293b;
+  --mat-tab-active-focus-label-text-color: #1e293b;
+  --mat-tab-active-indicator-color: #00bfb3;
+  --mat-tab-active-indicator-height: 3px;
+  --mat-tab-inactive-label-text-color: #94a3b8;
+  --mat-tab-inactive-hover-label-text-color: #1e293b;
+  --mat-tab-divider-color: #e2e8f0;
+  --mat-tab-label-text-size: 16px;
+  --mat-tab-label-text-weight: 700;
+}
+
+.tabs_principales a {
+  flex-grow: 0;
+  padding: 0 4px;
+  margin-right: 24px;
+}
+
+/* =========================================
+   PESTAÑAS SECUNDARIAS (estados y finanzas)
+========================================= */
+
+.tabs_secundarias {
+  --mat-tab-active-label-text-color: #00bfb3;
+  --mat-tab-active-hover-label-text-color: #00bfb3;
+  --mat-tab-active-focus-label-text-color: #00bfb3;
+  --mat-tab-active-indicator-color: #00bfb3;
+  --mat-tab-active-indicator-height: 2px;
+  --mat-tab-inactive-label-text-color: #64748b;
+  --mat-tab-inactive-hover-label-text-color: #1e293b;
+  --mat-tab-divider-color: #e2e8f0;
+  --mat-tab-label-text-size: 14px;
+  --mat-tab-label-text-weight: 500;
+
+  margin-bottom: 24px;
+}
+
+/* Las pestañas ocupan su contenido, no todo el ancho */
+.tabs_secundarias a {
+  flex-grow: 0;
+  padding: 0 4px;
+  margin-right: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Contador junto al nombre de la pestaña */
+.contador {
+  margin-left: 10px;
+  background: #e2e8f0;
+  color: #64748b;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.contador_verde {
+  background: #e1faf6;
+  color: #00a99d;
+}
+
+.contador_aceptado {
+  background: #dcfce7;
+  color: #159447;
+}
+
+.tabs_secundarias a.mdc-tab--active .contador {
+  background: #e3f9f7;
   color: #00bfb3;
 }
 
-/* ENCABEZADO PRINCIPAL */
+/* =========================================
+   DISTRIBUCIÓN Y TARJETAS
+========================================= */
 
-.cv-cabecera {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 18px;
-  margin-bottom: 27px;
-}
-
-.cv-tabs-principales {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 13px;
-  border-bottom: 1px solid #dae2eb;
-}
-
-  .cv-tabs-principales button {
-    appearance: none;
-    min-height: 54px;
-    padding: 8px 14px 13px;
-    border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    background: transparent;
-    color: #94a3b8;
-    font-family: inherit;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-    .cv-tabs-principales button.activo {
-      color: #202c3e;
-      border-bottom-color: #00bfb3;
-    }
-
-    .cv-tabs-principales button:hover {
-      color: #00a99d;
-    }
-
-.cv-acciones-superiores {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 9px;
-  padding-top: 7px;
-}
-
-/* BOTONES */
-
-.cv-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  min-height: 35px;
-  padding: 9px 15px;
-  border-radius: 5px;
-  font-family: inherit;
-  font-size: 11px;
-  line-height: 1.3;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.cv-btn-primario {
-  background: #00bfb3;
-  color: white;
-  border: 1px solid #00bfb3;
-}
-
-  .cv-btn-primario:hover:not(:disabled) {
-    background: #009e95;
-    border-color: #009e95;
-  }
-
-.cv-btn-blanco {
-  background: #ffffff;
-  color: #243449;
-  border: 1px solid #d6e0eb;
-}
-
-  .cv-btn-blanco:hover {
-    background: #f1f5f9;
-  }
-
-.cv-btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.cv-btn-ancho {
-  width: 100%;
-}
-
-/* ACCESIBILIDAD */
-
-.cv-btn:focus-visible,
-.cv-tabs-principales button:focus-visible,
-.cv-tabs-secundarias button:focus-visible {
-  outline: 3px solid #5eead4;
-  outline-offset: 2px;
-}
-
-/* MENSAJES DEL SISTEMA */
-
-.cv-mensaje {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 15px;
-  margin-bottom: 20px;
-  border: 1px solid #99e5d9;
-  border-radius: 6px;
-  background: #e6faf5;
-  color: #087d70;
-  font-size: 12px;
-}
-
-.cv-mensaje-error {
-  background: #fff1f2;
-  border-color: #fecdd3;
-  color: #b91c1c;
-}
-
-.cv-mensaje button {
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font-size: 19px;
-  cursor: pointer;
-}
-
-/* PESTAÑAS SECUNDARIAS */
-
-.cv-tabs-secundarias {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border-bottom: 1px solid #dbe3ed;
-  margin-bottom: 21px;
-  overflow-x: auto;
-}
-
-  .cv-tabs-secundarias button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    min-height: 46px;
-    padding: 10px 15px 12px;
-    border: 0;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    background: transparent;
-    color: #64748b;
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
-    cursor: pointer;
-  }
-
-    .cv-tabs-secundarias button.activo {
-      color: #00bfb3;
-      border-bottom-color: #00bfb3;
-    }
-
-    .cv-tabs-secundarias button:hover {
-      color: #00a99d;
-    }
-
-/* CONTADORES */
-
-.cv-contador {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 19px;
-  height: 19px;
-  padding: 0 5px;
-  background: #e2e8f0;
-  color: #475569;
-  border-radius: 20px;
-  font-size: 10px;
-}
-
-.cv-contador-verde {
-  color: #00a99d;
-  background: #e1faf6;
-}
-
-.cv-contador-aceptado {
-  color: #159447;
-  background: #dcfce7;
-}
-
-/* DISTRIBUCION DE COLUMNAS */
-
-.cv-grid-cotizaciones {
+.main_grid {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(310px, 1fr);
-  align-items: start;
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr);
   gap: 20px;
+  align-items: start;
 }
 
-.cv-grid-finanzas {
+.grid_finanzas {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
-  align-items: start;
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr);
   gap: 20px;
+  align-items: start;
 }
 
-/* TARJETAS */
-
-.cv-tarjeta,
-.cv-indicador {
-  min-width: 0;
-  background: #ffffff;
-  border: 1px solid #e4eaf2;
-  border-radius: 9px;
-  box-shadow: 0 5px 13px rgba(15, 23, 42, 0.06);
-}
-
-.cv-tarjeta {
+.panel_card {
+  border-radius: 12px;
+  border-color: #e2e8f0;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgb(15 23 42 / 5%);
   overflow: hidden;
+  --mat-card-outlined-container-color: #ffffff;
+  --mat-card-outlined-container-outline-color: #e2e8f0;
 }
 
-.cv-tarjeta-titulo {
+.panel_header {
   display: flex;
   align-items: center;
-  gap: 9px;
-  margin: 0;
-  min-height: 49px;
-  padding: 15px 17px;
-  font-size: 13px;
-  font-weight: 700;
-  border-bottom: 1px solid #edf1f5;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-/* TABLAS */
+.panel_title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #007e77;
+  font-size: 15px;
+  font-weight: 700;
+}
 
-.cv-tabla-scroll {
-  width: 100%;
+.panel_title_icon {
+  color: #00bfb3;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* =========================================
+   TABLAS
+========================================= */
+
+.tabla_wrap {
   overflow-x: auto;
 }
 
-.cv-tabla {
+.tabla_cotizaciones,
+.tabla_movimientos {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 11px;
-  text-align: left;
+  background: transparent;
+  --mat-table-background-color: transparent;
+  --mat-table-header-headline-color: #64748b;
+  --mat-table-row-item-label-text-color: #1e293b;
 }
 
-  .cv-tabla thead {
-    background: #f7f9fb;
-  }
-
-  .cv-tabla th {
-    padding: 13px 15px;
-    border-bottom: 1px solid #dfe7ef;
-    color: #718198;
-    font-size: 10px;
-    font-weight: 700;
-    white-space: nowrap;
-  }
-
-  .cv-tabla td {
-    padding: 13px 15px;
-    border-bottom: 1px solid #e6edf5;
-    color: #334155;
-    line-height: 1.5;
-  }
-
-  .cv-tabla tbody tr:last-child td {
-    border-bottom: none;
-  }
-
-.cv-fila-seleccionable {
-  cursor: pointer;
-  transition: background 0.15s;
+.tabla_cotizaciones .mat-mdc-header-cell,
+.tabla_movimientos .mat-mdc-header-cell {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-  .cv-fila-seleccionable:hover {
-    background: #f4fbfa;
-  }
-
-.cv-tabla .cv-fila-activa {
-  background: #e5faf7;
+.tabla_cotizaciones .mat-mdc-cell,
+.tabla_movimientos .mat-mdc-cell {
+  color: #1e293b;
+  font-size: 14px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-.cv-fila-seleccionable:focus-visible {
-  outline: 2px solid #00bfb3;
-  outline-offset: -2px;
+.tabla_cotizaciones .mat-mdc-row:hover,
+.tabla_movimientos .mat-mdc-row:hover {
+  background-color: #f8fafc;
 }
 
-.cv-id {
-  font-weight: 700;
+/* Mensaje cuando la categoría no tiene datos */
+.sin_datos {
+  margin: 0;
+  padding: 32px 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.celda_id {
+  font-weight: 600;
+}
+
+.celda_fecha {
+  color: #64748b;
+  font-size: 13px;
   white-space: nowrap;
 }
 
-.cv-fecha {
+.referencia {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.celda_monto {
+  font-weight: 600;
   white-space: nowrap;
 }
 
-.cv-cliente {
+.cliente_celda {
   display: flex;
   align-items: center;
-  gap: 8px;
-  white-space: nowrap;
+  gap: 10px;
 }
 
-.cv-avatar {
+.avatar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 23px;
-  height: 23px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: #e2e8f0;
-  color: #64748b;
-  font-size: 9px;
-  font-weight: 700;
+  background: #00bfb3;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
 }
 
-.cv-vacio {
-  padding: 35px !important;
-  text-align: center;
-  color: #94a3b8 !important;
-}
+/* =========================================
+   ESTADOS (badges)
+========================================= */
 
-/* ESTADOS DE COTIZACIONES */
-
-.cv-estado {
+.estado {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 9px;
+  padding: 4px 10px;
   border-radius: 20px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
-  background: #e2e8f0;
-  color: #64748b;
 }
 
-.cv-estado-amarillo {
+.estado_amarillo {
   background: #fff8bd;
   color: #d65318;
 }
 
-.cv-estado-azul {
+.estado_azul {
   background: #dbeafe;
   color: #2563eb;
 }
 
-.cv-estado-verde {
+.estado_verde {
   background: #e8f9ee;
   color: #168b48;
 }
 
-.cv-estado-rojo {
+.estado_rojo {
   background: #fee2e2;
   color: #dc2626;
 }
 
-.cv-estado-naranja {
+.estado_naranja {
   background: #fff3e7;
   color: #e68a20;
 }
 
-/* DETALLE DE COTIZACION */
+/* =========================================
+   DETALLE VACÍO
+========================================= */
 
-.cv-detalle {
-  padding: 19px 18px;
+.detalle_card {
+  padding: 24px;
 }
 
-.cv-detalle-encabezado {
+.detalle_vacio {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-  .cv-detalle-encabezado h2 {
-    margin: 0 0 6px;
-    font-size: 16px;
-    font-weight: 700;
-  }
-
-  .cv-detalle-encabezado p {
-    margin: 0;
-    color: #94a3b8;
-    font-size: 10px;
-  }
-
-.cv-linea {
-  border-bottom: 1px dashed #e2e8f0;
-  margin: 18px 0 14px;
-}
-
-.cv-detalle h3 {
-  margin: 0 0 9px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.cv-proyecto-detalle {
-  font-size: 10px;
-  color: #64748b;
-  margin: 0 0 13px;
-}
-
-/* FORMULARIOS */
-
-.cv-formulario-doble {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.cv-campo {
-  min-width: 0;
-  margin-bottom: 14px;
-}
-
-  .cv-campo label {
-    display: block;
-    margin-bottom: 7px;
-    font-size: 10px;
-    font-weight: 600;
-    color: #334155;
-  }
-
-  .cv-campo input,
-  .cv-campo textarea {
-    display: block;
-    width: 100%;
-    min-width: 0;
-    padding: 10px 11px;
-    border: 1px solid #dce5ee;
-    border-radius: 5px;
-    background: #ffffff;
-    font-family: inherit;
-    font-size: 11px;
-    color: #334155;
-  }
-
-  .cv-campo input {
-    min-height: 35px;
-  }
-
-  .cv-campo textarea {
-    min-height: 90px;
-    line-height: 1.5;
-    resize: vertical;
-  }
-
-    .cv-campo input:focus,
-    .cv-campo textarea:focus {
-      outline: none;
-      border-color: #00bfb3;
-      box-shadow: 0 0 0 3px rgba(0, 191, 179, 0.12);
-    }
-
-    .cv-campo input:disabled,
-    .cv-campo textarea:disabled {
-      background: #f8fafc;
-      color: #64748b;
-    }
-
-.cv-input-icono {
-  position: relative;
-}
-
-  .cv-input-icono .cv-icono {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 14px;
-    height: 14px;
-    color: #94a3b8;
-    pointer-events: none;
-  }
-
-  .cv-input-icono input {
-    padding-left: 31px;
-  }
-
-/* BOTONES DEL FORMULARIO */
-
-.cv-acciones-propuesta {
-  display: grid;
-  grid-template-columns: 0.9fr 1.6fr;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.cv-detalle-procesado {
-  margin-top: 18px;
-  padding: 12px;
-  border-radius: 6px;
-  background: #f1f5f9;
-  color: #64748b;
-  font-size: 11px;
-  line-height: 1.6;
-}
-
-.cv-detalle-vacio {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
-  min-height: 210px;
-  text-align: center;
-  color: #94a3b8;
-  font-size: 12px;
-}
-
-  .cv-detalle-vacio .cv-icono {
-    width: 30px;
-    height: 30px;
-  }
-
-/* MODAL NUEVA PROPUESTA */
-
-.cv-modal-fondo {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: rgba(15, 23, 42, 0.55);
-}
-
-.cv-modal {
-  width: 100%;
-  max-width: 450px;
-  padding: 22px;
-  border-radius: 11px;
-  background: white;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.18);
-}
-
-.cv-modal-cabecera {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-}
-
-  .cv-modal-cabecera h2 {
-    margin: 0;
-    font-size: 18px;
-  }
-
-  .cv-modal-cabecera button {
-    background: transparent;
-    border: 0;
-    font-size: 24px;
-    cursor: pointer;
-  }
-
-.cv-ayuda {
+  gap: 12px;
+  min-height: 240px;
   color: #64748b;
-  font-size: 12px;
-  line-height: 1.6;
-  margin: 15px 0 20px;
+  text-align: center;
 }
 
-.cv-modal-acciones {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 18px;
+.detalle_vacio mat-icon {
+  font-size: 36px;
+  width: 36px;
+  height: 36px;
+  color: #00bfb3;
 }
 
-/* INDICADORES FINANCIEROS */
+.detalle_vacio p {
+  margin: 0;
+  font-size: 14px;
+}
 
-.cv-indicadores {
+/* =========================================
+   INDICADORES FINANCIEROS
+========================================= */
+
+.indicadores {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.indicador {
+  border-radius: 12px;
+  border-color: #e2e8f0;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgb(15 23 42 / 5%);
+  --mat-card-outlined-container-color: #ffffff;
+  --mat-card-outlined-container-outline-color: #e2e8f0;
+}
+
+.indicador_contenido {
+  display: flex;
+  align-items: center;
   gap: 14px;
-  margin: 5px 0 23px;
+  padding: 18px 20px;
 }
 
-.cv-indicador {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  min-height: 90px;
-  padding: 18px 15px;
-}
-
-  .cv-indicador > div:last-child {
-    min-width: 0;
-  }
-
-  .cv-indicador p {
-    margin: 0 0 8px;
-    color: #8492a6;
-    font-size: 10px;
-    font-weight: 700;
-    line-height: 1.4;
-  }
-
-  .cv-indicador strong {
-    display: block;
-    font-size: clamp(15px, 1.5vw, 21px);
-    font-weight: 800;
-    white-space: nowrap;
-  }
-
-.cv-indicador-icono {
+.indicador_icono {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 39px;
-  height: 39px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
 }
 
-  .cv-indicador-icono .cv-icono {
-    width: 19px;
-    height: 19px;
-  }
+.indicador_icono mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
 
-.cv-ico-dinero {
-  color: #00bfb3;
+.ico_dinero {
   background: #e3faf5;
-}
-
-.cv-ico-tiempo {
-  color: #3b82f6;
-  background: #eff6ff;
-}
-
-.cv-ico-grafico {
-  color: #9659f9;
-  background: #f5f0ff;
-}
-
-.cv-ico-comision {
-  color: #f04452;
-  background: #fff0f1;
-  font-size: 20px;
-  font-weight: 800;
-}
-
-.cv-texto-turquesa {
-  color: #00bfb3 !important;
-}
-
-/* HISTORIAL DE MOVIMIENTOS */
-
-.cv-tabs-finanzas {
-  margin-top: 12px;
-}
-
-.cv-historial-cabecera {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding: 14px 17px;
-  border-bottom: 1px solid #e6edf5;
-}
-
-  .cv-historial-cabecera h2 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0;
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-.cv-filtro-fecha {
-  padding: 8px 12px;
-  color: #475569;
-  background: #ffffff;
-  border: 1px solid #dbe3ed;
-  border-radius: 5px;
-  font-size: 10px;
-}
-
-.cv-tabla-finanzas th,
-.cv-tabla-finanzas td {
-  padding: 13px;
-}
-
-.cv-concepto {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  white-space: nowrap;
-}
-
-.cv-mov-icono {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 23px;
-  height: 23px;
-  flex-shrink: 0;
-  color: #159447;
-  background: #e8f9ee;
-  border-radius: 50%;
-}
-
-  .cv-mov-icono .cv-icono {
-    width: 13px;
-    height: 13px;
-  }
-
-.cv-mov-comision {
-  color: #ef4444;
-  background: #fef2f2;
-}
-
-.cv-mov-retiro {
-  color: #2563eb;
-  background: #eff6ff;
-}
-
-.cv-referencia {
-  color: #64748b;
-  white-space: nowrap;
-}
-
-.cv-enlace-ref {
   color: #00bfb3;
-  font-weight: 700;
-  text-decoration: underline;
 }
 
-.cv-monto {
-  font-weight: 700;
-  white-space: nowrap;
+.ico_tiempo {
+  background: #eff6ff;
+  color: #3b82f6;
 }
 
-/* PANEL LATERAL FINANCIERO */
+.ico_grafico {
+  background: #f5f0ff;
+  color: #9659f9;
+}
 
-.cv-finanzas-lateral {
+.ico_comision {
+  background: #fff0f1;
+  color: #f04452;
+}
+
+.indicador_texto {
   display: flex;
   flex-direction: column;
-  gap: 17px;
+  gap: 4px;
   min-width: 0;
 }
 
-/* TARJETA DE SALDO */
+.indicador_etiqueta {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #64748b;
+}
 
-.cv-saldo {
-  position: relative;
-  overflow: hidden;
+.indicador_valor {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+}
+
+.texto_turquesa {
+  color: #00bfb3;
+}
+
+/* =========================================
+   LATERAL FINANCIERO
+========================================= */
+
+.lateral {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 20px;
+}
+
+.saldo_card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  border-radius: 12px;
+  border-color: #e2e8f0;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgb(15 23 42 / 5%);
+  --mat-card-outlined-container-color: #ffffff;
+  --mat-card-outlined-container-outline-color: #e2e8f0;
+}
+
+.saldo_valor {
+  font-size: 24px;
+  font-weight: 700;
+  color: #00bfb3;
+}
+
+.retiro_card {
+  padding: 20px;
+}
+
+.retiro_titulo {
+  margin: 0 0 16px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.resumen_retiro {
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  min-height: 132px;
-  padding: 23px;
-  border-radius: 9px;
-  background: linear-gradient(120deg, #202c3e, #34445d);
-  color: #ffffff;
+  margin-bottom: 20px;
 }
 
-  .cv-saldo::after {
-    content: '';
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    right: -25px;
-    top: -30px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.045);
-  }
-
-  .cv-saldo span {
-    color: #c5cfde;
-    font-size: 11px;
-    letter-spacing: 0.4px;
-    font-weight: 600;
-  }
-
-  .cv-saldo strong {
-    position: relative;
-    z-index: 1;
-    font-size: clamp(24px, 2.5vw, 36px);
-    font-weight: 800;
-    white-space: nowrap;
-  }
-
-/* RETIRAR FONDOS */
-
-.cv-retiro {
-  padding: 19px;
+.resumen_retiro div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
 }
 
-  .cv-retiro h2 {
-    margin: 0 0 18px;
-    font-size: 13px;
-    font-weight: 700;
-    text-align: center;
-  }
-
-.cv-resumen-retiro {
-  padding: 13px;
-  border: 1px dashed #d8e4ee;
-  border-radius: 7px;
-  background: #f8fafc;
-  margin-bottom: 12px;
+.resumen_retiro span {
+  color: #64748b;
 }
 
-  .cv-resumen-retiro > div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 8px 0;
-    border-bottom: 1px solid #e2e8f0;
-    font-size: 11px;
-  }
-
-    .cv-resumen-retiro > div:last-child {
-      border-bottom: none;
-    }
-
-  .cv-resumen-retiro span {
-    color: #64748b;
-  }
-
-  .cv-resumen-retiro strong {
-    color: #334155;
-    font-weight: 700;
-  }
-
-.cv-acciones-retiro {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+.boton_completo {
+  width: 100%;
+  --mat-button-filled-container-color: #00bfb3;
+  --mat-button-filled-label-text-color: #ffffff;
+  --mat-button-filled-hover-state-layer-color: #ffffff;
 }
 
-.cv-nota-retiro,
-.cv-nota-demo {
-  margin: 12px 0 0;
-  color: #94a3b8;
-  font-size: 10px;
-  line-height: 1.6;
-  text-align: center;
-}
+/* =========================================
+   RESPONSIVE
+========================================= */
 
-  .cv-nota-retiro strong {
-    color: #334155;
+@media (max-width: 1100px) {
+  .main_grid,
+  .grid_finanzas {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-.cv-nota-demo {
-  color: #b45309;
-}
-
-/* RESPONSIVE: TABLET */
-
-@media (max-width: 1200px) {
-
-  .cv-grid-cotizaciones,
-  .cv-grid-finanzas {
-    grid-template-columns: minmax(0, 1.6fr) minmax(290px, 1fr);
-  }
-
-  .cv-indicadores {
+  .indicadores {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* RESPONSIVE: PANTALLAS MEDIANAS */
-
-@media (max-width: 950px) {
-
-  .cotizaciones-vendedor {
-    padding: 24px 20px;
-  }
-
-  .cv-grid-cotizaciones,
-  .cv-grid-finanzas {
+@media (max-width: 700px) {
+  .indicadores {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .cv-tabla {
-    min-width: 650px;
-  }
-
-  .cv-detalle {
-    max-width: 100%;
-  }
-}
-
-/* RESPONSIVE: CELULAR */
-
-@media (max-width: 600px) {
-
-  .cotizaciones-vendedor {
-    padding: 17px 12px 35px;
-  }
-
-  .cv-cabecera {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .cv-tabs-principales button {
-    padding: 10px 8px 12px;
-    font-size: 13px;
-  }
-
-  .cv-acciones-superiores {
-    justify-content: flex-end;
-  }
-
-    .cv-acciones-superiores .cv-btn {
-      flex: 1;
-    }
-
-  .cv-tabs-secundarias button {
-    font-size: 11px;
-    padding: 10px 12px;
-  }
-
-  .cv-indicadores {
-    grid-template-columns: 1fr;
-  }
-
-  .cv-indicador strong {
-    font-size: 20px;
-  }
-
-  .cv-formulario-doble {
-    grid-template-columns: 1fr;
-  }
-
-  .cv-saldo strong {
-    font-size: 28px;
-  }
-
-  .cv-detalle {
-    padding: 15px;
-  }
-
-  .cv-acciones-propuesta {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* IMPRESION */
-
-@media print {
-
-  .cv-acciones-superiores,
-  .cv-tabs-principales,
-  .cv-tabs-secundarias,
-  .cv-btn,
-  .cv-mensaje {
-    display: none !important;
-  }
-
-  .cotizaciones-vendedor {
-    background: white;
-    padding: 0;
-  }
-
-  .cv-grid-finanzas {
-    grid-template-columns: 1fr;
-  }
-
-  .cv-tarjeta,
-  .cv-indicador {
-    box-shadow: none;
-    break-inside: avoid;
-  }
-}
-
-/* MOVIMIENTO REDUCIDO */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .cv-btn,
-  .cv-fila-seleccionable {
-    transition: none;
   }
 }
