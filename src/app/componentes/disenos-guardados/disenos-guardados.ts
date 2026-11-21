@@ -74,11 +74,11 @@ export class DisenosGuardados implements OnInit {
 
   ngOnInit(): void {
     this.recentlyViewed = this.recentlyViewedService.getAll().slice(0, this.previewSize);
-    this.loadData();
+    //this.loadData();
   }
 
   // ---------- Carga de datos ----------
-
+/*
   loadData(): void {
     this.loading = true;
     this.errorMessage = '';
@@ -123,7 +123,7 @@ export class DisenosGuardados implements OnInit {
         this.loading = false;
       },
     });
-  }
+  }*/
 
   // Si hay varias solicitudes para el mismo prototipo, se usa la más reciente
   private latestQuoteByPrototype(quotes: QuoteRequestDTO[]): Map<number, QuoteRequestDTO> {

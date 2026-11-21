@@ -125,32 +125,44 @@ export const MOCK_INITIAL_FAVORITE_IDS = [1, 2, 3, 12, 13, 14, 15, 16];
 // "Vistos recientemente" iniciales en modo mock
 export const MOCK_INITIAL_RECENT_IDS = [4, 5, 6, 7];
 
-export const MOCK_PROTOTYPES: PrototypeDTO[] = [
+/*export const MOCK_PROTOTYPES: PrototypeDTO[] = [
   {
-    prototypeId: 101, name: 'Escritorio Nórdico Personalizado', categoryId: 4,
-    prompt: 'Escritorio blanco nórdico con cajonera y pasacables', generationSatus: 'COMPLETED',
+    prototypeId: 101,
+    name: 'Escritorio Nórdico Personalizado',
+    categoryId: 4,
+    prompt: 'Escritorio blanco nórdico con cajonera y pasacables',
+    generationStatus: 'COMPLETED',
     createdAt: '2026-11-10T10:00:00',
     images: [{ imageId: 1, url: img('photo-1524758631624-e2822e304c36'), principal: true }],
   },
   {
-    prototypeId: 102, name: 'Closet Empotrado con Iluminación', categoryId: 1,
-    prompt: 'Closet de piso a techo con luces LED', generationSatus: 'COMPLETED',
+    prototypeId: 102,
+    name: 'Closet Empotrado con Iluminación',
+    categoryId: 1,
+    prompt: 'Closet de piso a techo con luces LED',
+    generationStatus: 'COMPLETED',
     createdAt: '2026-11-05T15:30:00',
     images: [{ imageId: 2, url: img('photo-1595526114035-0d45ed16cfbf'), principal: true }],
   },
   {
-    prototypeId: 103, name: 'Repostero Rústico para Cocina', categoryId: 6,
-    prompt: 'Repostero de madera rústica con vidrio', generationSatus: 'COMPLETED',
+    prototypeId: 103,
+    name: 'Repostero Rústico para Cocina',
+    categoryId: 6,
+    prompt: 'Repostero de madera rústica con vidrio',
+    generationStatus: 'COMPLETED',
     createdAt: '2026-10-28T09:15:00',
     images: [{ imageId: 3, url: img('photo-1556228453-efd6c1ff04f6'), principal: true }],
   },
   {
-    prototypeId: 104, name: 'Banca de Recibidor con Zapatera', categoryId: 6,
-    prompt: 'Banca de madera clara con espacio para zapatos', generationSatus: 'COMPLETED',
+    prototypeId: 104,
+    name: 'Banca de Recibidor con Zapatera',
+    categoryId: 6,
+    prompt: 'Banca de madera clara con espacio para zapatos',
+    generationStatus: 'COMPLETED',
     createdAt: '2026-10-20T18:45:00',
     images: [{ imageId: 4, url: img('photo-1503602642458-232111445657'), principal: true }],
   },
-];
+];*/
 
 export const MOCK_QUOTE_REQUESTS: QuoteRequestDTO[] = [
   { requestId: 501, prototypeId: 101, prototype: 'Escritorio Nórdico Personalizado', categoryId: 4, quantity: 1, status: 'OPEN', offerCount: 2, createdAt: '2026-11-11T09:00:00' },
