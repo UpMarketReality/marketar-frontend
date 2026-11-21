@@ -6,18 +6,17 @@ export const authGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
-  console.log('¿Autenticado?:', auth.isAuthenticated());
-  console.log('¿Existe JWT?:', !!auth.getToken());
-  console.log('¿Existe sesión?:', !!auth.getSession());
+  // Pantalla de login de la ruta (por defecto la del comprador)
+  const loginUrl = (route.data['loginUrl'] as string | undefined) ?? '/inicio-sesion';
 
-  // Usuario sin sesión: redirigir al login.
+  // Usuario sin sesión: redirigir al login correspondiente
   if (!auth.isAuthenticated()) {
-    return router.createUrlTree(['/inicio-sesion'], {
+    return router.createUrlTree([loginUrl], {
       queryParams: { returnUrl: state.url },
     });
   }
 
-  // Comprobar el rol requerido por la ruta.
+  // Comprobar el rol requerido por la ruta
   const role = route.data['role'] as string | undefined;
 
   if (role && !auth.hasRole(role)) {

@@ -21,12 +21,24 @@ import { environment } from '../environments/environment';
 import { VendedorPerfil } from './componentes/vendedor-perfil/vendedor-perfil';
 import { VendedorCotizaciones } from './componentes/vendedor-cotizaciones/vendedor-cotizaciones';
 import { GeneralLayoutComponente } from './componentes/general-layout-componente/general-layout-componente';
+import { VendedorInicioSesion } from './componentes/vendedor-inicio-sesion/vendedor-inicio-sesion';
+import { VendedorRegistro } from './componentes/vendedor-registro/vendedor-registro';
 
 export const routes: Routes = [
   // PANEL DEL VENDEDOR: sin encabezado del comprador
   {
+    path: 'vendedor',
+    children: [
+      { path: '', redirectTo: 'inicio-sesion', pathMatch: 'full' },
+      { path: 'inicio-sesion', component: VendedorInicioSesion },
+      { path: 'registro', component: VendedorRegistro },
+    ],
+  },
+  {
     path: 'perfil-vendedor',
     component: VendedorLayoutComponente,
+    canActivate: [authGuard],
+    data: { role: 'VENDEDOR', loginUrl: '/vendedor/inicio-sesion' },
     children: [
       {
         path: '',

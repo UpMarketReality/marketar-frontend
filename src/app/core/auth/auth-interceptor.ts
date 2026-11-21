@@ -11,8 +11,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   // Rutas públicas reales de Spring Boot
   const esAutenticacion =
-    req.url === `${apiUrl}/v1/auth/login` ||
-    req.url === `${apiUrl}/v1/auth/register`;
+    req.url === `${apiUrl}/v1/auth/login` || req.url === `${apiUrl}/v1/auth/register`;
 
   if (!esNuestraApi || esAutenticacion) {
     return next(req);

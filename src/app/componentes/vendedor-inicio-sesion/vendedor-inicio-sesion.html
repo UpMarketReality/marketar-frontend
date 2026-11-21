@@ -1,0 +1,88 @@
+<section class="acceso_pagina">
+  <div class="acceso_tarjeta">
+
+    <!-- Panel visual izquierdo -->
+    <div class="acceso_visual">
+      <div class="visual_texto">
+        <h2>Bienvenido de nuevo a MarketAR</h2>
+        <p>Accede a tu perfil para continuar creando, cotizando y vendiendo muebles únicos a tu medida.</p>
+      </div>
+    </div>
+
+    <!-- Formulario derecho -->
+    <div class="acceso_formulario">
+      <a matButton="text" routerLink="/home1" class="volver">
+        <mat-icon>arrow_back</mat-icon>
+        Volver al inicio
+      </a>
+      <nav mat-tab-nav-bar class="tabs_acceso" aria-label="Acceso de vendedor">
+        <a mat-tab-link
+           routerLink="/vendedor/inicio-sesion"
+           routerLinkActive
+           #rlaSesion="routerLinkActive"
+           [active]="rlaSesion.isActive">
+          Iniciar Sesión
+        </a>
+        <a mat-tab-link
+           routerLink="/vendedor/registro"
+           routerLinkActive
+           #rlaRegistro="routerLinkActive"
+           [active]="rlaRegistro.isActive">
+          Registrarse
+        </a>
+      </nav>
+
+      <h1 class="titulo">Iniciar Sesión</h1>
+      <p class="subtitulo">Ingresa tus credenciales para acceder a tu cuenta.</p>
+
+      <form (ngSubmit)="iniciarSesion()" #formulario="ngForm">
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+          <mat-label>Correo electrónico</mat-label>
+          <mat-icon matPrefix>mail</mat-icon>
+          <input matInput
+                 type="email"
+                 name="correo"
+                 placeholder="nombre@ejemplo.com"
+                 autocomplete="username"
+                 [(ngModel)]="correo"
+                 required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+          <mat-label>Contraseña</mat-label>
+          <mat-icon matPrefix>lock</mat-icon>
+          <input matInput
+                 type="password"
+                 name="password"
+                 placeholder="Ingresa tu contraseña"
+                 autocomplete="current-password"
+                 [(ngModel)]="password"
+                 required>
+        </mat-form-field>
+
+        <div class="fila_olvido">
+          <a href="#">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        @if (errorMessage) {
+          <p class="error" role="alert">{{ errorMessage }}</p>
+        }
+
+        <button matButton="filled"
+                type="submit"
+                class="boton_principal"
+                [disabled]="formulario.invalid || cargando">
+          {{ cargando ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+        </button>
+
+      </form>
+
+      <p class="pie">
+        ¿Aún no tienes cuenta?
+        <a routerLink="/vendedor/registro">Regístrate gratis</a>
+      </p>
+
+    </div>
+  </div>
+</section>
