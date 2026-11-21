@@ -28,8 +28,12 @@ export const APP_ICONS: Record<string, string> = {
     '<path d="M10 2.5l1.9 5.1 5.1 1.9-5.1 1.9L10 16.5l-1.9-5.1L3 9.5l5.1-1.9Z"/><path d="M18.5 13l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/>',
   ),
   'arrow-right': line('<path d="M5 12h14M13 6l6 6-6 6"/>'),
-  file: line('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>'),
-  image: line('<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-8 9"/>'),
+  file: line(
+    '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+  ),
+  image: line(
+    '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-8 9"/>',
+  ),
   search: line('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>'),
   sort: line('<path d="M3 6h18M6 12h12M10 18h4"/>'),
   check: line('<path d="m5 12 5 5 9-10"/>'),

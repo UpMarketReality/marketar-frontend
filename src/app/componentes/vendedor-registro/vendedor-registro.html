@@ -1,0 +1,142 @@
+<section class="acceso_pagina">
+  <div class="acceso_tarjeta">
+
+    <!-- Panel visual izquierdo -->
+    <div class="acceso_visual">
+      <div class="visual_texto">
+        <h2>Digitaliza tus muebles y abre tu tienda al mundo</h2>
+        <p>Conecta con miles de clientes, gestiona tus cotizaciones y lleva tu taller al siguiente nivel con nuestras herramientas 3D.</p>
+      </div>
+    </div>
+
+    <!-- Formulario derecho -->
+    <div class="acceso_formulario">
+      <a matButton="text" routerLink="/home1" class="volver">
+        <mat-icon>arrow_back</mat-icon>
+        Volver al inicio
+      </a>
+      <nav mat-tab-nav-bar class="tabs_acceso" aria-label="Acceso de vendedor">
+        <a mat-tab-link
+           routerLink="/vendedor/inicio-sesion"
+           routerLinkActive
+           #rlaSesion="routerLinkActive"
+           [active]="rlaSesion.isActive">
+          Iniciar Sesión
+        </a>
+        <a mat-tab-link
+           routerLink="/vendedor/registro"
+           routerLinkActive
+           #rlaRegistro="routerLinkActive"
+           [active]="rlaRegistro.isActive">
+          Registrarse
+        </a>
+      </nav>
+
+      <h1 class="titulo">Crea tu cuenta</h1>
+      <p class="subtitulo">Únete a MarketAR y empieza a ofrecer tus productos como vendedor.</p>
+
+      <form (ngSubmit)="registrar()" #formulario="ngForm">
+
+        <div class="fila_doble">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+            <mat-label>RUC de la empresa</mat-label>
+            <mat-icon matPrefix>badge</mat-icon>
+            <input matInput
+                   name="ruc"
+                   placeholder="Ej: 20123456789"
+                   maxlength="11"
+                   [(ngModel)]="ruc"
+                   required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+            <mat-label>Nombre del taller / empresa</mat-label>
+            <mat-icon matPrefix>storefront</mat-icon>
+            <input matInput
+                   name="nombreEmpresa"
+                   placeholder="Ej: DecoSAC"
+                   maxlength="100"
+                   [(ngModel)]="nombreEmpresa"
+                   required>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+          <mat-label>Nombre del representante</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput
+                 name="nombreRepresentante"
+                 placeholder="Nombre completo"
+                 maxlength="100"
+                 [(ngModel)]="nombreRepresentante"
+                 required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+          <mat-label>Correo electrónico</mat-label>
+          <mat-icon matPrefix>mail</mat-icon>
+          <input matInput
+                 type="email"
+                 name="correo"
+                 placeholder="nombre@ejemplo.com"
+                 autocomplete="username"
+                 maxlength="150"
+                 [(ngModel)]="correo"
+                 required>
+        </mat-form-field>
+
+        <div class="fila_doble">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+            <mat-label>Contraseña</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input matInput
+                   type="password"
+                   name="password"
+                   placeholder="Crea una clave"
+                   autocomplete="new-password"
+                   minlength="8"
+                   maxlength="64"
+                   [(ngModel)]="password"
+                   required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+            <mat-label>Confirmar clave</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input matInput
+                   type="password"
+                   name="confirmarPassword"
+                   placeholder="Repite la clave"
+                   autocomplete="new-password"
+                   minlength="8"
+                   maxlength="64"
+                   [(ngModel)]="confirmarPassword"
+                   required>
+          </mat-form-field>
+        </div>
+
+        @if (errorMessage) {
+          <p class="error" role="alert">{{ errorMessage }}</p>
+        }
+
+        <button matButton="filled"
+                type="submit"
+                class="boton_principal"
+                [disabled]="formulario.invalid || cargando">
+          {{ cargando ? 'Creando cuenta...' : 'Registrar mi empresa' }}
+        </button>
+
+      </form>
+
+      <p class="legal">
+        Al continuar, aceptas nuestros <a href="#">Términos de servicio</a> y <a href="#">Política de privacidad</a>.
+      </p>
+
+      <p class="pie">
+        ¿Ya tienes cuenta?
+        <a routerLink="/vendedor/inicio-sesion">Inicia sesión</a>
+      </p>
+
+    </div>
+  </div>
+</section>
