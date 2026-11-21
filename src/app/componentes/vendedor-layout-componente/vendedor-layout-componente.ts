@@ -5,6 +5,7 @@ import { filter, map } from 'rxjs';
 import { MatNavList, MatListItem, MatListItemIcon } from '@angular/material/list';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-vendedor-layout-componente',
@@ -24,6 +25,7 @@ import { MatButton } from '@angular/material/button';
 })
 export class VendedorLayoutComponente {
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
 
   // URL actual, se actualiza en cada navegación
   private readonly url = toSignal(
@@ -33,6 +35,12 @@ export class VendedorLayoutComponente {
     ),
     { initialValue: this.router.url },
   );
+
+  // CERRAR SESIÓN: borra la sesión guardada y vuelve al inicio de sesión del vendedor
+  cerrarSesion(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/vendedor/inicio-sesion');
+  }
 
   // "Mis productos" sigue seleccionado tanto en Catálogo Activo como en Añadir Nuevo
   readonly productosActivo = computed(() => {
