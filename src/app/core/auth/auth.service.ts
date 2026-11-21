@@ -6,7 +6,6 @@ import { ResponseDto } from '../../model/response-dto';
 import { UsuarioDto } from '../../model/usuario-dto';
 import { environment } from '../../../environments/environment';
 
-const TokenKey = 'access_token';
 
 @Injectable({
   providedIn: 'root',
@@ -38,11 +37,11 @@ export class AuthService {
 
   // GUARDAR SESIÓN
   private saveSession(response: ResponseDto): void {
-    localStorage.setItem(TokenKey, JSON.stringify(response));
+    localStorage.setItem(this.storageKey, JSON.stringify(response));
   }
 
   getSession(): ResponseDto | null {
-    const saved = localStorage.getItem('marketar_session');
+    const saved = localStorage.getItem(this.storageKey);
 
     if (!saved) return null;
 
@@ -80,6 +79,6 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('access_token');
+    localStorage.removeItem(this.storageKey);
   }
 }

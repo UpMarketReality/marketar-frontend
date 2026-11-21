@@ -63,7 +63,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'home1', pathMatch: 'full' },
       { path: 'inicio-sesion', component: InicioSesion },
-      { path: 'empieza-acrear', component: EmpiezaACrear },
+      { path: 'empieza-acrear', component: EmpiezaACrear, canActivate: [authGuard], data: { role: 'COMPRADOR' } },
       { path: 'catalogo', component: Catalogo },
       { path: 'home1', component: Home1 },
       {
