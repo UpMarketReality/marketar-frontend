@@ -3,129 +3,458 @@
   <div class="container">
 
     <div class="page-header">
-      <h1>Crea tu propio estilo con <span class="text-primary">IA</span></h1>
+      <h1>
+        Crea tu propio estilo con
+        <span class="text-primary">IA</span>
+      </h1>
+
+      <p>
+        Describe tu mueble y personalízalo con nuestros filtros.
+      </p>
     </div>
 
     <div class="create-layout">
 
-      <!-- LEFT COLUMN: FORM / IA PROMPT -->
+      <!-- COLUMNA IZQUIERDA -->
       <div class="form-column">
-        <div class="design-card form-card">
+
+        <form
+          class="design-card form-card"
+          [formGroup]="formulario"
+          (ngSubmit)="generarDiseno()">
 
           <h2 class="card-title">MarketAR</h2>
 
-          <!-- Text Area Section -->
+          <!-- NOMBRE -->
           <div class="form-group">
-            <label>Describe tu mueble ideal</label>
-            <p class="help-text">Cuéntanos qué necesitas y la IA creará un diseño detallado.</p>
-            <textarea placeholder="Ej: Necesito un escritorio para oficina, estilo moderno, con acabado en madera clara y patas de metal negro..."></textarea>
-            <div class="char-count">0/500 Caracteres</div>
+            <label for="nombre">Nombre del diseño *</label>
+
+            <input
+              id="nombre"
+              class="form-input"
+              type="text"
+              formControlName="name"
+              maxlength="150"
+              placeholder="Ej: Mi escritorio moderno">
+
+            @if (
+              formulario.controls.name.invalid &&
+              formulario.controls.name.touched
+              ) {
+              <small class="validation-error">
+                Ingresa un nombre de máximo 150 caracteres.
+              </small>
+            }
           </div>
 
-          <!-- Category Section -->
+          <!-- PROMPT -->
           <div class="form-group">
+
+            <label for="prompt">
+              Describe tu mueble ideal *
+            </label>
+
+            <p class="help-text">
+              Explica cómo deseas que sea tu producto.
+            </p>
+
+            <textarea
+              id="prompt"
+              formControlName="prompt"
+              maxlength="500"
+              rows="6"
+              placeholder="Ej: Necesito un escritorio para oficina, con dos cajones y patas de metal negro..."></textarea>
+
+            <div class="char-count">
+              {{ cantidadCaracteres }}/500 caracteres
+            </div>
+
+            @if (
+              formulario.controls.prompt.invalid &&
+              formulario.controls.prompt.touched
+              ) {
+              <small class="validation-error">
+                La descripción debe tener entre 10 y 500 caracteres.
+              </small>
+            }
+
+          </div>
+
+          <!-- CATEGORÍA REAL -->
+          <div class="form-group">
+            <label>Categoría</label>
+
+            <div class="category-info">
+              <i class="fa-solid fa-couch text-primary"></i>
+              Muebles personalizados
+            </div>
+          </div>
+
+          <!-- TIPO DE MUEBLE -->
+          <div class="form-group">
+
             <div class="label-row">
-              <label>Categoría</label>
+              <label>Tipo de mueble</label>
               <span class="optional-text">(Opcional)</span>
             </div>
+
             <div class="pill-group">
-              <button class="pill">Mesa</button>
-              <button class="pill">Cama</button>
-              <button class="pill">Sofá</button>
-              <button class="pill active">Escritorio</button>
-              <button class="pill">Armario</button>
-              <button class="pill">Cómoda</button>
+
+              @for (tipo of tiposMueble; track tipo) {
+
+                <button
+                  type="button"
+                  class="pill"
+                  [class.active]="
+                    formulario.controls.tipoMueble.value === tipo
+                  "
+                  [attr.aria-pressed]="
+                    formulario.controls.tipoMueble.value === tipo
+                  "
+                  (click)="seleccionarFiltro('tipoMueble', tipo)">
+
+                  {{ tipo }}
+
+                </button>
+
+              }
+
             </div>
           </div>
 
-          <!-- Style Section -->
+          <!-- ESTILO -->
           <div class="form-group">
+
             <div class="label-row">
               <label>Estilo</label>
               <span class="optional-text">(Opcional)</span>
             </div>
+
             <div class="pill-group">
-              <button class="pill active">Moderno</button>
-              <button class="pill">Minimalista</button>
-              <button class="pill">Industrial</button>
-              <button class="pill">Rústico</button>
-              <button class="pill">Vintage</button>
+
+              @for (estilo of estilos; track estilo) {
+
+                <button
+                  type="button"
+                  class="pill"
+                  [class.active]="
+                    formulario.controls.style.value === estilo
+                  "
+                  [attr.aria-pressed]="
+                    formulario.controls.style.value === estilo
+                  "
+                  (click)="seleccionarFiltro('style', estilo)">
+
+                  {{ estilo }}
+
+                </button>
+
+              }
+
             </div>
           </div>
 
-          <!-- Material Section -->
+          <!-- MATERIAL -->
           <div class="form-group">
+
             <div class="label-row">
-              <label>Material Principal</label>
-              <span class="optional-text">(Opcional)</span>
+              <label>Material principal *</label>
             </div>
+
             <div class="pill-group">
-              <button class="pill">Plástico</button>
-              <button class="pill">Bambú</button>
-              <button class="pill">Metal</button>
+
+              @for (material of materiales; track material) {
+
+                <button
+                  type="button"
+                  class="pill"
+                  [class.active]="
+                    formulario.controls.material.value === material
+                  "
+                  [attr.aria-pressed]="
+                    formulario.controls.material.value === material
+                  "
+                  (click)="seleccionarFiltro('material', material)">
+
+                  {{ material }}
+
+                </button>
+
+              }
+
             </div>
+
+            @if (
+              formulario.controls.material.invalid &&
+              formulario.controls.material.touched
+              ) {
+              <small class="validation-error">
+                Selecciona un material.
+              </small>
+            }
           </div>
 
-          <!-- Submit Button -->
-          <button class="btn-generate">Generar Diseño con IA</button>
-        </div>
+          <!-- COLOR -->
+          <div class="form-group">
+
+            <label for="color">
+              Color principal *
+            </label>
+
+            <input
+              id="color"
+              class="form-input"
+              type="text"
+              formControlName="color"
+              maxlength="60"
+              placeholder="Ej: Marrón natural, blanco, negro mate">
+
+            @if (
+              formulario.controls.color.invalid &&
+              formulario.controls.color.touched
+              ) {
+              <small class="validation-error">
+                Ingresa un color válido.
+              </small>
+            }
+
+          </div>
+
+          <!-- DIMENSIONES -->
+          <div class="form-group">
+
+            <label>Dimensiones aproximadas *</label>
+
+            <p class="help-text">
+              Estas medidas orientan el diseño.
+              La imagen generada es referencial.
+            </p>
+
+            <div class="dimensions-grid">
+
+              <div>
+                <label for="width">Ancho</label>
+
+                <input
+                  id="width"
+                  type="number"
+                  class="form-input"
+                  formControlName="width"
+                  min="0.01"
+                  step="any"
+                  placeholder="160">
+              </div>
+
+              <div>
+                <label for="height">Alto</label>
+
+                <input
+                  id="height"
+                  type="number"
+                  class="form-input"
+                  formControlName="height"
+                  min="0.01"
+                  step="any"
+                  placeholder="75">
+              </div>
+
+              <div>
+                <label for="depth">Profundidad</label>
+
+                <input
+                  id="depth"
+                  type="number"
+                  class="form-input"
+                  formControlName="depth"
+                  min="0.01"
+                  step="any"
+                  placeholder="60">
+              </div>
+
+              <div>
+                <label for="unit">Unidad</label>
+
+                <select
+                  id="unit"
+                  class="form-input"
+                  formControlName="unit">
+
+                  <option value="cm">cm</option>
+                  <option value="mm">mm</option>
+                  <option value="m">m</option>
+
+                </select>
+              </div>
+
+            </div>
+
+            @if (
+              (formulario.controls.width.invalid &&
+                formulario.controls.width.touched) ||
+              (formulario.controls.height.invalid &&
+                formulario.controls.height.touched) ||
+              (formulario.controls.depth.invalid &&
+                formulario.controls.depth.touched)
+              ) {
+              <small class="validation-error">
+                Ingresa dimensiones mayores que cero.
+              </small>
+            }
+          </div>
+
+          <!-- GENERAR -->
+          <button
+            type="submit"
+            class="btn-generate"
+            [disabled]="cargando">
+
+            @if (cargando) {
+              <i class="fa-solid fa-spinner fa-spin"></i>
+              Procesando diseño...
+            } @else {
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              Generar Diseño con IA
+            }
+
+          </button>
+
+          @if (mensajeError) {
+            <div class="error-box" role="alert">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ mensajeError }}
+            </div>
+          }
+
+          @if (puedeConsultar) {
+            <button
+              type="button"
+              class="btn-retry"
+              (click)="consultarEstado()">
+
+              <i class="fa-solid fa-rotate"></i>
+              Consultar estado del diseño
+
+            </button>
+          }
+
+        </form>
       </div>
 
-      <!-- RIGHT COLUMN: IA RESULT -->
+      <!-- COLUMNA DERECHA -->
       <div class="result-column">
+
         <div class="design-card result-card">
 
-          <h2 class="card-title">Diseño Generado</h2>
+          <h2 class="card-title">
+            Diseño Generado
+          </h2>
 
-          <!-- Image Collage -->
-          <div class="image-collage">
-            <!-- Reemplazar src por imágenes reales del diseño generado -->
-            <div class="collage-item large-item">
-              <img src="https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&q=80&w=400" alt="Vista general escritorio">
+          @if (cargando) {
+
+            <div class="generation-state" role="status">
+
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+              <h3>La IA está trabajando</h3>
+
+              <p>{{ mensajeEstado }}</p>
+
+              <div class="loading-bar">
+                <div class="loading-bar-progress"></div>
+              </div>
+
             </div>
-            <div class="collage-item">
-              <img src="https://images.unsplash.com/photo-1611125832047-1d7ad1e8e48f?auto=format&fit=crop&q=80&w=200" alt="Detalle textura">
+
+          } @else if (imagenUrl) {
+
+            <!-- IMAGEN DEL BACKEND -->
+            <div class="generated-image-container">
+
+              <img
+                class="generated-image"
+                [src]="imagenUrl"
+                [alt]="'Diseño generado: ' + prototipo?.name">
+
             </div>
-            <div class="collage-item">
-              <img src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&q=80&w=200" alt="Vista lateral">
+
+            <div class="specs-card">
+
+              <h4>Información del diseño</h4>
+
+              <div class="specs-grid">
+
+                <div class="spec-item">
+                  <i class="fa-solid fa-tag text-primary"></i>
+
+                  <span>
+                    {{ prototipo?.name }}
+                  </span>
+                </div>
+
+                <div class="spec-item">
+                  <i class="fa-solid fa-check-circle text-primary"></i>
+
+                  <span>
+                    {{ prototipo?.generationStatus }}
+                  </span>
+                </div>
+
+              </div>
+
+              <p class="help-text">
+                Este render es una referencia visual.
+                Las dimensiones y materiales deben
+                verificarse antes de fabricar el producto.
+              </p>
+
             </div>
-            <div class="collage-item render-more">
+
+            <div class="result-actions">
+
+              <button
+                type="button"
+                class="btn btn-save"
+                (click)="descargarImagen()">
+
+                <i class="fa-solid fa-download"></i>
+                Descargar imagen
+
+              </button>
+
+            </div>
+
+          } @else {
+
+            <div class="empty-result">
+
               <i class="fa-regular fa-image"></i>
-              <span>Ver más renders</span>
-            </div>
-          </div>
 
-          <!-- Specifications -->
-          <div class="specs-card">
-            <h4>Especificaciones</h4>
-            <div class="specs-grid">
-              <div class="spec-item">
-                <i class="fa-solid fa-ruler-combined text-primary"></i>
-                <span>L 160 x 50 x 60 cm</span>
-              </div>
-              <div class="spec-item">
-                <i class="fa-solid fa-palette text-primary"></i>
-                <span>Marrón Natural</span>
-              </div>
-              <div class="spec-item">
-                <i class="fa-solid fa-tree text-primary"></i>
-                <span>Madera de Roble</span>
-              </div>
-              <div class="spec-item">
-                <i class="fa-solid fa-box-open text-primary"></i>
-                <span>2 Cajones frontales</span>
-              </div>
-            </div>
-          </div>
+              @if (prototipo?.generationStatus === 'ERROR') {
 
-          <!-- Actions -->
-          <div class="result-actions">
-            <div class="action-row">
-              <button class="btn btn-save"><i class="fa-solid fa-bookmark"></i> Guardar Diseño</button>
-              <button class="btn btn-ar"><i class="fa-solid fa-cube"></i> Ver en AR</button>
+                <h3>No se pudo generar el diseño</h3>
+                <p>Revisa el mensaje de error e intenta nuevamente.</p>
+
+              } @else if (prototipo) {
+
+                <h3>Generación registrada</h3>
+                <p>
+                  Prototipo #{{ prototipo.prototypeId }}.
+                  Puedes consultar nuevamente su estado.
+                </p>
+
+              } @else {
+
+                <h3>Tu creación aparecerá aquí</h3>
+                <p>
+                  Completa el formulario y genera tu
+                  primer diseño con inteligencia artificial.
+                </p>
+
+              }
+
             </div>
-            <button class="btn btn-quote"><i class="fa-solid fa-file-invoice-dollar"></i> COTIZAR</button>
-          </div>
+
+          }
 
         </div>
       </div>
