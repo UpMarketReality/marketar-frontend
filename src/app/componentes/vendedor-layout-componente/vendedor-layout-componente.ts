@@ -5,6 +5,7 @@ import { filter, map } from 'rxjs';
 import { MatNavList, MatListItem, MatListItemIcon } from '@angular/material/list';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-vendedor-layout-componente',
@@ -24,6 +25,7 @@ import { MatButton } from '@angular/material/button';
 })
 export class VendedorLayoutComponente {
   private readonly router = inject(Router);
+  private readonly auth = inject(AuthService);
 
   // URL actual, se actualiza en cada navegación
   private readonly url = toSignal(
@@ -42,4 +44,8 @@ export class VendedorLayoutComponente {
       url.startsWith('/perfil-vendedor/nuevo-producto')
     );
   });
+  cerrarSesion() {
+    this.auth.logout();
+    this.router.navigateByUrl('/home1');
+  }
 }
