@@ -4,6 +4,7 @@ import { Observable} from 'rxjs';
 import { PrototypeDTO } from '../model/prototype-dto';
 import { PrototypeRequest } from '../model/prototype-request';
 import { environment } from '../../environments/environment';
+import { PageDTO } from '../model/page-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -49,5 +50,20 @@ export class PrototypeService {
     return this.http.get(`${this.apiUrl}/${prototypeId}/images/` + encodeURIComponent(filename), {
       responseType: 'blob',
     });
+  }
+  getMyPrototypes(
+    page: number = 0,
+    size: number = 20
+  ): Observable<PageDTO<PrototypeDTO>> {
+
+    return this.http.get<PageDTO<PrototypeDTO>>(
+      `${this.apiUrl}/me`,
+      {
+        params: {
+          page: page.toString(),
+          size: size.toString()
+        }
+      }
+    );
   }
 }
