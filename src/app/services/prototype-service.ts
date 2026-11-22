@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 })
 export class PrototypeService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = environment.apiUrl + '/api/v1/prototypes';
+  private readonly apiUrl = environment.apiUrl + '/v1/prototypes';
 
   generar(datos: PrototypeRequest): Observable<PrototypeDTO> {
     return this.http.post<PrototypeDTO>(this.apiUrl, datos);
