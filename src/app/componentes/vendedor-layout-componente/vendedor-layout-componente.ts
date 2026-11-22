@@ -36,6 +36,12 @@ export class VendedorLayoutComponente {
     { initialValue: this.router.url },
   );
 
+  // CERRAR SESIÓN: borra la sesión guardada y vuelve al inicio de sesión del vendedor
+  cerrarSesion(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/vendedor/inicio-sesion');
+  }
+
   // "Mis productos" sigue seleccionado tanto en Catálogo Activo como en Añadir Nuevo
   readonly productosActivo = computed(() => {
     const url = this.url();

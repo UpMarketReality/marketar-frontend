@@ -1,0 +1,187 @@
+/* =========================================
+   VISTA: INICIO DE SESIÓN DEL VENDEDOR
+   Paleta: teal #00bfb3, teal oscuro #007e77, verde pastel #effdfa,
+   títulos #1e293b, texto #64748b, bordes #e2e8f0, fondo #f8fafc.
+   Componentes visuales: Angular Material
+========================================= */
+
+.acceso_pagina {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #f8fafc;
+  box-sizing: border-box;
+}
+
+/* Tarjeta con dos columnas */
+.acceso_tarjeta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  width: 100%;
+  max-width: 900px;
+  min-height: 560px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgb(15 23 42 / 8%);
+}
+
+/* Panel visual izquierdo */
+.acceso_visual {
+  display: flex;
+  align-items: flex-end;
+  padding: 40px;
+  background:
+    linear-gradient(180deg, rgb(30 41 59 / 10%), rgb(30 41 59 / 85%)),
+    linear-gradient(135deg, #94a3b8, #334155);
+}
+
+.visual_texto h2 {
+  margin: 0 0 12px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #ffffff;
+}
+
+.visual_texto p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #e2e8f0;
+}
+
+/* Formulario derecho */
+.acceso_formulario {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px 44px;
+}
+
+/* Pestañas Iniciar Sesión / Registrarse */
+.tabs_acceso {
+  --mat-tab-active-label-text-color: #00bfb3;
+  --mat-tab-active-hover-label-text-color: #00bfb3;
+  --mat-tab-active-focus-label-text-color: #00bfb3;
+  --mat-tab-active-indicator-color: #00bfb3;
+  --mat-tab-active-indicator-height: 2px;
+  --mat-tab-inactive-label-text-color: #64748b;
+  --mat-tab-inactive-hover-label-text-color: #1e293b;
+  --mat-tab-divider-color: #e2e8f0;
+  --mat-tab-label-text-size: 14px;
+  --mat-tab-label-text-weight: 500;
+
+  margin-bottom: 28px;
+}
+
+.tabs_acceso a {
+  flex-grow: 0;
+  padding: 0 4px;
+  margin-right: 24px;
+}
+
+.titulo {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.subtitulo {
+  margin: 0 0 24px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* Campos */
+.campo {
+  width: 100%;
+  margin-bottom: 16px;
+  --mat-form-field-container-text-size: 13px;
+  --mat-form-field-outlined-outline-color: #e2e8f0;
+  --mat-form-field-outlined-hover-outline-color: #cbd5e1;
+  --mat-form-field-outlined-focus-outline-color: #00bfb3;
+}
+.campo ::ng-deep .mdc-floating-label,
+.campo ::ng-deep .mdc-text-field__input {
+  font-size: 13px;
+}
+
+.campo input::placeholder {
+  font-size: 13px;
+}
+
+.campo mat-icon {
+  color: #94a3b8;
+  margin-right: 4px;
+}
+
+.fila_olvido {
+  display: flex;
+  justify-content: flex-end;
+  margin: -4px 0 20px;
+  font-size: 12px;
+}
+
+.fila_olvido a,
+.pie a {
+  color: #007e77;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.fila_olvido a:hover,
+.pie a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+/* Botón principal */
+.boton_principal {
+  width: 100%;
+  height: 46px;
+  --mat-button-filled-container-color: #00bfb3;
+  --mat-button-filled-label-text-color: #ffffff;
+  --mat-button-filled-hover-state-layer-color: #ffffff;
+}
+
+.pie {
+  margin: 24px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+}
+/* Botón para volver al inicio */
+.volver {
+  align-self: flex-start;
+  margin: 0 0 16px -12px;
+  --mat-button-text-label-text-color: #007e77;
+  --mat-button-text-hover-state-layer-color: #00bfb3;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 760px) {
+  .acceso_tarjeta {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .acceso_visual {
+    min-height: 200px;
+    padding: 28px;
+  }
+
+  .acceso_formulario {
+    padding: 28px 24px;
+  }
+}

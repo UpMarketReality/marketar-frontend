@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { map, Observable} from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RequestDTO } from '../../model/request-dto';
+import { RegisterRequestDTO } from '../../model/register-request-dto';
 import { ResponseDto } from '../../model/response-dto';
 import { UsuarioDto } from '../../model/usuario-dto';
 import { environment } from '../../../environments/environment';
@@ -15,8 +16,7 @@ export class AuthService {
   private http = inject(HttpClient);
   readonly apiUrl = environment.apiUrl + '/v1';
 
-  private storageKey = 'marketar_session';
-
+  // INICIAR SESIÓN
   login(request: RequestDTO): Observable<ResponseDto> {
     return this.http
       .post<ResponseDto>(`${this.apiUrl}/auth/login`, request, { observe: 'response' })
@@ -28,8 +28,7 @@ export class AuthService {
             throw new Error('No se recibió un JWT válido');
           }
 
-          // Guardar la sesión en localStorage
-          this.saveSession(data);
+          localStorage.setItem(tokenKEY, JSON.stringify(data));
 
           return data;
         }),
@@ -44,18 +43,18 @@ export class AuthService {
   getSession(): ResponseDto | null {
     const saved = localStorage.getItem(this.storageKey);
 
-    if (!saved) return null;
+    if (!guardada) return null;
 
     try {
-      const session = JSON.parse(saved) as ResponseDto;
+      const sesion = JSON.parse(guardada) as ResponseDto;
 
-      // Verificar que tenga JWT y no haya expirado.
-      if (!session.jwt || !session.expiresAt || !(Date.parse(session.expiresAt) > Date.now())) {
+      // Verificar que tenga JWT y que no haya expirado
+      if (!sesion.jwt || !sesion.expiresAt || !(Date.parse(sesion.expiresAt) > Date.now())) {
         this.logout();
         return null;
       }
 
-      return session;
+      return sesion;
     } catch {
       this.logout();
       return null;
@@ -79,6 +78,7 @@ export class AuthService {
     return this.getSession()?.roles.includes(`ROLE_${role}`) ?? false;
   }
 
+  // CERRAR SESIÓN
   logout(): void {
     localStorage.removeItem(this.storageKey);
   }
