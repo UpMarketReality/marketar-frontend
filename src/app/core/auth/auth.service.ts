@@ -6,9 +6,8 @@ import { RegisterRequestDTO } from '../../model/register-request-dto';
 import { ResponseDto } from '../../model/response-dto';
 import { UsuarioDto } from '../../model/usuario-dto';
 import { environment } from '../../../environments/environment';
+import { RegisterRequestDTO } from '../../model/register-request-dto';
 
-// Clave única de la sesión, guardada en localStorage
-const tokenKEY = 'access_token';
 
 @Injectable({
   providedIn: 'root',
@@ -36,13 +35,13 @@ export class AuthService {
       );
   }
 
-  // REGISTRAR CUENTA (compradores o vendedores)
-  register(request: RegisterRequestDTO): Observable<UsuarioDto> {
-    return this.http.post<UsuarioDto>(`${this.apiUrl}/auth/register`, request);
+  // GUARDAR SESIÓN
+  private saveSession(response: ResponseDto): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(response));
   }
 
   getSession(): ResponseDto | null {
-    const guardada = localStorage.getItem(tokenKEY);
+    const saved = localStorage.getItem(this.storageKey);
 
     if (!guardada) return null;
 
@@ -81,6 +80,13 @@ export class AuthService {
 
   // CERRAR SESIÓN
   logout(): void {
-    localStorage.removeItem(tokenKEY);
+    localStorage.removeItem(this.storageKey);
+  }
+
+  register(request: RegisterRequestDTO): Observable<UsuarioDto> {
+    return this.http.post<UsuarioDto>(
+      `${this.apiUrl}/auth/register`,
+      request
+    );
   }
 }

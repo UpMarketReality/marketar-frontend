@@ -1,90 +1,406 @@
-<section class="login-page">
-  <div class="login-container">
-    <div class="login-brand">
-      <div class="login-logo">
-        <svg xmlns="http://www.w3.org/2000/svg"
-             width="28"
-             height="28"
-             viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="1.8"
-             stroke-linecap="round"
-             stroke-linejoin="round"
-             aria-hidden="true">
-          <path d="M12 2 21 7 21 17 12 22 3 17 3 7Z" />
-          <path d="m3 7 9 5 9-5" />
-          <path d="M12 12v10" />
-        </svg>
+
+<section class="auth-page">
+  <div class="auth-container">
+
+    <!-- PANEL IZQUIERDO -->
+    <aside
+      class="auth-visual"
+      [class.modo-registro]="modo === 'registro'">
+
+      <div class="visual-content">
+        <h1>
+          Guarda tus diseños 3D y pruébalos en tu sala
+          en cualquier momento
+        </h1>
+
+        <p>
+          Accede a tu catálogo personalizado y conecta
+          con los mejores artesanos y fabricantes locales.
+        </p>
       </div>
-      <h1>MARKET <span>AR</span></h1>
-      <p>Bienvenido de nuevo a MarketAR</p>
-    </div>
+    </aside>
 
-    <div class="login-card">
-      <h2>Iniciar sesión</h2>
-      <p class="login-subtitle">Ingresa tus datos para acceder a tu cuenta</p>
+    <!-- PANEL DERECHO -->
+    <div class="auth-panel">
 
-      <form (ngSubmit)="iniciarSesion()" #loginForm="ngForm">
-
-        <div class="form-group">
-          <label for="login-email">Correo electrónico</label>
-          <input
-            type="email"
-            id="login-email"
-            name="correo"
-            [(ngModel)]="correo"
-            placeholder="Ingresa tu correo electrónico"
-            autocomplete="username"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="login-password">Contraseña</label>
-          <input
-            type="password"
-            id="login-password"
-            name="password"
-            [(ngModel)]="password"
-            placeholder="Ingresa tu contraseña"
-            autocomplete="current-password"
-            required
-          />
-        </div>
-
-        <div class="login-options">
-          <label class="remember-me">
-            <input type="checkbox" name="remember" />
-            Recordarme
-          </label>
-          <a href="#" class="forgot-password">
-            ¿Olvidaste tu contraseña?
-          </a>
-        </div>
-
-        <!-- Mensaje de error -->
-        @if (errorMessage) {
-          <p class="login-error" role="alert">
-            {{ errorMessage }}
-          </p>
-        }
-
-        <!-- Botón para iniciar sesión -->
+      <!-- PESTAÑAS -->
+      <nav class="auth-tabs" aria-label="Autenticación">
         <button
-          type="submit"
-          class="login-button"
-          [disabled]="loginForm.invalid || cargando"
-        >
-          {{ cargando ? 'Iniciando sesión...' : 'Iniciar sesión' }}
+          type="button"
+          [class.active]="modo === 'login'"
+          [attr.aria-current]="modo === 'login' ? 'page' : null"
+          (click)="cambiarModo('login')">
+          Iniciar Sesión
         </button>
 
-      </form>
+        <button
+          type="button"
+          [class.active]="modo === 'registro'"
+          [attr.aria-current]="modo === 'registro' ? 'page' : null"
+          (click)="cambiarModo('registro')">
+          Registrarse
+        </button>
+      </nav>
 
-      <p class="register-text">
-        ¿No tienes una cuenta?
-        <a href="#">Regístrate aquí</a>
-      </p>
+      <!-- MENSAJES GENERALES -->
+      @if (mensajeExito) {
+        <p class="mensaje-exito" role="status">
+          {{ mensajeExito }}
+        </p>
+      }
+
+      @if (errorMessage) {
+        <p class="mensaje-error" role="alert">
+          {{ errorMessage }}
+        </p>
+      }
+
+      <!-- INICIAR SESIÓN -->
+      @if (modo === 'login') {
+
+        <h2>Bienvenido de nuevo</h2>
+
+        <p class="auth-subtitle">
+          Ingresa tus datos para acceder a tu cuenta.
+        </p>
+
+        <form
+          [formGroup]="loginForm"
+          (ngSubmit)="iniciarSesion()"
+          novalidate>
+
+          <div class="form-group">
+            <label for="login-correo">
+              Correo electrónico
+            </label>
+
+            <input
+              id="login-correo"
+              type="email"
+              formControlName="correo"
+              placeholder="nombre@ejemplo.com"
+              autocomplete="username"
+            />
+
+            @if (
+              loginForm.controls.correo.touched &&
+              loginForm.controls.correo.invalid
+              ) {
+              <small class="field-error">
+                Ingresa un correo electrónico válido.
+              </small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">
+              Contraseña
+            </label>
+
+            <input
+              id="login-password"
+              type="password"
+              formControlName="password"
+              placeholder="Ingresa tu contraseña"
+              autocomplete="current-password"
+            />
+
+            @if (
+              loginForm.controls.password.touched &&
+              loginForm.controls.password.invalid
+              ) {
+              <small class="field-error">
+                Ingresa tu contraseña.
+              </small>
+            }
+          </div>
+
+          <button
+            class="auth-submit"
+            type="submit"
+            [disabled]="loginForm.invalid || cargando">
+            {{ cargando ? 'Ingresando...' : 'Iniciar sesión' }}
+          </button>
+        </form>
+
+        <p class="auth-footer">
+          ¿No tienes una cuenta?
+          <button type="button"
+                  (click)="cambiarModo('registro')">
+            Regístrate aquí
+          </button>
+        </p>
+
+      } @else {
+
+        <!-- REGISTRARSE -->
+        <h2>Crea tu cuenta</h2>
+
+        <p class="auth-subtitle">
+          Únete a MarketAR como cliente o empieza a
+          ofrecer tus productos como vendedor.
+        </p>
+
+        <p class="tipo-label">
+          ¿Qué uso le darás a tu cuenta?
+        </p>
+
+        <!-- SELECCIÓN DE TIPO -->
+        <div class="tipo-cuenta">
+
+          <button
+            type="button"
+            class="tipo-card"
+            [class.active]="tipoCuenta === 'COMPRADOR'"
+            [attr.aria-pressed]="tipoCuenta === 'COMPRADOR'"
+            (click)="cambiarTipo('COMPRADOR')">
+
+            <svg viewBox="0 0 24 24"
+                 fill="currentColor"
+                 aria-hidden="true">
+              <circle cx="12" cy="7" r="4"/>
+              <path d="M4 21v-3a8 8 0 0 1 16 0v3Z"/>
+            </svg>
+
+            <span>Para mí</span>
+          </button>
+
+          <button
+            type="button"
+            class="tipo-card"
+            [class.active]="tipoCuenta === 'VENDEDOR'"
+            [attr.aria-pressed]="tipoCuenta === 'VENDEDOR'"
+            (click)="cambiarTipo('VENDEDOR')">
+
+            <svg viewBox="0 0 24 24"
+                 fill="currentColor"
+                 aria-hidden="true">
+              <path d="M3 9 5 3h14l2 6v3h-2v9H5v-9H3V9Zm4 4v6h10v-6H7Z"/>
+            </svg>
+
+            <span>Para mi empresa</span>
+          </button>
+        </div>
+
+        <!-- FORMULARIO REACTIVO DE REGISTRO -->
+        <form
+          [formGroup]="registroForm"
+          (ngSubmit)="registrar()"
+          novalidate>
+
+          <!-- NOMBRE COMÚN -->
+          <div class="form-group">
+            <label for="registro-nombre">
+              {{ tipoCuenta === 'COMPRADOR'
+              ? 'Nombre completo'
+              : 'Nombre del representante' }}
+            </label>
+
+            <input
+              id="registro-nombre"
+              type="text"
+              formControlName="nombre"
+              placeholder="Tu nombre y apellido"
+              autocomplete="name"
+              maxlength="100"
+            />
+
+            @if (
+              registroForm.controls.nombre.touched &&
+              registroForm.controls.nombre.invalid
+              ) {
+              <small class="field-error">
+                Ingresa un nombre válido de 3 a 100 caracteres.
+              </small>
+            }
+          </div>
+
+          <!-- SOLO COMPRADOR -->
+          @if (tipoCuenta === 'COMPRADOR') {
+
+            <div class="form-group">
+              <label for="registro-dni">DNI</label>
+
+              <input
+                id="registro-dni"
+                type="text"
+                formControlName="documento"
+                placeholder="Ingresa tu DNI"
+                inputmode="numeric"
+                maxlength="8"
+                autocomplete="off"
+              />
+
+              @if (
+                registroForm.controls.documento.touched &&
+                registroForm.controls.documento.invalid
+                ) {
+                <small class="field-error">
+                  El DNI debe tener exactamente 8 números.
+                </small>
+              }
+            </div>
+          }
+
+          <!-- SOLO VENDEDOR -->
+          @if (tipoCuenta === 'VENDEDOR') {
+
+            <div class="form-group">
+              <label for="registro-ruc">
+                RUC de la empresa
+              </label>
+
+              <input
+                id="registro-ruc"
+                type="text"
+                formControlName="ruc"
+                placeholder="20123456789"
+                inputmode="numeric"
+                maxlength="11"
+                autocomplete="off"
+              />
+
+              @if (
+                registroForm.controls.ruc.touched &&
+                registroForm.controls.ruc.invalid
+                ) {
+                <small class="field-error">
+                  El RUC debe contener 11 números.
+                </small>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="registro-tienda">
+                Nombre del taller o empresa
+              </label>
+
+              <input
+                id="registro-tienda"
+                type="text"
+                formControlName="storeName"
+                placeholder="Ej.: DecoSAC"
+                maxlength="100"
+              />
+
+              @if (
+                registroForm.controls.storeName.touched &&
+                registroForm.controls.storeName.invalid
+                ) {
+                <small class="field-error">
+                  Ingresa el nombre de tu tienda o empresa.
+                </small>
+              }
+            </div>
+          }
+
+          <!-- CORREO COMÚN -->
+          <div class="form-group">
+            <label for="registro-correo">
+              Correo electrónico
+            </label>
+
+            <input
+              id="registro-correo"
+              type="email"
+              formControlName="correo"
+              placeholder="nombre@ejemplo.com"
+              autocomplete="email"
+              maxlength="150"
+            />
+
+            @if (
+              registroForm.controls.correo.touched &&
+              registroForm.controls.correo.invalid
+              ) {
+              <small class="field-error">
+                Ingresa un correo electrónico válido.
+              </small>
+            }
+          </div>
+
+          <!-- CONTRASEÑAS -->
+          <div class="form-row">
+
+            <div class="form-group">
+              <label for="registro-password">
+                Contraseña
+              </label>
+
+              <input
+                id="registro-password"
+                type="password"
+                formControlName="password"
+                placeholder="Crea una clave"
+                autocomplete="new-password"
+              />
+
+              @if (
+                registroForm.controls.password.touched &&
+                registroForm.controls.password.invalid
+                ) {
+                <small class="field-error">
+                  Utiliza entre 8 y 64 caracteres.
+                </small>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="registro-confirmar">
+                Confirmar clave
+              </label>
+
+              <input
+                id="registro-confirmar"
+                type="password"
+                formControlName="confirmarPassword"
+                placeholder="Repite la clave"
+                autocomplete="new-password"
+              />
+
+              @if (
+                registroForm.controls.confirmarPassword.touched &&
+                registroForm.controls.confirmarPassword.invalid
+                ) {
+                <small class="field-error">
+                  Confirma tu contraseña.
+                </small>
+              }
+
+              @if (
+                registroForm.controls.confirmarPassword.touched &&
+                registroForm.hasError('passwordsNoCoinciden')
+                ) {
+                <small class="field-error">
+                  Las contraseñas no coinciden.
+                </small>
+              }
+            </div>
+
+          </div>
+
+          <button
+            type="submit"
+            class="auth-submit"
+            [disabled]="registroForm.invalid || cargando">
+
+            {{ cargando
+            ? 'Creando cuenta...'
+            : 'Registrarme gratis' }}
+          </button>
+
+        </form>
+
+        <p class="auth-footer">
+          ¿Ya tienes una cuenta?
+          <button type="button"
+                  (click)="cambiarModo('login')">
+            Inicia sesión
+          </button>
+        </p>
+
+      }
+
     </div>
   </div>
 </section>

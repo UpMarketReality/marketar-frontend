@@ -25,7 +25,7 @@ import { AuthService } from '../../core/auth/auth.service';
 })
 export class VendedorLayoutComponente {
   private readonly router = inject(Router);
-  private readonly authService = inject(AuthService);
+  private readonly auth = inject(AuthService);
 
   // URL actual, se actualiza en cada navegación
   private readonly url = toSignal(
@@ -50,4 +50,8 @@ export class VendedorLayoutComponente {
       url.startsWith('/perfil-vendedor/nuevo-producto')
     );
   });
+  cerrarSesion() {
+    this.auth.logout();
+    this.router.navigateByUrl('/home1');
+  }
 }

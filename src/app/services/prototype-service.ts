@@ -1,46 +1,52 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
-import { MOCK_PROTOTYPES, mockPage } from '../data/mock-data';
-import { PageDTO } from '../model/page-dto';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient} from '@angular/common/http';
+import { Observable} from 'rxjs';
 import { PrototypeDTO } from '../model/prototype-dto';
+import { PrototypeRequest } from '../model/prototype-request';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PrototypeService {
-  private apiUrl = `${environment.apiUrl}/prototypes`;
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = '/api/v1/prototypes';
 
-  constructor(private http: HttpClient) {}
-
-  // US02 (Andre realizado por David K.)
-  // 1. GET /api/v1/prototypes/me
-  getMyPrototypes(
-    categoryId?: number,
-    page: number = 0,
-    size: number = 20,
-  ): Observable<PageDTO<PrototypeDTO>> {
-    if (environment.useMockData) {
-      const list = MOCK_PROTOTYPES.filter((p) => categoryId == null || p.categoryId === categoryId);
-      return of(mockPage(list, page, size));
-    }
-
-    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
-
-    if (categoryId !== undefined && categoryId !== null) {
-      params = params.set('categoryId', categoryId.toString());
-    }
-
-    return this.http.get<PageDTO<PrototypeDTO>>(`${this.apiUrl}/me`, { params });
+  generar(datos: PrototypeRequest): Observable<PrototypeDTO> {
+    return this.http.post<PrototypeDTO>(this.apiUrl, datos);
   }
 
-  // 2. GET /api/v1/prototypes/{prototypeId}
-  getOwnPrototype(prototypeId: number): Observable<PrototypeDTO> {
-    if (environment.useMockData) {
-      const p = MOCK_PROTOTYPES.find((x) => x.prototypeId === prototypeId);
-      return p ? of(p) : throwError(() => new Error('Prototipo no encontrado'));
+  obtenerPorId(id: number): Observable<PrototypeDTO> {
+    return this.http.get<PrototypeDTO>(`${this.apiUrl}/${id}`);
+  }
+
+  obtenerImagen(prototypeId: number, imageUrl: string): Observable<Blob> {
+    // ImageDTO devuelve una URL, no un filename.
+    // Se extrae el nombre del archivo para utilizar
+    // el endpoint protegido del PrototypeController.
+
+    const parsed = new URL(imageUrl, window.location.origin);
+
+    const segmentos = parsed.pathname.split('/').filter(Boolean);
+
+    const ultimo = segmentos[segmentos.length - 1];
+
+    if (!ultimo) {
+      throw new Error('La imagen no tiene un archivo válido.');
     }
-    return this.http.get<PrototypeDTO>(`${this.apiUrl}/${prototypeId}`);
+
+    const filename = decodeURIComponent(ultimo);
+
+    if (
+      filename === '.' ||
+      filename === '..' ||
+      filename.includes('/') ||
+      filename.includes('\\')
+    ) {
+      throw new Error('Nombre de imagen inválido.');
+    }
+
+    return this.http.get(`${this.apiUrl}/${prototypeId}/images/` + encodeURIComponent(filename), {
+      responseType: 'blob',
+    });
   }
 }

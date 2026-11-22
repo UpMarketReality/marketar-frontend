@@ -2,197 +2,352 @@
 :host {
   display: block;
   font-family: 'Inter', Arial, sans-serif;
+  --primary: #00bfb3;
+  --primary-dark: #009f97;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
 }
 
-.login-page {
-  min-height: 85vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 50px 20px;
-  background: #f5f7fa;
+* {
   box-sizing: border-box;
 }
 
-.login-container {
-  width: 100%;
-  max-width: 460px;
-}
-
-.login-brand {
-  text-align: center;
-  margin-bottom: 28px;
-}
-
-.login-logo {
-  width: 58px;
-  height: 58px;
-  margin: 0 auto 15px;
-  border: 2px solid #00bfb3;
-  border-radius: 14px;
+.auth-page {
+  min-height: 100vh;
+  padding: 28px 20px;
+  background: #f8fafc;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #00bfb3;
-  font-size: 26px;
 }
 
-.login-brand h1 {
-  margin: 0 0 10px;
-  color: #172238;
-  font-size: 30px;
-  font-weight: 800;
+/* CONTENEDOR PRINCIPAL */
+.auth-container {
+  width: 100%;
+  max-width: 1050px;
+  min-height: 650px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
 }
 
-.login-brand h1 span {
-  color: #00bfb3;
+/* PANEL IZQUIERDO */
+.auth-visual {
+  min-height: 650px;
+  display: flex;
+  align-items: flex-end;
+  padding: 42px;
+  color: #fff;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(12, 18, 33, 0.05) 0%,
+      rgba(12, 18, 33, 0.9) 100%
+    ),
+    url('/public/images/login-sala.png');
+
+  background-size: cover;
+  background-position: center;
 }
 
-.login-brand p {
-  color: #687589;
-  font-size: 15px;
+.auth-visual.modo-registro {
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(12, 18, 33, 0.1) 0%,
+      rgba(12, 18, 33, 0.94) 100%
+    ),
+    url('/public/images/registro-camera.jpg');
+}
+
+.visual-content h1 {
+  margin: 0 0 18px;
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 750;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+}
+
+.visual-content p {
   margin: 0;
+  font-size: 15px;
+  color: #d5deea;
+  line-height: 1.65;
 }
 
-.login-card {
-  background: #ffffff;
-  border: 1px solid #e6eaf0;
-  border-radius: 16px;
-  padding: 36px;
-  box-shadow: 0 12px 35px rgba(18, 34, 56, 0.08);
+/* PANEL DERECHO */
+.auth-panel {
+  padding: 30px 46px 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.login-card h2 {
-  margin: 0 0 8px;
-  color: #172238;
-  font-size: 25px;
-  font-weight: 700;
-  text-align: center;
+.auth-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 35px;
 }
 
-.login-subtitle {
-  margin: 0 0 30px;
+.auth-tabs button {
+  flex: 1;
+  min-height: 48px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
   font-size: 14px;
-  color: #687589;
-  text-align: center;
-  line-height: 1.6;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
 }
 
+.auth-tabs button.active {
+  color: var(--primary-dark);
+  border-bottom-color: var(--primary);
+}
+
+.auth-panel h2 {
+  font-size: 25px;
+  font-weight: 750;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin: 0 0 25px;
+}
+
+/* TIPO DE CUENTA */
+.tipo-label {
+  margin: 0 0 9px;
+  color: var(--text-dark);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tipo-cuenta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.tipo-card {
+  min-height: 77px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.tipo-card svg {
+  width: 21px;
+  height: 21px;
+}
+
+.tipo-card.active {
+  background: #e4faf8;
+  color: var(--primary-dark);
+  border-color: var(--primary);
+}
+
+/* CAMPOS DEL FORMULARIO */
 .form-group {
-  margin-bottom: 22px;
+  margin-bottom: 17px;
+  min-width: 0;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 9px;
-  color: #253047;
-  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+  font-size: 13px;
   font-weight: 600;
 }
 
 .form-group input {
   width: 100%;
-  height: 48px;
-  border: 1px solid #d7dde5;
+  height: 44px;
+  padding: 0 13px;
+
+  border: 1px solid var(--border-color);
   border-radius: 9px;
-  padding: 0 14px;
-  font-size: 14px;
-  font-family: inherit;
-  color: #172238;
-  background: #ffffff;
-  box-sizing: border-box;
   outline: none;
+
+  background: #f8fafc;
+  color: var(--text-dark);
+  font-size: 13px;
+  font-family: inherit;
+
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.form-group input:focus {
-  border-color: #00bfb3;
-  box-shadow: 0 0 0 3px rgba(0, 191, 179, 0.12);
-}
-
 .form-group input::placeholder {
-  color: #9ca5b4;
+  color: #94a3b8;
 }
 
-.login-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 26px;
+.form-group input:focus {
+  background: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 191, 179, 0.10);
 }
 
-.remember-me {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #526077;
-  font-size: 13px;
-  cursor: pointer;
+.form-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 13px;
 }
 
-.remember-me input {
-  accent-color: #00bfb3;
+.field-error {
+  display: block;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #dc2626;
+  margin-top: 5px;
 }
 
-.forgot-password,
-.register-text a {
-  color: #009f97;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
+/* MENSAJES */
+.mensaje-error,
+.mensaje-exito {
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 18px;
 }
 
-.forgot-password:hover,
-.register-text a:hover {
-  text-decoration: underline;
+.mensaje-error {
+  color: #b91c1c;
+  background: #fef2f2;
 }
 
-.login-button {
+.mensaje-exito {
+  color: #047857;
+  background: #ecfdf5;
+}
+
+/* BOTÓN PRINCIPAL */
+.auth-submit {
   width: 100%;
-  min-height: 48px;
+  min-height: 45px;
   border: none;
   border-radius: 9px;
-  background: #00bfb3;
-  color: white;
-  font-size: 15px;
-  font-weight: 700;
+  background: var(--primary);
+  color: #fff;
   font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
+  margin-top: 7px;
   transition: background 0.2s;
 }
 
-.login-button:hover {
-  background: #009f97;
+.auth-submit:hover:not(:disabled) {
+  background: var(--primary-dark);
 }
 
-.login-button:focus-visible {
-  outline: 3px solid #172238;
+.auth-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.auth-footer {
+  margin: 22px 0 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.auth-footer button {
+  border: none;
+  background: transparent;
+  padding: 4px;
+  color: var(--primary-dark);
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-footer button:hover {
+  text-decoration: underline;
+}
+
+button:focus-visible {
+  outline: 3px solid var(--primary-dark);
   outline-offset: 3px;
 }
 
-.register-text {
-  margin: 28px 0 0;
-  color: #687589;
-  font-size: 14px;
-  text-align: center;
+/* TABLET */
+@media (max-width: 850px) {
+  .auth-container {
+    max-width: 580px;
+    grid-template-columns: 1fr;
+  }
+
+  .auth-visual {
+    min-height: 220px;
+    padding: 27px;
+  }
+
+  .visual-content h1 {
+    font-size: 25px;
+  }
+
+  .auth-panel {
+    padding: 30px;
+  }
 }
 
+/* MÓVILES */
 @media (max-width: 480px) {
-  .login-page {
-    padding: 30px 15px;
+  .auth-page {
+    padding: 10px;
   }
 
-  .login-card {
-    padding: 25px 20px;
+  .auth-container {
+    border-radius: 12px;
   }
 
-  .login-options {
-    flex-direction: column;
-    align-items: flex-start;
+  .auth-visual {
+    min-height: 185px;
+    padding: 22px;
   }
 
-  .login-brand h1 {
-    font-size: 26px;
+  .visual-content h1 {
+    font-size: 22px;
+  }
+
+  .visual-content p {
+    font-size: 12px;
+  }
+
+  .auth-panel {
+    padding: 22px 18px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 }
