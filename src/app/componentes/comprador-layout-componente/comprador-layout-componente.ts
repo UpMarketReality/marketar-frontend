@@ -16,7 +16,6 @@ export class CompradorLayoutComponente {
   cerrarSesion(): void {
     // Eliminar el token y los datos de sesión
     this.authService.logout();
-
     // Redirigir al usuario al Home público
     this.router.navigateByUrl('/home1');
   }

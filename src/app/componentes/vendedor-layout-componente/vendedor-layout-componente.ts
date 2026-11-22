@@ -38,7 +38,7 @@ export class VendedorLayoutComponente {
 
   // CERRAR SESIÓN: borra la sesión guardada y vuelve al inicio de sesión del vendedor
   cerrarSesion(): void {
-    this.authService.logout();
+    this.auth.logout();
     this.router.navigateByUrl('/vendedor/inicio-sesion');
   }
 
@@ -50,8 +50,4 @@ export class VendedorLayoutComponente {
       url.startsWith('/perfil-vendedor/nuevo-producto')
     );
   });
-  cerrarSesion() {
-    this.auth.logout();
-    this.router.navigateByUrl('/home1');
-  }
 }
