@@ -17,7 +17,12 @@
     } @else if (errorMessage) {
       <div class="mis-disenos__mensaje">
         <p>{{ errorMessage }}</p>
-        <button mat-stroked-button type="button" >Reintentar</button>
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="cargarMisPrototipos()">
+          Reintentar
+        </button>
       </div>
     } @else {
       <!-- ============ DISEÑOS GUARDADOS ============ -->

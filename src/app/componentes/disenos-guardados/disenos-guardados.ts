@@ -1,7 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, OnDestroy, ChangeDetectorRef, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { forkJoin, of, catchError, map } from 'rxjs';
+import { forkJoin, of, catchError, map, finalize, switchMap } from 'rxjs';
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -22,6 +22,7 @@ import { CartService } from '../../services/cart-service';
 import { RecentlyViewedService } from '../../services/recently-viewed-service';
 import { AuthService } from '../../core/auth/auth.service';
 import { environment } from '../../../environments/environment';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 // Tarjeta de "Diseños Guardados": puede ser un producto favorito o un diseño propio generado con IA
 export type SavedItem =
@@ -46,7 +47,7 @@ type StarType = 'full' | 'half' | 'empty';
   templateUrl: './disenos-guardados.html',
   styleUrl: './disenos-guardados.css',
 })
-export class DisenosGuardados implements OnInit {
+export class DisenosGuardados implements OnInit, OnDestroy {
   private readonly catalogService = inject(CatalogService);
   private readonly commerceService = inject(CommerceService);
   private readonly prototypeService = inject(PrototypeService);
@@ -56,6 +57,9 @@ export class DisenosGuardados implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly imagenesPrototipos = new Map<number, string>();
 
   // Datos de cada sección
   favorites: ProductDTO[] = [];
@@ -74,11 +78,110 @@ export class DisenosGuardados implements OnInit {
 
   ngOnInit(): void {
     this.recentlyViewed = this.recentlyViewedService.getAll().slice(0, this.previewSize);
-    //this.loadData();
+    this.cargarMisPrototipos();
+  }
+
+  cargarMisPrototipos(): void {
+    this.loading = true;
+    this.errorMessage = '';
+
+    if (!this.authService.isAuthenticated()) {
+      this.loading = false;
+      this.errorMessage = 'Inicia sesión para ver tus diseños.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    this.prototypeService
+      .getMyPrototypes(0, 20)
+      .pipe(
+        switchMap((page) => {
+          const prototipos = page.content ?? [];
+
+          const solicitudes = prototipos.map((prototipo) => {
+            const imagen =
+              prototipo.generationStatus === 'COMPLETADO'
+                ? (prototipo.images?.find((i) => i.principal) ?? prototipo.images?.[0])
+                : undefined;
+
+            if (!imagen?.url) {
+              return of(null);
+            }
+
+            return this.prototypeService.obtenerImagen(prototipo.prototypeId, imagen.url).pipe(
+              map((blob) => {
+                if (!blob.size || !blob.type.startsWith('image/')) {
+                  return null;
+                }
+
+                return {
+                  id: prototipo.prototypeId,
+                  url: URL.createObjectURL(blob),
+                };
+              }),
+
+              catchError((error) => {
+                console.warn(
+                  'No se pudo cargar la imagen del prototipo',
+                  prototipo.prototypeId,
+                  error,
+                );
+
+                return of(null);
+              }),
+            );
+          });
+
+          if (solicitudes.length === 0) {
+            return of({
+              prototipos,
+              imagenes: [],
+            });
+          }
+
+          return forkJoin(solicitudes).pipe(
+            map((imagenes) => ({
+              prototipos,
+              imagenes,
+            })),
+          );
+        }),
+
+        takeUntilDestroyed(this.destroyRef),
+
+        finalize(() => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: ({ prototipos, imagenes }) => {
+          this.prototypes = prototipos;
+
+          // Liberar imágenes anteriores si recargamos la lista.
+          this.liberarImagenes();
+
+          for (const imagen of imagenes) {
+            if (imagen) {
+              this.imagenesPrototipos.set(imagen.id, imagen.url);
+            }
+          }
+
+          this.cdr.markForCheck();
+        },
+
+        error: (error) => {
+          console.error('Error cargando diseños:', error);
+
+          this.errorMessage = 'No se pudieron recuperar tus diseños.';
+
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   // ---------- Carga de datos ----------
-/*
+  /*
   loadData(): void {
     this.loading = true;
     this.errorMessage = '';
@@ -195,7 +298,18 @@ export class DisenosGuardados implements OnInit {
   // ---------- Diseños IA y cotizaciones ----------
 
   prototypeImage(prototype: PrototypeDTO): string | undefined {
-    return prototype.images?.find((i) => i.principal)?.url ?? prototype.images?.[0]?.url;
+    return this.imagenesPrototipos.get(prototype.prototypeId);
+  }
+  private liberarImagenes(): void {
+    for (const url of this.imagenesPrototipos.values()) {
+      URL.revokeObjectURL(url);
+    }
+
+    this.imagenesPrototipos.clear();
+  }
+
+  ngOnDestroy(): void {
+    this.liberarImagenes();
   }
 
   quoteStatusLabel(quote?: QuoteRequestDTO): string {
