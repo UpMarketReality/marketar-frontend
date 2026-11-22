@@ -30,8 +30,24 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: VendedorPerfil,
-        pathMatch: 'full',
+        redirectTo: 'inicio-sesion',
+        pathMatch: 'full'
+      },
+      {
+        path: 'inicio-sesion',
+        component: InicioSesion,
+        data: {
+          modo: 'login',
+          tipoCuenta: 'VENDEDOR'
+        }
+      },
+      {
+        path: 'registro',
+        component: InicioSesion,
+        data: {
+          modo: 'registro',
+          tipoCuenta: 'VENDEDOR'
+        }
       },
       {
         path: 'productos',
@@ -62,7 +78,22 @@ export const routes: Routes = [
     component: GeneralLayoutComponente,
     children: [
       { path: '', redirectTo: 'home1', pathMatch: 'full' },
-      { path: 'inicio-sesion', component: InicioSesion },
+      {
+        path: 'inicio-sesion',
+        component: InicioSesion,
+        data: {
+          modo: 'login',
+          tipoCuenta: 'COMPRADOR'
+        }
+      },
+      {
+        path: 'registro',
+        component: InicioSesion,
+        data: {
+          modo: 'registro',
+          tipoCuenta: 'COMPRADOR'
+        }
+      },
       { path: 'empieza-acrear', component: EmpiezaACrear, canActivate: [authGuard], data: { role: 'COMPRADOR' } },
       { path: 'catalogo', component: Catalogo },
       { path: 'home1', component: Home1 },

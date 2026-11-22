@@ -1,4 +1,15 @@
 export class RequestDTO {
-  correo: string;
-  password: string;
+  name!: string;
+  email!: string;
+  password!: string;
+  role!: 'COMPRADOR' | 'VENDEDOR';
+
+  // Comprador
+  documento?: string;
+  address?: string;
+
+  // Vendedor
+  storeName?: string;
+  ruc?: string;
+  storeDescription?: string;
 }
