@@ -3,13 +3,14 @@ import { HttpClient} from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { PrototypeDTO } from '../model/prototype-dto';
 import { PrototypeRequest } from '../model/prototype-request';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PrototypeService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/v1/prototypes';
+  private readonly apiUrl = environment.apiUrl + '/api/v1/prototypes';
 
   generar(datos: PrototypeRequest): Observable<PrototypeDTO> {
     return this.http.post<PrototypeDTO>(this.apiUrl, datos);
