@@ -48,10 +48,8 @@ type StarType = 'full' | 'half' | 'empty';
   styleUrl: './disenos-guardados.css',
 })
 export class DisenosGuardados implements OnInit, OnDestroy {
-  private readonly catalogService = inject(CatalogService);
   private readonly commerceService = inject(CommerceService);
   private readonly prototypeService = inject(PrototypeService);
-  private readonly quoteService = inject(QuoteService);
   private readonly cartService = inject(CartService);
   private readonly recentlyViewedService = inject(RecentlyViewedService);
   private readonly authService = inject(AuthService);
