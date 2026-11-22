@@ -4,7 +4,7 @@
     <header class="mis-disenos__encabezado">
       <h1>Mis Diseños y Favoritos</h1>
       <p>
-        Administra los muebles que has guardado y vuelve a encontrar lo que
+        Administra los muebles que has guardado, tus creaciones con IA y vuelve a encontrar lo que
         viste recientemente.
       </p>
     </header>
@@ -17,7 +17,12 @@
     } @else if (errorMessage) {
       <div class="mis-disenos__mensaje">
         <p>{{ errorMessage }}</p>
-        <button mat-stroked-button type="button" (click)="loadFavorites()">Reintentar</button>
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="cargarMisPrototipos()">
+          Reintentar
+        </button>
       </div>
     } @else {
       <!-- ============ DISEÑOS GUARDADOS ============ -->
@@ -29,26 +34,46 @@
           </h2>
 
           @if (totalSaved > previewSize) {
-            <button
-              mat-button
-              type="button"
-              class="ver-todos"
-              (click)="toggleShowAll()"
-              [attr.aria-expanded]="showAllSaved">
+            <button mat-button type="button" class="ver-todos" (click)="toggleShowAll()" [attr.aria-expanded]="showAllSaved">
               {{ showAllSaved ? 'Ver menos' : 'Ver todos (' + totalSaved + ')' }}
-              <mat-icon
-                iconPositionEnd
-                svgIcon="arrow-right"
-                [class.icono--girado]="showAllSaved">
-              </mat-icon>
+              <mat-icon iconPositionEnd svgIcon="arrow-right" [class.icono--girado]="showAllSaved"></mat-icon>
             </button>
           }
         </div>
 
         <div class="rejilla">
-          @for (product of savedProducts; track product.productId) {
-            <ng-container
-              *ngTemplateOutlet="tarjetaProducto; context: { $implicit: product }" />
+          @for (item of savedItems; track item.kind === 'product' ? 'p' + item.product.productId : 'd' + item.prototype.prototypeId) {
+            @if (item.kind === 'product') {
+              <ng-container *ngTemplateOutlet="tarjetaProducto; context: { $implicit: item.product }" />
+            } @else {
+              <!-- Tarjeta de diseño propio generado con IA -->
+              <mat-card appearance="outlined" class="tarjeta">
+                <div class="tarjeta__media">
+                  @if (hasImage(prototypeImage(item.prototype))) {
+                    <img [src]="prototypeImage(item.prototype)" [alt]="item.prototype.name" loading="lazy" (error)="onImageError(prototypeImage(item.prototype))" />
+                  } @else {
+                    <mat-icon svgIcon="image" class="tarjeta__sin-imagen" aria-hidden="true"></mat-icon>
+                  }
+                  <span class="tarjeta__favorito tarjeta__favorito--activo" matTooltip="Diseño guardado" aria-label="Diseño guardado">
+                    <mat-icon svgIcon="heart"></mat-icon>
+                  </span>
+                  <span class="tarjeta__etiqueta tarjeta__etiqueta--ia">Mi Diseño IA</span>
+                </div>
+
+                <mat-card-content class="tarjeta__cuerpo">
+                  <span class="tarjeta__unico">Diseño Único</span>
+                  <h3 class="tarjeta__nombre">{{ item.prototype.name }}</h3>
+                  <span class="tarjeta__rotulo">Estado de cotización</span>
+                  <p class="tarjeta__estado" [ngClass]="quoteStatusClass(item.quote)">
+                    {{ quoteStatusLabel(item.quote) }}
+                  </p>
+                  <button mat-flat-button type="button" class="tarjeta__boton tarjeta__boton--oscuro" (click)="goToQuotes(item.quote)">
+                    <mat-icon svgIcon="file"></mat-icon>
+                    {{ item.quote ? 'Ver Cotizaciones' : 'Solicitar Cotización' }}
+                  </button>
+                </mat-card-content>
+              </mat-card>
+            }
           } @empty {
             <div class="vacio">
               <p>Aún no tienes diseños guardados.</p>
@@ -69,8 +94,7 @@
 
         <div class="rejilla">
           @for (product of recentlyViewed; track product.productId) {
-            <ng-container
-              *ngTemplateOutlet="tarjetaProducto; context: { $implicit: product }" />
+            <ng-container *ngTemplateOutlet="tarjetaProducto; context: { $implicit: product }" />
           } @empty {
             <div class="vacio">
               <p>Todavía no has visto productos.</p>
@@ -91,12 +115,9 @@
 
         <div class="rejilla">
           @for (product of recommended; track product.productId) {
-            <ng-container
-              *ngTemplateOutlet="tarjetaProducto; context: { $implicit: product }" />
+            <ng-container *ngTemplateOutlet="tarjetaProducto; context: { $implicit: product }" />
           } @empty {
-            <div class="vacio">
-              <p>No hay recomendaciones por ahora.</p>
-            </div>
+            <div class="vacio"><p>No hay recomendaciones por ahora.</p></div>
           }
         </div>
       </section>
@@ -109,20 +130,9 @@
   <mat-card appearance="outlined" class="tarjeta">
     <div class="tarjeta__media">
       @if (hasImage(productImage(product))) {
-        <img
-          [src]="productImage(product)"
-          [alt]="product.name"
-          loading="lazy"
-          class="tarjeta__imagen-clickable"
-          (click)="goToProductDetail(product)"
-          (error)="onImageError(productImage(product))" />
+        <img [src]="productImage(product)" [alt]="product.name" loading="lazy" (error)="onImageError(productImage(product))" />
       } @else {
-        <mat-icon
-          svgIcon="image"
-          class="tarjeta__sin-imagen tarjeta__imagen-clickable"
-          aria-hidden="true"
-          (click)="goToProductDetail(product)">
-        </mat-icon>
+        <mat-icon svgIcon="image" class="tarjeta__sin-imagen" aria-hidden="true"></mat-icon>
       }
 
       <button
@@ -130,7 +140,6 @@
         type="button"
         class="tarjeta__favorito"
         [class.tarjeta__favorito--activo]="isFavorite(product)"
-        [disabled]="isPendingFavorite(product.productId)"
         [attr.aria-pressed]="isFavorite(product)"
         [attr.aria-label]="isFavorite(product) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
         [matTooltip]="isFavorite(product) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
@@ -145,27 +154,20 @@
     </div>
 
     <mat-card-content class="tarjeta__cuerpo">
-      <span class="tarjeta__tienda">
-        {{ product.storeName || product.material }}
-      </span>
+      <div class="tarjeta__valoracion" [attr.aria-label]="'Valoración ' + (product.rating ?? 0) + ' de 5'">
+        @for (star of stars(product.rating); track $index) {
+          <mat-icon class="estrella" [svgIcon]="starIcon(star)" aria-hidden="true"></mat-icon>
+        }
+        <span class="tarjeta__resenas">({{ product.reviewCount ?? 0 }})</span>
+      </div>
 
-      <h3 class="tarjeta__nombre tarjeta__nombre--clickable" (click)="goToProductDetail(product)">
-        {{ product.name }}
-      </h3>
-
+      <h3 class="tarjeta__nombre">{{ product.name }}</h3>
       <span class="tarjeta__rotulo">Precio estimado</span>
-      <p class="tarjeta__precio">
-        {{ (product.price ?? 0) | currency: 'PEN' : 'S/ ' : '1.2-2' }}
-      </p>
+      <p class="tarjeta__precio">{{ (product.price ?? 0) | currency: 'PEN' : 'S/ ' : '1.2-2' }}</p>
 
-      <button
-        mat-flat-button
-        type="button"
-        class="tarjeta__boton"
-        [disabled]="!hasStock(product)"
-        (click)="addToCart(product)">
+      <button mat-flat-button type="button" class="tarjeta__boton" (click)="addToCart(product)">
         <mat-icon svgIcon="cart"></mat-icon>
-        {{ hasStock(product) ? 'Agregar al carrito' : 'Sin stock' }}
+        Agregar al carrito
       </button>
     </mat-card-content>
   </mat-card>
