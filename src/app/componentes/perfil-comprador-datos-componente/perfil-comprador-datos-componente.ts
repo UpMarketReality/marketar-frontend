@@ -52,7 +52,7 @@ export class PerfilCompradorDatosComponente {
       passwordActual: ['', Validators.required],
       passwordNueva: [
         '',
-        [Validators.required, Validators.minLength(12), Validators.maxLength(128)],
+        [Validators.required, Validators.minLength(12), Validators.maxLength(64)],
       ],
       confirmarPassword: ['', Validators.required],
     },

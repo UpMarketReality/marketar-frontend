@@ -11,6 +11,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RequestDTO } from '../../model/request-dto';
 import { finalize } from 'rxjs';
+import { RegisterRequestDTO } from '../../model/register-request-dto';
 
 type ModoAuth = 'login' | 'registro';
 type TipoCuenta = 'COMPRADOR' | 'VENDEDOR';
@@ -56,7 +57,7 @@ export class InicioSesion {
       storeName: [''],
       ruc: [''],
       correo: ['', [Validators.required, Validators.email, Validators.maxLength(150)]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(64)]],
+      password: ['', [Validators.required, Validators.minLength(12), Validators.maxLength(64)]],
       confirmarPassword: ['', Validators.required],
     },
     {
@@ -128,7 +129,7 @@ export class InicioSesion {
     const valores = this.loginForm.getRawValue();
 
     const request = new RequestDTO();
-    request.email = valores.correo.trim().toLowerCase();
+    request.correo = valores.correo.trim().toLowerCase();
     request.password = valores.password;
 
     this.authService
@@ -174,7 +175,7 @@ export class InicioSesion {
     // exclusiva de comprador, o viceversa.
     const rutaPermitida = esVendedor
       ? /^\/perfil-vendedor(?:\/|$)/.test(path)
-      : /^\/(?:carrito|perfil-comprador|disenos-guardados|pagos)(?:\/|$)/.test(path);
+      : /^\/(?:carrito|perfil-comprador|disenos-guardados|empieza-acrear|pagos)(?:\/|$)/.test(path);
 
     const destino =
       rutaInterna && rutaPermitida ? returnUrl! : esVendedor ? '/perfil-vendedor' : '/home1';
@@ -206,7 +207,7 @@ export class InicioSesion {
 
     const datos = this.registroForm.getRawValue();
 
-    const request = new RequestDTO();
+    const request = new RegisterRequestDTO();
 
     // Datos comunes
     request.name = datos.nombre.trim();
@@ -223,7 +224,7 @@ export class InicioSesion {
     }
 
     this.authService
-      .login(request)
+      .register(request)
       .pipe(finalize(() => (this.cargando = false)))
       .subscribe({
         next: () => {

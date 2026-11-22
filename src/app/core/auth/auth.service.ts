@@ -5,6 +5,7 @@ import { RequestDTO } from '../../model/request-dto';
 import { ResponseDto } from '../../model/response-dto';
 import { UsuarioDto } from '../../model/usuario-dto';
 import { environment } from '../../../environments/environment';
+import { RegisterRequestDTO } from '../../model/register-request-dto';
 
 
 @Injectable({
@@ -80,5 +81,12 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.storageKey);
+  }
+
+  register(request: RegisterRequestDTO): Observable<UsuarioDto> {
+    return this.http.post<UsuarioDto>(
+      `${this.apiUrl}/auth/register`,
+      request
+    );
   }
 }

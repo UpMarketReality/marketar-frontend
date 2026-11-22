@@ -25,8 +25,7 @@ import { GeneralLayoutComponente } from './componentes/general-layout-componente
 export const routes: Routes = [
   // PANEL DEL VENDEDOR: sin encabezado del comprador
   {
-    path: 'perfil-vendedor',
-    component: VendedorLayoutComponente,
+    path: 'vendedor',
     children: [
       {
         path: '',
@@ -48,6 +47,22 @@ export const routes: Routes = [
           modo: 'registro',
           tipoCuenta: 'VENDEDOR'
         }
+      }
+    ]
+  },
+  {
+    path: 'perfil-vendedor',
+    component: VendedorLayoutComponente,
+    canActivate: [authGuard],
+    data: {
+      role: 'VENDEDOR',
+      loginUrl: '/vendedor/inicio-sesion'
+    },
+    children: [
+      {
+        path: '',
+        component: VendedorPerfil,
+        pathMatch: 'full'
       },
       {
         path: 'productos',
