@@ -1,28 +1,19 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { PageDTO } from '../model/page-dto';
+import { HttpClient} from '@angular/common/http';
+import { Observable} from 'rxjs';
 import { PrototypeDTO } from '../model/prototype-dto';
 import { PrototypeRequest } from '../model/prototype-request';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PrototypeService {
   private readonly http = inject(HttpClient);
-  // Debe ser una URL absoluta al backend para que el interceptor agregue el token JWT
-  private readonly apiUrl = `${environment.apiUrl}/v1/prototypes`;
+  private readonly apiUrl = environment.apiUrl + '/api/v1/prototypes';
 
   generar(datos: PrototypeRequest): Observable<PrototypeDTO> {
     return this.http.post<PrototypeDTO>(this.apiUrl, datos);
-  }
-
-  // GET /api/v1/prototypes/me (prototipos del comprador autenticado)
-  getMyPrototypes(categoryId?: number, page: number = 0, size: number = 20): Observable<PageDTO<PrototypeDTO>> {
-    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
-    if (categoryId != null) params = params.set('categoryId', categoryId.toString());
-    return this.http.get<PageDTO<PrototypeDTO>>(`${this.apiUrl}/me`, { params });
   }
 
   obtenerPorId(id: number): Observable<PrototypeDTO> {
