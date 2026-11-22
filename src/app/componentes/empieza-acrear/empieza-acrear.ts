@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PrototypeDTO } from '../../model/prototype-dto';
 import {
@@ -20,10 +20,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PrototypeRequest } from '../../model/prototype-request';
 import { PrototypeService } from '../../services/prototype-service';
+import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-empieza-acrear',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './empieza-acrear.html',
   styleUrl: './empieza-acrear.css',
 })
@@ -31,6 +33,7 @@ export class EmpiezaACrear implements OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly api = inject(PrototypeService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   // SOLO PARA EL SCRIPT SQL ACTUAL.
   // Sustituir por el ID obtenido del backend
@@ -220,24 +223,39 @@ export class EmpiezaACrear implements OnDestroy {
 
         finalize(() => {
           this.cargando = false;
+          this.cdr.markForCheck();
         }),
       )
       .subscribe({
         next: ({ prototipo, blob }) => {
+          console.log('Imagen recibida:', {
+            prototypeId: prototipo.prototypeId,
+            estado: prototipo.generationStatus,
+            tipo: blob.type,
+            bytes: blob.size,
+          });
+
           if (!blob.size || !['image/png', 'image/jpeg', 'image/webp'].includes(blob.type)) {
             this.mensajeError = 'El servidor no devolvió una imagen compatible.';
             this.mensajeEstado = '';
+            this.cdr.markForCheck();
             return;
           }
 
           this.imagenUrl = URL.createObjectURL(blob);
           this.prototipo = prototipo;
           this.mensajeEstado = 'Diseño generado correctamente.';
+
+          this.cdr.markForCheck();
         },
 
         error: (error: unknown) => {
+          console.error('Error al obtener imagen:', error);
+
           this.mensajeError = this.obtenerMensajeError(error);
           this.mensajeEstado = '';
+
+          this.cdr.markForCheck();
         },
       });
   }
@@ -256,6 +274,7 @@ export class EmpiezaACrear implements OnDestroy {
       tap((prototipo) => {
         this.prototipo = prototipo;
         this.mensajeEstado = `Estado de generación: ${prototipo.generationStatus}`;
+        this.cdr.markForCheck();
       }),
 
       filter(
