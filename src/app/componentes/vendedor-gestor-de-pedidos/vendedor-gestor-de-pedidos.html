@@ -31,59 +31,75 @@
         </span>
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search_field">
           <mat-icon matPrefix>search</mat-icon>
-          <input matInput type="search" placeholder="Buscar ID o Cliente...">
+          <input matInput type="search" [(ngModel)]="busqueda" placeholder="Buscar ID...">
         </mat-form-field>
       </div>
 
+      @if (errorPedidos) {
+        <p class="sin_pedidos error_texto" role="alert">{{ errorPedidos }}</p>
+      }
+
       <div class="tabla_wrap">
-        <table mat-table [dataSource]="pedidosFiltrados" class="tabla_pedidos">
+        @if (cargandoPedidos) {
+          <p class="sin_pedidos">Cargando pedidos...</p>
+        } @else {
+          <table mat-table [dataSource]="pedidosFiltrados" class="tabla_pedidos">
 
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef>ID Pedido</th>
-            <td mat-cell *matCellDef="let p" class="celda_id">{{ p.id }}</td>
-          </ng-container>
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>ID Pedido</th>
+              <td mat-cell *matCellDef="let p" class="celda_id">#{{ p.orderId }}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="cliente">
-            <th mat-header-cell *matHeaderCellDef>Cliente</th>
-            <td mat-cell *matCellDef="let p">
-              <div class="cliente_celda">
-                <span class="avatar">{{ iniciales(p.cliente) }}</span>
-                {{ p.cliente }}
-              </div>
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="cantidad">
+              <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+              <td mat-cell *matCellDef="let p">{{ p.quantity }}</td>
+            </ng-container>
 
-          <ng-container matColumnDef="mueble">
-            <th mat-header-cell *matHeaderCellDef>Mueble</th>
-            <td mat-cell *matCellDef="let p">{{ p.mueble }}</td>
-          </ng-container>
+            <ng-container matColumnDef="monto">
+              <th mat-header-cell *matHeaderCellDef>Monto</th>
+              <td mat-cell *matCellDef="let p" class="celda_monto">
+                S/ {{ p.amount | number:'1.2-2' }}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="estado">
-            <th mat-header-cell *matHeaderCellDef>Estado</th>
-            <td mat-cell *matCellDef="let p">
-              <span [class]="'badge badge_' + p.estado">{{ etiquetaEstado(p.estado) }}</span>
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="estado">
+              <th mat-header-cell *matHeaderCellDef>Estado</th>
+              <td mat-cell *matCellDef="let p">
+                <span [class]="'badge ' + claseEstado(p.status)">{{ etiquetaEstado(p.status) }}</span>
+              </td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="columnas"></tr>
-          <tr mat-row *matRowDef="let row; columns: columnas"></tr>
-        </table>
+            <ng-container matColumnDef="fecha">
+              <th mat-header-cell *matHeaderCellDef>Fecha</th>
+              <td mat-cell *matCellDef="let p" class="celda_fecha">
+                {{ p.createdAt | date:'dd/MM/yyyy' }}
+              </td>
+            </ng-container>
 
-        @if (pedidosFiltrados.length === 0) {
-          <p class="sin_pedidos">{{ mensajeVacio }}</p>
+            <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+            <tr mat-row *matRowDef="let fila; columns: columnas"
+                class="fila_clicable"
+                [class.fila_activa]="pedidoSeleccionado?.orderId === fila.orderId"
+                (click)="verDetalle(fila)"></tr>
+          </table>
+
+          @if (pedidosFiltrados.length === 0) {
+            <p class="sin_pedidos">{{ mensajeVacio }}</p>
+          }
         }
       </div>
     </mat-card>
 
-    <!-- Detalle del pedido -->
+    <!-- Detalle del pedido: especificaciones (solo lectura) -->
     <mat-card appearance="outlined" class="panel_card detalle_card">
+
       @if (pedidoSeleccionado; as p) {
         <div class="detalle_header">
           <div>
-            <h2 class="detalle_titulo">Pedido {{ p.id }}</h2>
-            <p class="detalle_sub">Realizado el {{ p.fecha }}</p>
+            <h2 class="detalle_titulo">Pedido #{{ p.orderId }}</h2>
+            <p class="detalle_sub">Creado el {{ p.createdAt | date:'dd/MM/yyyy' }}</p>
           </div>
-          <span [class]="'badge badge_' + p.estado">{{ etiquetaEstado(p.estado) }}</span>
+          <span [class]="'badge ' + claseEstado(p.status)">{{ etiquetaEstado(p.status) }}</span>
         </div>
 
         <div class="producto_resumen">
@@ -91,55 +107,67 @@
             <mat-icon>chair</mat-icon>
           </div>
           <div class="producto_texto">
-            <h3 class="producto_nombre">{{ p.mueble }}</h3>
-            <span class="precio">{{ p.precio }}</span>
-            <span class="cantidad">Cant: {{ p.cantidad }}</span>
+            <h3 class="producto_nombre">Prototipo #{{ p.prototypeId }}</h3>
+            <span class="precio">S/ {{ p.amount | number:'1.2-2' }}</span>
+            <span class="cantidad">Cant: {{ p.quantity }} · Entrega en {{ p.deliveryDays }} días</span>
           </div>
         </div>
 
-        <h3 class="subtitulo">Progreso de Fabricación</h3>
-        <div class="stepper">
-          @for (etapa of etapasFabricacion; track etapa; let i = $index) {
-            <div class="paso"
-                 [class.completado]="i < p.etapaActual"
-                 [class.actual]="i === p.etapaActual"
-                 [class.pendiente]="i > p.etapaActual">
-              <div class="paso_punto"></div>
-              <div class="paso_texto">
-                <span class="paso_titulo">{{ etapa }}</span>
-                <span class="paso_estado">
-                  {{ i < p.etapaActual ? 'Completado' : (i === p.etapaActual ? 'Progreso actual' : 'Pendiente') }}
-                </span>
-              </div>
-            </div>
+        <div class="cliente_box">
+          <p class="caja_titulo">ESPECIFICACIONES</p>
+          @for (espec of especificaciones; track espec.clave) {
+            <p class="cliente_fila">
+              <mat-icon>tune</mat-icon>
+              {{ espec.clave }}: {{ espec.valor }}
+            </p>
+          } @empty {
+            <p class="cliente_fila">
+              <mat-icon>info</mat-icon>
+              Sin especificaciones registradas.
+            </p>
+          }
+          @if (p.conditions) {
+            <p class="cliente_fila">
+              <mat-icon>assignment</mat-icon>
+              Condiciones: {{ p.conditions }}
+            </p>
           }
         </div>
 
         <div class="cliente_box">
-          <p class="caja_titulo">DATOS DEL CLIENTE</p>
-          <p class="cliente_fila">
-            <mat-icon>person</mat-icon>
-            {{ p.cliente }}
-          </p>
-          <p class="cliente_fila">
-            <mat-icon>call</mat-icon>
-            {{ p.telefono }}
-          </p>
+          <p class="caja_titulo">DATOS DE ENTREGA</p>
           <p class="cliente_fila">
             <mat-icon>location_on</mat-icon>
-            {{ p.direccion }}
+            {{ p.deliveryAddress || 'Sin dirección registrada' }}
           </p>
         </div>
 
-        <button matButton="filled" type="button" class="boton_completo">
-          Marcar Control de Calidad
-        </button>
+        @if (p.images && p.images.length > 0) {
+          <div class="miniaturas">
+            @for (imagen of p.images; track imagen) {
+              <img [src]="imagen" alt="Imagen de referencia">
+            }
+          </div>
+        }
+
+        <p class="nota_accion">Estas especificaciones son de solo lectura.</p>
+
+      } @else if (cargandoDetalle) {
+        <div class="detalle_vacio">
+          <p>Cargando pedido...</p>
+        </div>
+      } @else if (errorDetalle) {
+        <div class="detalle_vacio">
+          <mat-icon>error_outline</mat-icon>
+          <p class="error_texto">{{ errorDetalle }}</p>
+        </div>
       } @else {
         <div class="detalle_vacio">
           <mat-icon>touch_app</mat-icon>
-          <p>Selecciona un pedido para ver su detalle.</p>
+          <p>Selecciona un pedido para ver sus especificaciones.</p>
         </div>
       }
+
     </mat-card>
 
   </div>
