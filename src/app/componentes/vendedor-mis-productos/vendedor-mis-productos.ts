@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatFormField, MatPrefix } from '@angular/material/form-field';
@@ -7,7 +10,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
-import { MatChip } from '@angular/material/chips';
+import { MatChip, MatChipAvatar } from '@angular/material/chips';
 import {
   MatCard,
   MatCardActions,
@@ -15,9 +18,13 @@ import {
   MatCardImage,
   MatCardTitle,
 } from '@angular/material/card';
+import { CatalogService } from '../../services/catalog-service';
+import { ProductDTO } from '../../model/product-dto';
 
 @Component({
   imports: [
+    FormsModule,
+    DecimalPipe,
     RouterLink,
     RouterLinkActive,
     MatTabNav,
@@ -31,6 +38,7 @@ import {
     MatIcon,
     MatButton,
     MatChip,
+    MatChipAvatar,
     MatCard,
     MatCardImage,
     MatCardContent,
@@ -41,4 +49,85 @@ import {
   styleUrl: './vendedor-mis-productos.css',
   templateUrl: './vendedor-mis-productos.html',
 })
-export class VendedorMisProductos {}
+export class VendedorMisProductos implements OnInit {
+  private readonly catalogService = inject(CatalogService);
+
+  // PRODUCTOS DE LA PAGINA ACTUAL (vienen de la API)
+  productos: ProductDTO[] = [];
+  cargando = true;
+  errorMessage = '';
+
+  // PAGINACION
+  pagina = 0;
+  readonly tamanoPagina = 12;
+  totalPaginas = 0;
+  totalProductos = 0;
+
+  // FILTROS (se aplican sobre la página cargada)
+  busqueda = '';
+  estadoFiltro = 'todos';
+
+  ngOnInit(): void {
+    this.cargarProductos(0);
+  }
+
+  get productosFiltrados(): ProductDTO[] {
+    const texto = this.busqueda.trim().toLowerCase();
+
+    return this.productos.filter((producto) => {
+      const coincideEstado = this.estadoFiltro === 'todos' || producto.status === this.estadoFiltro;
+
+      const coincideTexto =
+        !texto ||
+        (producto.name ?? '').toLowerCase().includes(texto) ||
+        String(producto.productId ?? '').includes(texto);
+
+      return coincideEstado && coincideTexto;
+    });
+  }
+
+  // GET /api/v1/seller/products
+  cargarProductos(pagina: number): void {
+    this.cargando = true;
+    this.errorMessage = '';
+
+    this.catalogService.getOwnProducts(pagina, this.tamanoPagina).subscribe({
+      next: (respuesta) => {
+        this.productos = respuesta.content ?? [];
+        this.pagina = respuesta.number ?? pagina;
+        this.totalPaginas = respuesta.totalPages ?? 0;
+        this.totalProductos = respuesta.totalElements ?? this.productos.length;
+        this.cargando = false;
+      },
+      error: (error: HttpErrorResponse) => {
+        this.cargando = false;
+        this.errorMessage = error.error?.message ?? 'No se pudieron cargar tus productos.';
+      },
+    });
+  }
+
+  paginaAnterior(): void {
+    if (this.pagina > 0) {
+      this.cargarProductos(this.pagina - 1);
+    }
+  }
+
+  paginaSiguiente(): void {
+    if (this.pagina < this.totalPaginas - 1) {
+      this.cargarProductos(this.pagina + 1);
+    }
+  }
+
+  etiquetaEstado(status?: string): string {
+    switch (status) {
+      case 'ACTIVO':
+        return 'Activo';
+      case 'AGOTADO':
+        return 'Agotado';
+      case 'INACTIVO':
+        return 'Inactivo';
+      default:
+        return status ?? '';
+    }
+  }
+}
