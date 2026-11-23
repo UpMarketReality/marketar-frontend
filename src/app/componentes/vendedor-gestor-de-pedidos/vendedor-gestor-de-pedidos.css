@@ -509,6 +509,71 @@
   font-size: 14px;
 }
 
+
+/* =========================================
+   PEDIDOS: LISTADO Y ESPECIFICACIONES (US09)
+========================================= */
+
+.badge_confirmado {
+  background: #fff8bd;
+  color: #d65318;
+}
+
+.badge_listo {
+  background: #e8f9ee;
+  color: #168b48;
+}
+
+.badge_entregado {
+  background: #dcfce7;
+  color: #159447;
+}
+
+.fila_clicable {
+  cursor: pointer;
+}
+
+.tabla_pedidos .mat-mdc-row.fila_activa {
+  background-color: #e3f9f7;
+}
+
+.celda_monto {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.celda_fecha {
+  color: #64748b;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.error_texto {
+  color: #bc3039;
+}
+
+.nota_accion {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #64748b;
+  text-align: center;
+}
+
+.miniaturas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.miniaturas img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #e2e8f0;
+}
+
 /* =========================================
    RESPONSIVE
 ========================================= */
