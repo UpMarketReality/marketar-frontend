@@ -21,7 +21,6 @@ import {
 import { CatalogService } from '../../services/catalog-service';
 import { ProductDTO } from '../../model/product-dto';
 
-
 @Component({
   imports: [
     FormsModule,
@@ -58,6 +57,9 @@ export class VendedorMisProductos implements OnInit {
   productos: ProductDTO[] = [];
   cargando = true;
   errorMessage = '';
+
+  // PRODUCTO CUYO ESTADO SE ESTA CAMBIANDO (evita clics repetidos)
+  productoEnCambio: number | null = null;
 
   // PAGINACION
   pagina = 0;
@@ -105,6 +107,36 @@ export class VendedorMisProductos implements OnInit {
       error: (error: HttpErrorResponse) => {
         this.cargando = false;
         this.errorMessage = error.error?.message ?? 'No se pudieron cargar tus productos.';
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  // PATCH /api/v1/seller/products/{id}/status
+  // Si está INACTIVO se reactiva; si no, se desactiva
+  cambiarEstado(producto: ProductDTO): void {
+    if (producto.productId === undefined || this.productoEnCambio !== null) {
+      return;
+    }
+
+    const activar = producto.status === 'INACTIVO';
+    const id = producto.productId;
+
+    this.productoEnCambio = id;
+    this.errorMessage = '';
+
+    this.catalogService.changeStatus(id, activar).subscribe({
+      next: (actualizado) => {
+        // Reemplaza solo la tarjeta cambiada con los datos que devuelve la API
+        this.productos = this.productos.map((p) =>
+          p.productId === actualizado.productId ? actualizado : p,
+        );
+        this.productoEnCambio = null;
+        this.cdr.markForCheck();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.productoEnCambio = null;
+        this.errorMessage = error.error?.message ?? 'No se pudo cambiar el estado del producto.';
         this.cdr.markForCheck();
       },
     });

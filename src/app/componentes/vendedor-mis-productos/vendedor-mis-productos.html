@@ -62,7 +62,9 @@
 
       <div class="product_grid">
         @for (producto of productosFiltrados; track producto.productId) {
-          <mat-card appearance="outlined" class="product_card">
+          <mat-card appearance="outlined"
+                    class="product_card"
+                    [class.product_card_inactivo]="producto.status === 'INACTIVO'">
             <div class="product_image_wrapper">
               <mat-chip class="status_chip"
                         [class.chip_agotado]="producto.status === 'AGOTADO'"
@@ -99,6 +101,15 @@
                       [routerLink]="['/perfil-vendedor/productos', producto.productId, 'editar']">
                 <mat-icon>edit</mat-icon>
                 Editar
+              </button>
+
+              <button matButton="outlined"
+                      class="card_btn"
+                      [class.card_btn_reactivar]="producto.status === 'INACTIVO'"
+                      [disabled]="productoEnCambio !== null"
+                      (click)="cambiarEstado(producto)">
+                <mat-icon>{{ producto.status === 'INACTIVO' ? 'play_circle' : 'pause_circle' }}</mat-icon>
+                {{ producto.status === 'INACTIVO' ? 'Reactivar' : 'Desactivar' }}
               </button>
             </mat-card-actions>
           </mat-card>
