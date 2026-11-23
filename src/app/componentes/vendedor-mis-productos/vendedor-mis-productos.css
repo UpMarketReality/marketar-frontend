@@ -339,6 +339,26 @@
   color: #475569;
 }
 
+/* Producto desactivado: se ve apagado, pero sigue en la lista */
+.product_card_inactivo .product_img {
+  opacity: 0.55;
+  filter: grayscale(0.6);
+}
+
+.product_card_inactivo .product_name {
+  color: #607491;
+}
+
+/* Botón de reactivar en verde de la app */
+.card_btn_reactivar {
+  color: #007e77;
+}
+
+.card_btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
 /* =========================================
    DISEÑO RESPONSIVO
 ========================================= */
