@@ -6,18 +6,26 @@
     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo_fecha">
       <mat-label>Desde</mat-label>
       <mat-icon matPrefix>event</mat-icon>
-      <input matInput type="date" name="fechaInicio" [(ngModel)]="fechaInicio">
+      <input matInput type="date" name="fechaInicio"
+             [(ngModel)]="fechaInicio"
+             (ngModelChange)="alCambiarPeriodo()">
     </mat-form-field>
 
     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo_fecha">
       <mat-label>Hasta</mat-label>
       <mat-icon matPrefix>event</mat-icon>
-      <input matInput type="date" name="fechaFin" [(ngModel)]="fechaFin">
+      <input matInput type="date" name="fechaFin"
+             [(ngModel)]="fechaFin"
+             (ngModelChange)="alCambiarPeriodo()">
     </mat-form-field>
   </div>
 
   @if (rangoInvalido) {
     <p class="aviso_fecha" role="alert">La fecha de inicio no puede ser posterior a la fecha de fin.</p>
+  }
+
+  @if (errorMessage) {
+    <p class="aviso_fecha" role="alert">{{ errorMessage }}</p>
   }
 
   <!-- Tarjetas de estadísticas -->

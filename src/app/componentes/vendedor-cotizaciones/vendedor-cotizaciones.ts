@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatTabLink, MatTabNav } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
@@ -7,6 +8,8 @@ import { MatFormField, MatLabel, MatPrefix } from '@angular/material/form-field'
 import { MatInput } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
+import { ReportService } from '../../services/report-service';
+import { SalesReportDTO } from '../../model/sales-report-dto';
 
 interface Cotizacion {
   id: string;
@@ -53,6 +56,10 @@ export class VendedorCotizaciones {
   fechaInicio = '';
   fechaFin = '';
 
+  // Ventas del período que llegan de la API (null hasta elegir un período válido)
+  ventas: SalesReportDTO | null = null;
+  errorMessage = '';
+
   // Pestaña principal: cotizaciones o finanzas
   pestanaPrincipal = 'cotizaciones';
 
@@ -77,9 +84,23 @@ export class VendedorCotizaciones {
   readonly columnasCotizaciones = ['id', 'cliente', 'proyecto', 'fecha', 'estado'];
   readonly columnasMovimientos = ['fecha', 'concepto', 'referencia', 'monto', 'estado'];
 
+  constructor(private reportService: ReportService) {}
+
   // Verdadero si el inicio es posterior al fin
   get rangoInvalido(): boolean {
     return !!this.fechaInicio && !!this.fechaFin && this.fechaInicio > this.fechaFin;
+  }
+
+  // Ventas brutas del período en formato S/
+  get ventasBrutasTexto(): string {
+    if (!this.ventas) return '—';
+    return (
+      'S/ ' +
+      this.ventas.netSalesAmount.toLocaleString('es-PE', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+    );
   }
 
   // Pestaña de estado que está activa
@@ -90,6 +111,26 @@ export class VendedorCotizaciones {
   // Solicitudes de la pestaña activa
   get cotizacionesFiltradas(): Cotizacion[] {
     return this.cotizaciones.filter((c) => c.estado === this.pestanaCotizacion);
+  }
+
+  // Se llama cada vez que cambia una fecha
+  alCambiarPeriodo(): void {
+    this.errorMessage = '';
+
+    // Sin período completo y válido no se consulta la API
+    if (!this.fechaInicio || !this.fechaFin || this.rangoInvalido) {
+      this.ventas = null;
+      return;
+    }
+
+    this.reportService.getSales(this.fechaInicio, this.fechaFin).subscribe({
+      next: (respuesta) => (this.ventas = respuesta),
+      error: (error: HttpErrorResponse) => {
+        this.ventas = null;
+        this.errorMessage =
+          error.error?.message ?? 'No se pudo cargar el reporte. Inténtalo nuevamente.';
+      },
+    });
   }
 
   contar(estado: string): number {
