@@ -301,6 +301,42 @@
 }
 
 /* =========================================
+   FILTRO DE FECHAS
+========================================= */
+
+.filtro_fechas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.campo_fecha {
+  width: 200px;
+  --mat-form-field-outlined-outline-color: #e2e8f0;
+  --mat-form-field-outlined-hover-outline-color: #cbd5e1;
+  --mat-form-field-outlined-focus-outline-color: #00bfb3;
+  --mat-form-field-container-text-size: 13px;
+}
+
+.campo_fecha mat-icon {
+  color: #94a3b8;
+  margin-right: 4px;
+}
+
+.campo_fecha ::ng-deep .mdc-floating-label,
+.campo_fecha ::ng-deep .mdc-text-field__input {
+  font-size: 13px;
+}
+
+.aviso_fecha {
+  margin: -12px 0 20px;
+  font-size: 13px;
+  color: #bc3039;
+}
+
+/* =========================================
    DISEÑO RESPONSIVO
 ========================================= */
 
