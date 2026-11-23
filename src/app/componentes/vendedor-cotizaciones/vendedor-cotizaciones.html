@@ -36,6 +36,33 @@
 
   </div>
 
+  <!-- FILTRO DE FECHAS DEL REPORTE (aplica a cotizaciones y finanzas) -->
+  <div class="filtro_fechas">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo_fecha">
+      <mat-label>Desde</mat-label>
+      <mat-icon matPrefix>event</mat-icon>
+      <input matInput type="date" name="fechaInicio"
+             [(ngModel)]="fechaInicio"
+             (ngModelChange)="alCambiarPeriodo()">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo_fecha">
+      <mat-label>Hasta</mat-label>
+      <mat-icon matPrefix>event</mat-icon>
+      <input matInput type="date" name="fechaFin"
+             [(ngModel)]="fechaFin"
+             (ngModelChange)="alCambiarPeriodo()">
+    </mat-form-field>
+  </div>
+
+  @if (rangoInvalido) {
+    <p class="aviso_fecha" role="alert">La fecha de inicio no puede ser posterior a la fecha de fin.</p>
+  }
+
+  @if (errorMessage) {
+    <p class="aviso_fecha" role="alert">{{ errorMessage }}</p>
+  }
+
   <!-- ======================================
        PANTALLA A: COTIZACIONES
        ====================================== -->
@@ -138,8 +165,8 @@
             <mat-icon>payments</mat-icon>
           </div>
           <div class="indicador_texto">
-            <span class="indicador_etiqueta">Disponible para retiro</span>
-            <strong class="indicador_valor texto_turquesa">S/ 0.00</strong>
+            <span class="indicador_etiqueta">Ventas brutas del período</span>
+            <strong class="indicador_valor">{{ ventasBrutasTexto }}</strong>
           </div>
         </div>
       </mat-card>
