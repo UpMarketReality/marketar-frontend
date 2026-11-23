@@ -68,6 +68,7 @@
                     {{ quoteStatusLabel(item.quote) }}
                   </p>
 
+
                   <button
                     mat-flat-button
                     type="button"
@@ -76,12 +77,31 @@
                   >
                     <mat-icon svgIcon="file"></mat-icon>
 
-                    {{
-                      item.quote
-                        ? 'Ver cotización'
-                        : 'Solicitar cotización'
-                    }}
+                    @if (tieneCotizacionActiva(item.quote)) {
+                      Ver cotización
+                    } @else if (item.quote) {
+                      Volver a cotizar
+                    } @else {
+                      Solicitar cotización
+                    }
                   </button>
+
+                  @if (
+                    item.quote &&
+                    !tieneCotizacionActiva(item.quote)
+                    ) {
+                    <a
+                      mat-stroked-button
+                      class="tarjeta__boton"
+                      routerLink="/perfil-comprador/cotizacion"
+                      [queryParams]="{
+                      requestId: item.quote.requestId
+                      }"
+                    >
+                      Ver última cotización
+                    </a>
+                  }
+
 
                 </mat-card-content>
               </mat-card>

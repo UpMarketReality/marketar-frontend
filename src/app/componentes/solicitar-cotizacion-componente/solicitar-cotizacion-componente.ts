@@ -315,8 +315,14 @@ export class SolicitarCotizacionComponente implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (cotizaciones) => {
+
           this.cotizacionExistente =
-            cotizaciones.find((c) => c.prototypeId === prototypeId) ?? null;
+            cotizaciones.find(
+              (c) =>
+                c.prototypeId === prototypeId &&
+                (c.status === 'EN_COTIZACION' || c.status === 'COTIZADA'),
+            ) ?? null;
+
 
           this.cdr.markForCheck();
         },

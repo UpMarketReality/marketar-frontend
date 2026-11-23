@@ -239,16 +239,41 @@ export class DisenosGuardados implements OnInit, OnDestroy {
   }*/
 
   // Si hay varias solicitudes para el mismo prototipo, se usa la más reciente
+
   private latestQuoteByPrototype(quotes: QuoteRequestDTO[]): Map<number, QuoteRequestDTO> {
-    const result = new Map<number, QuoteRequestDTO>();
-    for (const q of quotes) {
-      if (q.prototypeId == null) continue;
-      const current = result.get(q.prototypeId);
-      if (!current || (q.createdAt ?? '') > (current.createdAt ?? '')) {
-        result.set(q.prototypeId, q);
+    const resultado = new Map<number, QuoteRequestDTO>();
+
+    for (const quote of quotes) {
+      if (quote.prototypeId == null) {
+        continue;
+      }
+
+      const actual = resultado.get(quote.prototypeId);
+
+      if (!actual) {
+        resultado.set(quote.prototypeId, quote);
+        continue;
+      }
+
+      const nuevaActiva = this.tieneCotizacionActiva(quote);
+      const actualActiva = this.tieneCotizacionActiva(actual);
+
+      if (nuevaActiva && !actualActiva) {
+        resultado.set(quote.prototypeId, quote);
+        continue;
+      }
+
+      if (
+        nuevaActiva === actualActiva &&
+        ((quote.createdAt ?? '') > (actual.createdAt ?? '') ||
+          (quote.createdAt === actual.createdAt &&
+            (quote.requestId ?? 0) > (actual.requestId ?? 0)))
+      ) {
+        resultado.set(quote.prototypeId, quote);
       }
     }
-    return result;
+
+    return resultado;
   }
 
   // Recomendados: productos del catálogo que no están en favoritos ni en vistos recientemente.
@@ -375,7 +400,8 @@ export class DisenosGuardados implements OnInit, OnDestroy {
   }
 
   goToQuotes(item: Extract<SavedItem, { kind: 'prototype' }>): void {
-    if (item.quote?.requestId != null) {
+    // Si la cotización sigue activa, se muestra su detalle.
+    if (this.tieneCotizacionActiva(item.quote) && item.quote?.requestId != null) {
       this.router.navigate(['/perfil-comprador/cotizacion'], {
         queryParams: {
           requestId: item.quote.requestId,
@@ -384,6 +410,8 @@ export class DisenosGuardados implements OnInit, OnDestroy {
       return;
     }
 
+    // Si no hay una solicitud activa, se puede cotizar
+    // de nuevo el mismo diseño.
     if (item.prototype.generationStatus === 'COMPLETADO') {
       this.router.navigate(['/solicitar-cotizacion', item.prototype.prototypeId]);
       return;
@@ -392,6 +420,10 @@ export class DisenosGuardados implements OnInit, OnDestroy {
     this.snackBar.open('El diseño debe estar completado para solicitar una cotización.', 'Cerrar', {
       duration: 3500,
     });
+  }
+
+  tieneCotizacionActiva(quote?: QuoteRequestDTO): boolean {
+    return quote?.status === 'EN_COTIZACION' || quote?.status === 'COTIZADA';
   }
 
   // ---------- Acciones de producto ----------
