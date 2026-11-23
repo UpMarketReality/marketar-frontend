@@ -24,4 +24,10 @@ export class OrderService {
   getSellerOrderSpecifications(orderId: number): Observable<OrderDTO> {
     return this.http.get<OrderDTO>(`${this.apiUrl}/seller/orders/${orderId}/specifications`);
   }
+
+  // US29 (vendedor)
+  // 3. PATCH /api/v1/seller/orders/{orderId}/status
+  updateSellerOrderStatus(orderId: number, status: string): Observable<OrderDTO> {
+    return this.http.patch<OrderDTO>(`${this.apiUrl}/seller/orders/${orderId}/status`, { status });
+  }
 }

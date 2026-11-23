@@ -50,6 +50,15 @@ export class VendedorGestorDePedidos implements OnInit {
   // Cantidad de pedidos que se cargan (los filtros de pestaña trabajan sobre estos)
   readonly tamanoPagina = 50;
 
+  // Estados en el orden exacto que exige el backend (no se puede saltar ni retroceder)
+  readonly estados: readonly string[] = [
+    'CONFIRMADO',
+    'EN_FABRICACION',
+    'LISTO',
+    'ENVIADO',
+    'ENTREGADO',
+  ];
+
   private readonly etiquetasEstado: Record<string, string> = {
     CONFIRMADO: 'Confirmado',
     EN_FABRICACION: 'En fabricación',
@@ -84,11 +93,16 @@ export class VendedorGestorDePedidos implements OnInit {
   filtroActivo = 'todos';
   busqueda = '';
 
-  // DETALLE (API): especificaciones del pedido
+  // DETALLE (API): especificaciones y avance de estado
   pedidoSeleccionado: OrderDTO | null = null;
   especificaciones: Especificacion[] = [];
   cargandoDetalle = false;
   errorDetalle = '';
+  actualizando = false;
+
+  // MENSAJE del avance de estado (encima del listado)
+  mensaje = '';
+  tipoMensaje: 'exito' | 'error' = 'exito';
 
   ngOnInit(): void {
     this.cargarPedidos();
@@ -109,6 +123,17 @@ export class VendedorGestorDePedidos implements OnInit {
     if (this.filtroActivo === 'fabricacion') return 'No hay pedidos en proceso.';
     if (this.filtroActivo === 'completados') return 'No hay pedidos completados.';
     return 'Aún no tienes pedidos.';
+  }
+
+  // Posición de la etapa actual en la lista de estados (-1 si no hay pedido)
+  get indiceActual(): number {
+    return this.estados.indexOf(this.pedidoSeleccionado?.status ?? '');
+  }
+
+  // Siguiente etapa a la que puede avanzar el pedido (null si ya está entregado)
+  get estadoSiguiente(): string | null {
+    const indice = this.indiceActual;
+    return indice >= 0 && indice < this.estados.length - 1 ? this.estados[indice + 1] : null;
   }
 
   // GET /api/v1/seller/orders
@@ -139,6 +164,7 @@ export class VendedorGestorDePedidos implements OnInit {
     this.pedidoSeleccionado = null;
     this.especificaciones = [];
     this.errorDetalle = '';
+    this.mensaje = '';
     this.cargandoDetalle = true;
 
     this.orderService
@@ -158,6 +184,47 @@ export class VendedorGestorDePedidos implements OnInit {
         error: (error: HttpErrorResponse) => {
           this.errorDetalle = error.error?.message ?? 'No se pudo cargar el pedido.';
           this.cdr.markForCheck();
+        },
+      });
+  }
+
+  // PATCH /api/v1/seller/orders/{orderId}/status
+  avanzarEstado(): void {
+    const pedido = this.pedidoSeleccionado;
+    const siguiente = this.estadoSiguiente;
+
+    if (!pedido || pedido.orderId === undefined || !siguiente || this.actualizando) {
+      return;
+    }
+
+    this.actualizando = true;
+    this.mensaje = '';
+
+    this.orderService
+      .updateSellerOrderStatus(pedido.orderId, siguiente)
+      .pipe(
+        finalize(() => {
+          this.actualizando = false;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (actualizado) => {
+          this.pedidoSeleccionado = actualizado;
+          this.especificaciones = this.parsearEspecificaciones(actualizado.specifications);
+          this.pedidos = this.pedidos.map((p) =>
+            p.orderId === actualizado.orderId ? actualizado : p,
+          );
+          this.mostrarMensaje(
+            `Pedido actualizado a ${this.etiquetaEstado(actualizado.status)}.`,
+            'exito',
+          );
+        },
+        error: (error: HttpErrorResponse) => {
+          this.mostrarMensaje(
+            error.error?.message ?? 'No se pudo actualizar el estado del pedido.',
+            'error',
+          );
         },
       });
   }
@@ -223,5 +290,11 @@ export class VendedorGestorDePedidos implements OnInit {
       return partes.join(' × ') + unidad;
     }
     return String(valor);
+  }
+
+  private mostrarMensaje(texto: string, tipo: 'exito' | 'error'): void {
+    this.mensaje = texto;
+    this.tipoMensaje = tipo;
+    this.cdr.markForCheck();
   }
 }

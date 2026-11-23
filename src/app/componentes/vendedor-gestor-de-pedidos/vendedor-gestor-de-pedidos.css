@@ -575,6 +575,26 @@
 }
 
 /* =========================================
+   AVANCE DE ESTADO (US29)
+========================================= */
+
+.mensaje_pedido {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #e3f9f7;
+  color: #007e77;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.mensaje_pedido_error {
+  background: #fff6f6;
+  color: #bc3039;
+  border: 1px solid #fecaca;
+}
+
+/* =========================================
    RESPONSIVE
 ========================================= */
 

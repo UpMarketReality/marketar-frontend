@@ -20,6 +20,14 @@
   </nav>
   <mat-tab-nav-panel #tabPanel1></mat-tab-nav-panel>
 
+  @if (mensaje) {
+    <p class="mensaje_pedido"
+       [class.mensaje_pedido_error]="tipoMensaje === 'error'"
+       role="status">
+      {{ mensaje }}
+    </p>
+  }
+
   <div class="main_grid">
 
     <!-- Listado de pedidos -->
@@ -90,7 +98,7 @@
       </div>
     </mat-card>
 
-    <!-- Detalle del pedido: especificaciones (solo lectura) -->
+    <!-- Detalle del pedido -->
     <mat-card appearance="outlined" class="panel_card detalle_card">
 
       @if (pedidoSeleccionado; as p) {
@@ -111,6 +119,24 @@
             <span class="precio">S/ {{ p.amount | number:'1.2-2' }}</span>
             <span class="cantidad">Cant: {{ p.quantity }} · Entrega en {{ p.deliveryDays }} días</span>
           </div>
+        </div>
+
+        <h3 class="subtitulo">Progreso de Fabricación</h3>
+        <div class="stepper">
+          @for (estado of estados; track estado; let i = $index) {
+            <div class="paso"
+                 [class.completado]="i < indiceActual"
+                 [class.actual]="i === indiceActual"
+                 [class.pendiente]="i > indiceActual">
+              <div class="paso_punto"></div>
+              <div class="paso_texto">
+                <span class="paso_titulo">{{ etiquetaEstado(estado) }}</span>
+                <span class="paso_estado">
+                  {{ i < indiceActual ? 'Completado' : (i === indiceActual ? 'Etapa actual' : 'Pendiente') }}
+                </span>
+              </div>
+            </div>
+          }
         </div>
 
         <div class="cliente_box">
@@ -150,7 +176,17 @@
           </div>
         }
 
-        <p class="nota_accion">Estas especificaciones son de solo lectura.</p>
+        @if (estadoSiguiente) {
+          <button matButton="filled" type="button" class="boton_completo"
+                  [disabled]="actualizando"
+                  (click)="avanzarEstado()">
+            <mat-icon>arrow_forward</mat-icon>
+            {{ actualizando ? 'Actualizando...' : 'Pasar a ' + etiquetaEstado(estadoSiguiente) }}
+          </button>
+          <p class="nota_accion">Las etapas solo avanzan en orden y no se pueden revertir.</p>
+        } @else {
+          <p class="nota_accion">El pedido está entregado. No hay más etapas.</p>
+        }
 
       } @else if (cargandoDetalle) {
         <div class="detalle_vacio">
@@ -164,7 +200,7 @@
       } @else {
         <div class="detalle_vacio">
           <mat-icon>touch_app</mat-icon>
-          <p>Selecciona un pedido para ver sus especificaciones.</p>
+          <p>Selecciona un pedido para ver su detalle.</p>
         </div>
       }
 
