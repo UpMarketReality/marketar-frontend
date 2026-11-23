@@ -99,13 +99,14 @@
 
       <button type="button"
               class="btn-guardar"
+              [disabled]="guardando"
               (click)="guardarCambios()">
 
         <svg class="icono-boton" aria-hidden="true">
           <use href="#vp-save"></use>
         </svg>
 
-        Guardar Cambios
+        {{ guardando ? 'Guardando...' : 'Guardar Cambios' }}
       </button>
 
     </div>
@@ -220,7 +221,7 @@
 
             <textarea id="descripcion"
                       rows="4"
-                      maxlength="1000"
+                      maxlength="500"
                       [(ngModel)]="perfil.descripcion"></textarea>
 
           </div>
