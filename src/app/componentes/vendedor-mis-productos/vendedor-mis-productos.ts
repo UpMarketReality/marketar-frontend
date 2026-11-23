@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { MatTabLink, MatTabNav } from '@angular/material/tabs';
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatFormField, MatPrefix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
@@ -22,6 +22,7 @@ import {
     RouterLinkActive,
     MatTabNav,
     MatTabLink,
+    MatTabNavPanel,
     MatFormField,
     MatPrefix,
     MatInput,

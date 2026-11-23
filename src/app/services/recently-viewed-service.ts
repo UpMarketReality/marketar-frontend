@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { MOCK_INITIAL_RECENT_IDS, findMockProduct } from '../data/mock-data';
 import { ProductDTO } from '../model/product-dto';
-import { environment } from '../../environments/environment';
 
-// Guarda en el navegador los últimos productos con los que interactuó el usuario.
+// Guarda en el navegador los últimos productos reales con los que interactuó el usuario.
 @Injectable({
   providedIn: 'root',
 })
@@ -14,14 +12,13 @@ export class RecentlyViewedService {
   getAll(): ProductDTO[] {
     try {
       const raw = localStorage.getItem(this.storageKey);
-      if (raw) return JSON.parse(raw) as ProductDTO[];
+      if (raw) {
+        return JSON.parse(raw) as ProductDTO[];
+      }
     } catch {
       /* almacenamiento no disponible */
     }
-    // Sin historial: en modo mock se muestran datos de ejemplo
-    return environment.useMockData
-      ? MOCK_INITIAL_RECENT_IDS.map((id) => findMockProduct(id)).filter((p): p is ProductDTO => !!p)
-      : [];
+    return [];
   }
 
   add(product: ProductDTO): void {
@@ -30,6 +27,7 @@ export class RecentlyViewedService {
       0,
       this.maxItems,
     );
+
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(list));
     } catch {

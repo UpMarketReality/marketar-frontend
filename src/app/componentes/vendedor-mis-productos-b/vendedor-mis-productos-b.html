@@ -2,7 +2,7 @@
   <section class="view_section">
     <h1 class="page_title">Mis Productos</h1>
 
-    <nav mat-tab-nav-bar class="tabs_nav" aria-label="Secciones de mis productos">
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel1" class="tabs_nav" aria-label="Secciones de mis productos">
       <a mat-tab-link
          routerLink="/perfil-vendedor/productos"
          routerLinkActive
@@ -20,6 +20,7 @@
         Añadir Nuevo
       </a>
     </nav>
+    <mat-tab-nav-panel #tabPanel1></mat-tab-nav-panel>
 
     <mat-card appearance="outlined" class="form_card">
       <mat-card-title class="form_title">Crear Nuevo Producto</mat-card-title>

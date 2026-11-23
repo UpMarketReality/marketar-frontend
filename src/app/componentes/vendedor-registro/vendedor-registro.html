@@ -15,7 +15,7 @@
         <mat-icon>arrow_back</mat-icon>
         Volver al inicio
       </a>
-      <nav mat-tab-nav-bar class="tabs_acceso" aria-label="Acceso de vendedor">
+      <nav mat-tab-nav-bar [tabPanel]="tabPanel1" class="tabs_acceso" aria-label="Acceso de vendedor">
         <a mat-tab-link
            routerLink="/vendedor/inicio-sesion"
            routerLinkActive
@@ -31,6 +31,7 @@
           Registrarse
         </a>
       </nav>
+      <mat-tab-nav-panel #tabPanel1></mat-tab-nav-panel>
 
       <h1 class="titulo">Crea tu cuenta</h1>
       <p class="subtitulo">Únete a MarketAR y empieza a ofrecer tus productos como vendedor.</p>

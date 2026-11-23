@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatTabLink, MatTabNav } from '@angular/material/tabs';
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatCard } from '@angular/material/card';
 import { MatFormField, MatPrefix } from '@angular/material/form-field';
@@ -32,6 +32,7 @@ interface Pestana {
   imports: [
     MatTabNav,
     MatTabLink,
+    MatTabNavPanel,
     MatTableModule,
     MatCard,
     MatFormField,

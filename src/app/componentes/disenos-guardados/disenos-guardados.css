@@ -10,7 +10,6 @@
   --md-dark: #1e2a3b;
   --md-muted: #64748b;
   --md-line: #e2e8f0;
-  --md-star: #f5b301;
   --md-orange: #f59e0b;
   --md-success: #10b981;
 }
@@ -159,6 +158,10 @@
   object-fit: cover;
 }
 
+.tarjeta__imagen-clickable {
+  cursor: pointer;
+}
+
 .tarjeta__sin-imagen {
   width: 40px;
   height: 40px;
@@ -195,8 +198,13 @@
   transition: transform 0.2s;
 }
 
-button.tarjeta__favorito:hover mat-icon {
+button.tarjeta__favorito:hover:not(:disabled) mat-icon {
   transform: scale(1.12);
+}
+
+.tarjeta__favorito:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 
 .tarjeta__favorito--activo {
@@ -204,7 +212,7 @@ button.tarjeta__favorito:hover mat-icon {
   --mat-icon-button-icon-color: #ef4444;
 }
 
-/* Etiqueta superior derecha (Ver en AR = mat-button / Mi Diseño IA = span) */
+/* Etiqueta superior derecha (Ver en AR) */
 .tarjeta__etiqueta {
   position: absolute;
   top: 9px;
@@ -244,10 +252,6 @@ button.tarjeta__etiqueta:hover {
   --mat-button-text-label-text-color: var(--md-teal);
 }
 
-.tarjeta__etiqueta--ia {
-  color: var(--md-teal);
-}
-
 /* Cuerpo */
 .tarjeta__cuerpo.mat-mdc-card-content {
   display: flex;
@@ -256,30 +260,14 @@ button.tarjeta__etiqueta:hover {
   padding: 16px 15px 15px;
 }
 
-.tarjeta__valoracion {
-  display: flex;
-  align-items: center;
-  gap: 1px;
-  margin-bottom: 8px;
-}
-
-.estrella {
-  width: 12px;
-  height: 12px;
-  color: var(--md-star);
-}
-
-.tarjeta__resenas {
-  margin-left: 5px;
-  color: var(--md-muted);
-  font-size: 11.5px;
-}
-
-.tarjeta__unico {
-  margin-bottom: 8px;
+.tarjeta__tienda {
+  margin-bottom: 6px;
   color: var(--md-teal);
   font-size: 11.5px;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tarjeta__nombre {
@@ -293,6 +281,14 @@ button.tarjeta__etiqueta:hover {
   line-height: 1.35;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+.tarjeta__nombre--clickable {
+  cursor: pointer;
+}
+
+.tarjeta__nombre--clickable:hover {
+  color: var(--md-teal);
 }
 
 .tarjeta__rotulo {
@@ -311,24 +307,6 @@ button.tarjeta__etiqueta:hover {
   letter-spacing: 0.6px;
 }
 
-.tarjeta__estado {
-  margin: 2px 0 18px;
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.estado--proceso {
-  color: var(--md-orange);
-}
-
-.estado--aceptada {
-  color: var(--md-success);
-}
-
-.estado--inactiva {
-  color: var(--md-muted);
-}
-
 /* Botones de la tarjeta (mat-flat-button) */
 .tarjeta__boton.mat-mdc-unelevated-button {
   width: 100%;
@@ -343,7 +321,7 @@ button.tarjeta__etiqueta:hover {
   --mat-button-filled-icon-offset: 0;
 }
 
-.tarjeta__boton:hover {
+.tarjeta__boton:hover:not(:disabled) {
   --mat-button-filled-container-color: var(--md-teal-hover);
 }
 
@@ -351,14 +329,6 @@ button.tarjeta__etiqueta:hover {
   width: 15px;
   height: 15px;
   font-size: 15px;
-}
-
-.tarjeta__boton--oscuro.mat-mdc-unelevated-button {
-  --mat-button-filled-container-color: var(--md-dark);
-}
-
-.tarjeta__boton--oscuro:hover {
-  --mat-button-filled-container-color: #0f172a;
 }
 
 /* Estados vacíos y enlaces */

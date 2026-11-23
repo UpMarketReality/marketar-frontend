@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatTabLink, MatTabNav } from '@angular/material/tabs';
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
@@ -28,7 +28,7 @@ interface Pestana {
 }
 
 @Component({
-  imports: [MatTabNav, MatTabLink, MatTableModule, MatCard, MatIcon, MatButton],
+  imports: [MatTabNav, MatTabLink, MatTabNavPanel, MatTableModule, MatCard, MatIcon, MatButton],
   selector: 'app-vendedor-cotizaciones',
   styleUrl: './vendedor-cotizaciones.css',
   templateUrl: './vendedor-cotizaciones.html',

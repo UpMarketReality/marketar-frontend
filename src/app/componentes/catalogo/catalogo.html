@@ -1,155 +1,227 @@
-<main class="catalogo">
-  <!-- encabezado principal-->
-  <header class="encabezado">
+<div class="catalog-container">
+  <!-- Encabezado -->
+  <header class="catalog-header">
     <h1>Catálogo de Diseños</h1>
-    <p>
-      Explora muebles personalizados generados por IA
-      y creados por fabricantes certificados.
-    </p>
+    <p>Explora muebles personalizados generados por IA y creados por fabricantes certificados.</p>
   </header>
 
-  <!--buscador y filtros de búsqueda-->
-  <section class="panel-de-filtros">
-    <!-- barra de búsqueda y ordenamiento -->
-    <div class="barra-herramientas">
-      <mat-form-field class="buscador" appearance="outline" subscriptSizing="dynamic">
-        <mat-icon matPrefix svgIcon="search" class="icono-lupa"></mat-icon>
+  <!-- Panel de Búsqueda, Ordenamiento y Categorías -->
+  <mat-card class="filter-panel">
+    <div class="search-sort-row">
+      <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+        <mat-icon matPrefix class="search-icon">search</mat-icon>
         <input
           matInput
           type="text"
-          [(ngModel)]="searchQuery"
+          [ngModel]="searchQuery"
           (ngModelChange)="onSearchChange($event)"
-          (keyup.enter)="onSearch()"
           placeholder="Buscar por tipo de mueble, estilo o artesano..."
-          aria-label="Buscar Diseños" />
+        />
         @if (searchQuery) {
-          <button matSuffix mat-icon-button type="button" aria-label="Limpiar búsqueda" (click)="clearSearch()">
-            <mat-icon svgIcon="close"></mat-icon>
+          <button mat-icon-button matSuffix (click)="onSearchChange('')" aria-label="Limpiar">
+            <mat-icon>close</mat-icon>
           </button>
         }
       </mat-form-field>
 
-      <button mat-stroked-button class="selector-orden" type="button" [matMenuTriggerFor]="menuOrden">
-        <mat-icon svgIcon="sort"></mat-icon>
-        Ordenar por: {{ sortLabel }}
-      </button>
-      <mat-menu #menuOrden="matMenu" xPosition="before">
-        @for (option of sortOptions; track option.value) {
-          <button mat-menu-item type="button" (click)="setSort(option.value)">
-            <mat-icon svgIcon="check" [class.oculto]="sortOption !== option.value"></mat-icon>
-            <span>{{ option.label }}</span>
-          </button>
-        }
-      </mat-menu>
+      <mat-form-field appearance="outline" class="sort-field" subscriptSizing="dynamic">
+        <mat-select [(ngModel)]="sortBy" (selectionChange)="onSortChange()">
+          <mat-option value="recent">Ordenar por: Más recientes</mat-option>
+          <mat-option value="priceAsc">Precio: Menor a mayor</mat-option>
+          <mat-option value="priceDesc">Precio: Mayor a menor</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
-    <!-- categorias (se cargan desde GET /product-categories) -->
-    <mat-chip-listbox
-      class="categorias"
-      aria-label="Categorias de busqueda"
-      hideSingleSelectionIndicator
-      [value]="selectedChip"
-      (change)="onCategoryChange($event.value)">
-      <mat-chip-option class="categoria" [value]="allCategories" [selectable]="selectedChip !== allCategories">
-        Todos
-      </mat-chip-option>
-      @for (category of categories; track category.categoryId) {
-        <mat-chip-option class="categoria" [value]="category.categoryId" [selectable]="selectedChip !== category.categoryId">
-          {{ category.name }}
+    <!-- Chips de categorías -->
+    <div class="categories-row">
+      <mat-chip-listbox aria-label="Categorías de productos">
+        <mat-chip-option
+          [selected]="selectedCategoryId === undefined"
+          (click)="selectCategory(undefined)"
+          class="category-chip"
+        >
+          Todos
         </mat-chip-option>
-      }
-    </mat-chip-listbox>
-  </section>
 
-  @if (loading) {
-    <div class="estado-carga">
-      <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
-      <p>Cargando diseños del catálogo...</p>
-    </div>
-  } @else if (errorMessage) {
-    <div class="estado-carga">
-      <p>{{ errorMessage }}</p>
-      <button mat-stroked-button type="button" (click)="loadProducts(currentPage)">Reintentar</button>
-    </div>
-  } @else {
-    <!--lista de productos (Novedosos)-->
-    <section class="productos">
-      <h2>Diseños Personalizados</h2>
-      <div class="tarjetas-de-productos">
-        @for (product of customProducts; track product.productId) {
-          <ng-container *ngTemplateOutlet="tarjeta; context: { $implicit: product }" />
-        } @empty {
-          <p>No se encontraron productos disponibles.</p>
+        @for (cat of categories; track cat.categoryId) {
+          <mat-chip-option
+            [selected]="selectedCategoryId === cat.categoryId"
+            (click)="selectCategory(cat.categoryId)"
+            class="category-chip"
+          >
+            {{ cat.name }}
+          </mat-chip-option>
         }
-      </div>
+      </mat-chip-listbox>
+    </div>
+  </mat-card>
 
-      <!--paginacion-->
-      @if (totalElements > 0) {
-        <mat-paginator
-          class="paginacion"
-          aria-label="Paginacion de productos"
-          [length]="totalElements"
-          [pageSize]="pageSize"
-          [pageIndex]="currentPage"
-          [hidePageSize]="true"
-          [showFirstLastButtons]="true"
-          (page)="onPageChange($event)">
-        </mat-paginator>
-      }
-    </section>
-
-    <!--lista de productos (Lo más vendidos)-->
-    <section class="productos">
-      <h2>Lo más vendidos</h2>
-      <div class="tarjetas-de-productos">
-        @for (product of bestSellerProducts; track product.productId) {
-          <ng-container *ngTemplateOutlet="tarjeta; context: { $implicit: product }" />
-        } @empty {
-          <p>No se encontraron productos en esta sección.</p>
-        }
-      </div>
-    </section>
+  <!-- Estado de carga -->
+  @if (isLoading) {
+    <div class="state-container">
+      <mat-spinner diameter="44"></mat-spinner>
+      <p>Cargando diseños...</p>
+    </div>
   }
-</main>
 
-<!-- Plantilla de la tarjeta de producto (mat-card) -->
-<ng-template #tarjeta let-product>
-  <mat-card appearance="outlined" class="tarjeta-producto">
-    <div class="imagen-producto" [style.backgroundImage]="getImageUrl(product)">
-      @if (!getImageUrl(product)) {
-        <mat-icon svgIcon="image" class="sin-imagen" aria-hidden="true"></mat-icon>
-      }
+  <!-- Estado de error -->
+  @if (!isLoading && errorMessage) {
+    <div class="state-container error-state">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ errorMessage }}</p>
+      <button mat-stroked-button color="primary" (click)="loadProducts()">Reintentar</button>
+    </div>
+  }
+
+  <!-- Sin resultados -->
+  @if (!isLoading && !errorMessage && products.length === 0) {
+    <div class="state-container">
+      <mat-icon>inventory_2</mat-icon>
+      <p>No se encontraron muebles con los filtros seleccionados.</p>
+    </div>
+  }
+
+  <!-- Contenido del Catálogo -->
+  @if (!isLoading && products.length > 0) {
+    <!-- Sección 1: Lo más novedoso -->
+    <section class="catalog-section">
+      <div class="section-header">
+        <h2>Lo más novedoso</h2>
+        <button mat-button class="view-all-btn" (click)="selectCategory(undefined)">
+          Ver todos
+          <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+        </button>
+      </div>
+
+      <div class="products-grid">
+        @for (product of newestProducts; track product.productId) {
+          <ng-container *ngTemplateOutlet="productCardTpl; context: { $implicit: product }" />
+        }
+      </div>
+    </section>
+
+    <!-- Sección 2: Lo más vendido -->
+    @if (bestSellerProducts.length > 0) {
+      <section class="catalog-section">
+        <div class="section-header">
+          <h2>Lo más vendido</h2>
+          <button mat-button class="view-all-btn" (click)="selectCategory(undefined)">
+            Ver todos
+            <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+          </button>
+        </div>
+
+        <div class="products-grid">
+          @for (product of bestSellerProducts; track product.productId) {
+            <ng-container *ngTemplateOutlet="productCardTpl; context: { $implicit: product }" />
+          }
+        </div>
+      </section>
+    }
+
+    <!-- Paginación -->
+    @if (totalPages > 1) {
+      <nav class="pagination-bar" aria-label="Paginación del catálogo">
+        <button
+          mat-button
+          class="nav-btn"
+          [disabled]="currentPage === 0"
+          (click)="goToPage(currentPage - 1)"
+        >
+          <mat-icon>chevron_left</mat-icon>
+          Anterior
+        </button>
+
+        <div class="page-numbers">
+          @for (p of visiblePages; track $index) {
+            @if (p === '...') {
+              <span class="ellipsis">...</span>
+            } @else {
+              <button
+                mat-button
+                class="page-btn"
+                [class.active]="currentPage === +p"
+                (click)="goToPage(+p)"
+              >
+                {{ +p + 1 }}
+              </button>
+            }
+          }
+        </div>
+
+        <button
+          mat-button
+          class="nav-btn"
+          [disabled]="currentPage >= totalPages - 1"
+          (click)="goToPage(currentPage + 1)"
+        >
+          Siguiente
+          <mat-icon iconPositionEnd>chevron_right</mat-icon>
+        </button>
+      </nav>
+    }
+  }
+</div>
+
+<!-- Template reutilizable para cada tarjeta de producto -->
+<ng-template #productCardTpl let-product>
+  <mat-card class="product-card" [routerLink]="['/producto', product.productId]">
+    <div class="image-wrapper">
+      <img
+        [src]="product.mainImageUrl || product.images?.[0]?.url || 'assets/placeholder-mueble.svg'"
+        [alt]="product.name"
+        loading="lazy"
+      />
+
+      <!-- Botón Favorito -->
       <button
         mat-icon-button
-        type="button"
-        class="favorito"
-        [class.favorito--activo]="isFavorite(product)"
-        [attr.aria-pressed]="isFavorite(product)"
-        [attr.aria-label]="isFavorite(product) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
-        [matTooltip]="isFavorite(product) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
-        (click)="toggleFavorite(product)">
-        <mat-icon [svgIcon]="isFavorite(product) ? 'heart' : 'heart-outline'"></mat-icon>
+        class="fav-btn"
+        (click)="toggleFavorite(product.productId, $event)"
+        aria-label="Agregar a favoritos"
+      >
+        <mat-icon [class.is-fav]="isFavorite(product.productId)">
+          {{ isFavorite(product.productId) ? 'favorite' : 'favorite_border' }}
+        </mat-icon>
       </button>
-      <button mat-button type="button" class="realidad-aumentada" (click)="viewInAR(product)">
-        <mat-icon svgIcon="cube"></mat-icon>
-        Ver en AR
+
+      <!-- Badge Ver en AR -->
+      <button type="button" class="ar-badge" (click)="openAR(product, $event)">
+        <mat-icon>view_in_ar</mat-icon>
+        <span>Ver en AR</span>
       </button>
     </div>
 
-    <mat-card-content class="informacion-producto">
-      <div class="valoracion" [attr.aria-label]="'Valoración ' + (product.rating ?? 0) + ' de 5'">
-        <span class="estrellas">
-          @for (star of stars(product.rating); track $index) {
-            <mat-icon [svgIcon]="starIcon(star)"></mat-icon>
+    <mat-card-content class="card-body">
+      <!-- Rating -->
+      <div class="rating-row">
+        <div class="stars">
+          @for (filled of getStars(product.rating ?? 5); track $index) {
+            <mat-icon class="star-icon" [class.filled]="filled === 1">star</mat-icon>
           }
-        </span>
-        <span class="valoracion-cantidad">({{ product.reviewCount ?? product.stock ?? 0 }})</span>
+        </div>
+        <span class="review-count">({{ product.reviewCount ?? 0 }})</span>
       </div>
-      <h3>{{ product.name }}</h3>
-      <div class="texto-precio">PRECIO ESTIMADO</div>
-      <p class="precio">{{ (product.price ?? 0) | currency: 'PEN' : 's/ ' : '1.2-2' }}</p>
-      <button mat-flat-button type="button" class="agregar-carrito" (click)="addToCart(product)">
-        <mat-icon svgIcon="cart"></mat-icon>
+
+      <!-- Nombre del producto -->
+      <h3 class="product-title" [title]="product.name">
+        {{ product.name }}
+      </h3>
+
+      <!-- Precio -->
+      <div class="price-block">
+        <span class="price-label">PRECIO ESTIMADO</span>
+        <span class="price-value">S/{{ product.price | number: '1.2-2' }}</span>
+      </div>
+
+      <!-- Botón Agregar al carrito -->
+      <button
+        mat-flat-button
+        class="add-cart-btn"
+        (click)="addToCart(product, $event)"
+      >
+        <mat-icon>shopping_cart</mat-icon>
         Agregar al carrito
       </button>
     </mat-card-content>

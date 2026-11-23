@@ -17,7 +17,4 @@ export class ProductDTO {
   mainImageUrl?: string;
   images?: ImageDTO[];
 
-  // Posibles adiciones pero se necesitaria cambiar el service relacionado
-  rating?: number;
-  reviewCount?: number;
 }

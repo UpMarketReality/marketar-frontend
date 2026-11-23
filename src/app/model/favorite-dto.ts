@@ -3,5 +3,6 @@ import {ProductDTO} from './product-dto';
 export class FavoriteDTO {
   favoriteId?: number;
   productId?: number;
-  productDTO?: ProductDTO;
+  // El backend (FavoriteDTO de Spring) envía el producto en el campo "product"
+  product?: ProductDTO;
 }

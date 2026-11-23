@@ -3,7 +3,7 @@
   <section class="view_section">
     <h1 class="page_title">Mis Productos</h1>
 
-    <nav mat-tab-nav-bar class="tabs_nav" aria-label="Secciones de mis productos">
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel1" class="tabs_nav" aria-label="Secciones de mis productos">
       <a mat-tab-link
          routerLink="/perfil-vendedor/productos"
          routerLinkActive
@@ -21,6 +21,7 @@
         Añadir Nuevo
       </a>
     </nav>
+    <mat-tab-nav-panel #tabPanel1></mat-tab-nav-panel>
 
     <div class="toolbar_container">
       <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search_field">
@@ -50,7 +51,7 @@
             <mat-icon matChipAvatar class="status_dot">circle</mat-icon>
             Activo
           </mat-chip>
-          <img mat-card-image src="placeholder.jpg" alt="Armario" class="product_img">
+          <img mat-card-image src="assets/placeholder-mueble.svg" alt="Armario" class="product_img">
         </div>
 
         <mat-card-content class="product_info">
@@ -80,7 +81,7 @@
             <mat-icon matChipAvatar class="status_dot">circle</mat-icon>
             Activo
           </mat-chip>
-          <img mat-card-image src="placeholder.jpg" alt="Escritorio" class="product_img">
+          <img mat-card-image src="assets/placeholder-mueble.svg" alt="Escritorio" class="product_img">
         </div>
 
         <mat-card-content class="product_info">
