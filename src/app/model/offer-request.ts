@@ -2,6 +2,6 @@ export class OfferRequest {
   amount?: number;
   currency?: string;
   deliveryDays?: number;
-  expiresAt?: number;
+  expiresAt?: string;
   conditions?: string;
 }

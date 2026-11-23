@@ -485,6 +485,184 @@
   --mat-button-filled-hover-state-layer-color: #ffffff;
 }
 
+
+/* =========================================
+   NUEVAS SOLICITUDES (US24)
+========================================= */
+
+/* Paleta de campos y selects, igual que el filtro de fechas */
+.panel_card {
+  --mat-form-field-container-text-size: 13px;
+  --mat-form-field-outlined-outline-color: #e2e8f0;
+  --mat-form-field-outlined-hover-outline-color: #cbd5e1;
+  --mat-form-field-outlined-focus-outline-color: #00bfb3;
+  --mat-select-trigger-text-size: 13px;
+  --mat-select-enabled-trigger-text-color: #1e293b;
+  --mat-select-enabled-arrow-color: #64748b;
+  --mat-select-focused-arrow-color: #00bfb3;
+}
+
+.panel_card ::ng-deep .mdc-floating-label,
+.panel_card ::ng-deep .mdc-text-field__input {
+  font-size: 13px;
+}
+
+.filtro_categoria {
+  width: 220px;
+}
+
+.error_texto {
+  color: #bc3039;
+}
+
+.mensaje_oferta {
+  margin: -8px 0 20px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #e3f9f7;
+  color: #007e77;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.mensaje_oferta_error {
+  background: #fff6f6;
+  color: #bc3039;
+  border: 1px solid #fecaca;
+}
+
+.fila_clicable {
+  cursor: pointer;
+}
+
+.tabla_cotizaciones .mat-mdc-row.fila_activa {
+  background-color: #e3f9f7;
+}
+
+/* Paginación con botones de la app */
+.paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px;
+  font-size: 13px;
+  color: #64748b;
+  --mat-button-outlined-label-text-color: #007e77;
+  --mat-button-outlined-outline-color: #00bfb3;
+  --mat-button-outlined-label-text-size: 13px;
+  --mat-button-outlined-label-text-weight: 600;
+  --mat-button-outlined-container-shape: 5px;
+}
+
+/* Detalle de la solicitud */
+.detalle_cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.detalle_cabecera h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #007e77;
+}
+
+.detalle_cabecera button {
+  --mat-icon-button-icon-color: #64748b;
+}
+
+.detalle_titulo {
+  margin: 4px 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.dato {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.dato strong {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.bloque_texto {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.bloque_texto p {
+  margin: 4px 0 0;
+  word-break: break-word;
+  color: #1e293b;
+}
+
+.etiqueta {
+  font-size: 12px;
+  font-weight: 600;
+  color: #007e77;
+}
+
+.miniaturas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.miniaturas img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #e2e8f0;
+}
+
+.subtitulo_seccion {
+  margin: 16px 0 4px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* Formulario de oferta */
+.form_oferta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.campo_completo {
+  grid-column: 1 / -1;
+}
+
+.acciones_oferta {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 8px;
+  --mat-button-filled-container-color: #00bfb3;
+  --mat-button-filled-label-text-color: #ffffff;
+  --mat-button-filled-hover-state-layer-color: #ffffff;
+  --mat-button-filled-label-text-size: 13px;
+  --mat-button-filled-label-text-weight: 600;
+  --mat-button-filled-container-shape: 5px;
+}
+
+@media (max-width: 700px) {
+  .form_oferta {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* =========================================
    FILTRO DE FECHAS
 ========================================= */
