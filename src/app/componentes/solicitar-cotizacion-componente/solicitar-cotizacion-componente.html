@@ -22,6 +22,19 @@
       </div>
     }
 
+    @if (errorVerificacion) {
+      <div class="alert error" role="alert">
+        {{ errorVerificacion }}
+      </div>
+    }
+
+    @if (verificandoCotizacion) {
+      <div class="info-note" role="status">
+        Verificando si este diseño ya tiene una cotización...
+      </div>
+    }
+
+
     @if (cargandoPrototipo) {
       <div class="loading-box" role="status">
         Cargando la información del diseño...
@@ -252,17 +265,35 @@
                 Cancelar
               </a>
 
-              <button
-                type="submit"
-                class="btn-primary"
-                [disabled]="!puedeCotizar || enviando"
-              >
-                @if (enviando) {
-                  Enviando solicitud...
-                } @else {
-                  Enviar a cotizar
-                }
-              </button>
+
+              @if (cotizacionExistente; as existente) {
+
+                <a
+                  class="btn-primary"
+                  routerLink="/perfil-comprador/cotizacion"
+                  [queryParams]="{
+                  requestId: existente.requestId
+                  }"
+                >
+                  Ver cotización existente
+                </a>
+
+              } @else {
+
+                <button
+                  type="submit"
+                  class="btn-primary"
+                  [disabled]="!puedeCotizar"
+                >
+                  @if (enviando) {
+                    Enviando solicitud...
+                  } @else {
+                    Enviar a cotizar
+                  }
+                </button>
+
+              }
+
             </div>
 
           </form>

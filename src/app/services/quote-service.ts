@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 import { QuoteRequestDTO } from '../model/quote-request-dto';
 import { CreateQuoteRequest } from '../model/create-quote-request';
 import { PageDTO } from '../model/page-dto';
@@ -39,6 +39,31 @@ export class QuoteService {
       params,
     });
   }
+
+  getAllMyQuoteRequests(
+    page: number = 0
+  ): Observable<QuoteRequestDTO[]> {
+
+    return this.getMyQuoteRequests(page, 100).pipe(
+      switchMap((respuesta) => {
+        const cotizaciones = respuesta.content ?? [];
+        const totalPaginas = respuesta.totalPages ?? 0;
+
+        // Si existen más páginas, continuamos consultando.
+        if (page + 1 < totalPaginas) {
+          return this.getAllMyQuoteRequests(page + 1).pipe(
+            map((siguientes) => [
+              ...cotizaciones,
+              ...siguientes
+            ])
+          );
+        }
+
+        return of(cotizaciones);
+      })
+    );
+  }
+
 
   // 2. GET /api/v1/seller/quote-requests/{requestId}
   getSellerQuoteRequestDetail(requestId: number): Observable<QuoteRequestDTO> {

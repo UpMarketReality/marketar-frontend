@@ -50,6 +50,7 @@ type StarType = 'full' | 'half' | 'empty';
 export class DisenosGuardados implements OnInit, OnDestroy {
   private readonly commerceService = inject(CommerceService);
   private readonly prototypeService = inject(PrototypeService);
+  private readonly quoteService = inject(QuoteService);
   private readonly cartService = inject(CartService);
   private readonly recentlyViewedService = inject(RecentlyViewedService);
   private readonly authService = inject(AuthService);
@@ -90,13 +91,19 @@ export class DisenosGuardados implements OnInit, OnDestroy {
       return;
     }
 
-    this.prototypeService
-      .getMyPrototypes(0, 20)
+    forkJoin({
+      paginaPrototipos: this.prototypeService.getMyPrototypes(0, 20),
+      cotizaciones: this.quoteService.getAllMyQuoteRequests(),
+    })
       .pipe(
-        switchMap((page) => {
-          const prototipos = page.content ?? [];
+        switchMap(({ paginaPrototipos, cotizaciones }) => {
+          const prototipos = paginaPrototipos.content ?? [];
 
-          const solicitudes = prototipos.map((prototipo) => {
+          // Relacionamos cada prototipo con la solicitud más reciente.
+          this.quotesByPrototype = this.latestQuoteByPrototype(cotizaciones);
+
+          // Conservamos la carga de imágenes que ya existía.
+          const solicitudesImagen = prototipos.map((prototipo) => {
             const imagen =
               prototipo.generationStatus === 'COMPLETADO'
                 ? (prototipo.images?.find((i) => i.principal) ?? prototipo.images?.[0])
@@ -130,14 +137,17 @@ export class DisenosGuardados implements OnInit, OnDestroy {
             );
           });
 
-          if (solicitudes.length === 0) {
+          if (solicitudesImagen.length === 0) {
             return of({
               prototipos,
-              imagenes: [],
+              imagenes: [] as Array<{
+                id: number;
+                url: string;
+              } | null>,
             });
           }
 
-          return forkJoin(solicitudes).pipe(
+          return forkJoin(solicitudesImagen).pipe(
             map((imagenes) => ({
               prototipos,
               imagenes,
@@ -156,7 +166,7 @@ export class DisenosGuardados implements OnInit, OnDestroy {
         next: ({ prototipos, imagenes }) => {
           this.prototypes = prototipos;
 
-          // Liberar imágenes anteriores si recargamos la lista.
+          // Liberamos las imágenes de la carga anterior.
           this.liberarImagenes();
 
           for (const imagen of imagenes) {
@@ -169,9 +179,11 @@ export class DisenosGuardados implements OnInit, OnDestroy {
         },
 
         error: (error) => {
-          console.error('Error cargando diseños:', error);
+          console.error('Error cargando diseños y cotizaciones:', error);
 
-          this.errorMessage = 'No se pudieron recuperar tus diseños.';
+          // No mostramos "Sin cotizar" si falló la consulta.
+          this.errorMessage =
+            'No se pudo recuperar el estado de tus diseños. ' + 'Inténtalo nuevamente.';
 
           this.cdr.markForCheck();
         },
@@ -311,33 +323,55 @@ export class DisenosGuardados implements OnInit, OnDestroy {
   }
 
   quoteStatusLabel(quote?: QuoteRequestDTO): string {
-    if (!quote) return 'Sin cotizar';
-    const offers = quote.offerCount ?? 0;
-    const offersText = offers === 1 ? '1 Oferta' : `${offers} Ofertas`;
-    switch ((quote.status ?? '').toUpperCase()) {
-      case 'OPEN':
-      case 'PENDING':
-      case 'IN_PROGRESS':
-        return offers > 0 ? `En Proceso (${offersText})` : 'Esperando ofertas';
-      case 'ACCEPTED':
-      case 'COMPLETED':
+    if (!quote) {
+      return 'Sin cotizar';
+    }
+
+    const cantidad = quote.offerCount ?? 0;
+
+    switch (quote.status) {
+      case 'EN_COTIZACION':
+        return 'En cotización';
+
+      case 'COTIZADA':
+        return cantidad === 1 ? 'Cotizado · 1 oferta' : `Cotizado · ${cantidad} ofertas`;
+
+      case 'ACEPTADA':
         return 'Oferta aceptada';
-      case 'CANCELLED':
-      case 'CANCELED':
+
+      case 'COMPLETADA':
+        return 'Completada';
+
+      case 'CANCELADA':
         return 'Cancelada';
-      case 'EXPIRED':
-        return 'Expirada';
+
       default:
-        return quote.status ?? 'Sin estado';
+        return quote.status ?? 'Estado desconocido';
     }
   }
 
   // Clase de color del estado: en-proceso (naranja), aceptada (verde), inactiva (gris)
+
   quoteStatusClass(quote?: QuoteRequestDTO): string {
-    const status = (quote?.status ?? '').toUpperCase();
-    if (['ACCEPTED', 'COMPLETED'].includes(status)) return 'estado--aceptada';
-    if (['CANCELLED', 'CANCELED', 'EXPIRED'].includes(status) || !quote) return 'estado--inactiva';
-    return 'estado--proceso';
+    if (!quote) {
+      return 'estado--inactiva';
+    }
+
+    switch (quote.status) {
+      case 'EN_COTIZACION':
+      case 'COTIZADA':
+        return 'estado--proceso';
+
+      case 'ACEPTADA':
+      case 'COMPLETADA':
+        return 'estado--aceptada';
+
+      case 'CANCELADA':
+        return 'estado--inactiva';
+
+      default:
+        return 'estado--inactiva';
+    }
   }
 
   goToQuotes(item: Extract<SavedItem, { kind: 'prototype' }>): void {

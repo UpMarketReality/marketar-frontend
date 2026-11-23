@@ -10,6 +10,7 @@ import { QuoteService } from '../../services/quote-service';
 import { PrototypeService } from '../../services/prototype-service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { QuoteRequestDTO } from '../../model/quote-request-dto';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
@@ -26,6 +27,10 @@ export class SolicitarCotizacionComponente implements OnInit, OnDestroy {
   private readonly usuarioService = inject(UsuarioService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly cdr = inject(ChangeDetectorRef);
+
+  cotizacionExistente: QuoteRequestDTO | null = null;
+  verificandoCotizacion = true;
+  errorVerificacion = '';
 
   prototipo: PrototypeDTO | null = null;
   imagenUrl: string | null = null;
@@ -54,6 +59,9 @@ export class SolicitarCotizacionComponente implements OnInit, OnDestroy {
     return (
       !this.cargandoPrototipo &&
       !this.enviando &&
+      !this.verificandoCotizacion &&
+      !this.errorVerificacion &&
+      !this.cotizacionExistente &&
       this.prototipo?.generationStatus === 'COMPLETADO' &&
       (this.prototipo.images?.length ?? 0) > 0
     );
@@ -74,12 +82,16 @@ export class SolicitarCotizacionComponente implements OnInit, OnDestroy {
 
     if (!Number.isSafeInteger(id) || id <= 0) {
       this.cargandoPrototipo = false;
+      this.verificandoCotizacion = false;
       this.mensajeError = 'El identificador del diseño no es válido.';
       return;
     }
 
     this.cargarPrototipo(id);
     this.cargarDireccionGuardada();
+
+    // Verificación adicional antes de permitir cotizar.
+    this.verificarCotizacionExistente(id);
   }
 
   private cargarPrototipo(id: number): void {
@@ -284,6 +296,40 @@ export class SolicitarCotizacionComponente implements OnInit, OnDestroy {
       default:
         return typeof error.error?.message === 'string' ? error.error.message : mensajeDefault;
     }
+  }
+
+  private verificarCotizacionExistente(prototypeId: number): void {
+    this.verificandoCotizacion = true;
+    this.errorVerificacion = '';
+    this.cotizacionExistente = null;
+
+    this.quoteService
+      .getAllMyQuoteRequests()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+
+        finalize(() => {
+          this.verificandoCotizacion = false;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (cotizaciones) => {
+          this.cotizacionExistente =
+            cotizaciones.find((c) => c.prototypeId === prototypeId) ?? null;
+
+          this.cdr.markForCheck();
+        },
+
+        error: (error: HttpErrorResponse) => {
+          this.errorVerificacion = this.mensajeHttp(
+            error,
+            'No se pudo verificar si el diseño ya está cotizado.',
+          );
+
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   ngOnDestroy(): void {
