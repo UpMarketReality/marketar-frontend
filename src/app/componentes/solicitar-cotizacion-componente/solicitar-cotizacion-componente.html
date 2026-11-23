@@ -1,0 +1,284 @@
+
+<main class="quote-create-page">
+  <div class="quote-container">
+
+    <nav class="breadcrumb" aria-label="Navegación">
+      <a routerLink="/disenos-guardados">Mis diseños</a>
+      <span aria-hidden="true">/</span>
+      <span>Solicitar cotización</span>
+    </nav>
+
+    <header class="page-header">
+      <h1>Solicita una <span>cotización</span></h1>
+      <p>
+        Comparte tu diseño con nuestros fabricantes y
+        recibe diferentes propuestas de fabricación.
+      </p>
+    </header>
+
+    @if (mensajeError) {
+      <div class="alert error" role="alert">
+        {{ mensajeError }}
+      </div>
+    }
+
+    @if (cargandoPrototipo) {
+      <div class="loading-box" role="status">
+        Cargando la información del diseño...
+      </div>
+    } @else if (prototipo) {
+
+      <div class="quote-layout">
+
+        <!-- RESUMEN DEL PROTOTIPO -->
+        <section class="card preview-card">
+          <h2>Tu diseño personalizado</h2>
+          <p class="section-description">
+            Este diseño será enviado como referencia
+            a los fabricantes.
+          </p>
+
+          <div class="preview-image">
+            @if (imagenUrl) {
+              <img
+                [src]="imagenUrl"
+                [alt]="'Diseño generado: ' + prototipo.name"
+              />
+            } @else {
+              <div class="image-placeholder" role="status">
+                {{ mensajeImagen || 'Vista previa no disponible' }}
+              </div>
+            }
+          </div>
+
+          <div class="product-info">
+            <span class="eyebrow">DISEÑO GENERADO CON IA</span>
+            <h3>{{ prototipo.name }}</h3>
+
+            <div class="meta-row">
+              <span>Identificador</span>
+              <strong>#{{ prototipo.prototypeId }}</strong>
+            </div>
+
+            <div class="meta-row">
+              <span>Estado</span>
+              <strong
+                [class.ready]="
+                  prototipo.generationStatus === 'COMPLETADO'
+                "
+              >
+                {{ prototipo.generationStatus }}
+              </strong>
+            </div>
+
+            <details class="specifications">
+              <summary>Ver especificaciones del diseño</summary>
+              <pre>{{ especificaciones }}</pre>
+            </details>
+
+            <div class="info-note">
+              La imagen es referencial. El precio y tiempo
+              de fabricación serán propuestos por cada vendedor.
+            </div>
+          </div>
+        </section>
+
+        <!-- FORMULARIO REACTIVO -->
+        <section class="card form-card">
+          <div class="form-heading">
+            <div class="step-number">1</div>
+            <div>
+              <h2>Datos de tu solicitud</h2>
+              <p>
+                Completa cómo y dónde deseas recibir el producto.
+              </p>
+            </div>
+          </div>
+
+          <form
+            [formGroup]="formulario"
+            (ngSubmit)="enviarCotizacion()"
+            novalidate
+          >
+
+            <!-- CANTIDAD -->
+            <div class="form-group">
+              <label for="quantity">
+                Cantidad solicitada <span>*</span>
+              </label>
+
+              <input
+                id="quantity"
+                type="number"
+                min="1"
+                step="1"
+                formControlName="quantity"
+                [attr.aria-invalid]="
+                  controles.quantity.invalid &&
+                  controles.quantity.touched
+                "
+              />
+
+              <p class="field-help">
+                Número de unidades que deseas fabricar.
+              </p>
+
+              @if (
+                controles.quantity.invalid &&
+                controles.quantity.touched
+                ) {
+                <small class="field-error">
+                  Ingresa una cantidad entera mayor que cero.
+                </small>
+              }
+            </div>
+
+            <!-- DIRECCIÓN -->
+            <div class="form-group">
+              <label for="deliveryAddress">
+                Dirección de entrega <span>*</span>
+              </label>
+
+              <input
+                id="deliveryAddress"
+                type="text"
+                formControlName="deliveryAddress"
+                maxlength="300"
+                placeholder="Av., calle, número y referencia"
+                [attr.aria-invalid]="
+                  controles.deliveryAddress.invalid &&
+                  controles.deliveryAddress.touched
+                "
+              />
+
+              @if (
+                controles.deliveryAddress.invalid &&
+                controles.deliveryAddress.touched
+                ) {
+                <small class="field-error">
+                  Ingresa una dirección de hasta 300 caracteres.
+                </small>
+              }
+            </div>
+
+            <!-- ZONA DE ENTREGA -->
+            <div class="form-group">
+              <label for="deliveryZone">
+                Zona de entrega <span>*</span>
+              </label>
+
+              <input
+                id="deliveryZone"
+                type="text"
+                formControlName="deliveryZone"
+                maxlength="150"
+                placeholder="Ej.: San Miguel, Lima"
+                [attr.aria-invalid]="
+                  controles.deliveryZone.invalid &&
+                  controles.deliveryZone.touched
+                "
+              />
+
+              <p class="field-help">
+                Indica el distrito y la ciudad donde deseas
+                recibir el producto.
+              </p>
+
+              @if (
+                controles.deliveryZone.invalid &&
+                controles.deliveryZone.touched
+                ) {
+                <small class="field-error">
+                  Ingresa una zona de entrega válida.
+                </small>
+              }
+            </div>
+
+            <!-- CONDICIONES -->
+            <div class="form-group">
+              <label for="deliveryConditions">
+                Condiciones y observaciones <span>*</span>
+              </label>
+
+              <textarea
+                id="deliveryConditions"
+                rows="5"
+                maxlength="1000"
+                formControlName="deliveryConditions"
+                placeholder="Ej.: Coordinar la entrega con anticipación. El producto debe llegar armado."
+                [attr.aria-invalid]="
+                  controles.deliveryConditions.invalid &&
+                  controles.deliveryConditions.touched
+                "
+              ></textarea>
+
+              <div class="field-footer">
+                <span>
+                  Información adicional para los fabricantes.
+                </span>
+                <span>
+                  {{
+                    controles.deliveryConditions.value.length
+                  }}/1000
+                </span>
+              </div>
+
+              @if (
+                controles.deliveryConditions.invalid &&
+                controles.deliveryConditions.touched
+                ) {
+                <small class="field-error">
+                  Ingresa las condiciones de entrega.
+                </small>
+              }
+            </div>
+
+            <!-- AVISO -->
+            <div class="info-banner">
+              <strong>¿Qué sucede después?</strong>
+              <p>
+                Los fabricantes podrán revisar tu diseño
+                y enviarte propuestas con precio, plazo
+                y condiciones. Tú decidirás cuál aceptar.
+              </p>
+            </div>
+
+            <!-- ACCIONES -->
+            <div class="form-actions">
+              <a
+                routerLink="/disenos-guardados"
+                class="btn-secondary"
+              >
+                Cancelar
+              </a>
+
+              <button
+                type="submit"
+                class="btn-primary"
+                [disabled]="!puedeCotizar || enviando"
+              >
+                @if (enviando) {
+                  Enviando solicitud...
+                } @else {
+                  Enviar a cotizar
+                }
+              </button>
+            </div>
+
+          </form>
+        </section>
+
+      </div>
+
+    } @else {
+      <div class="empty-state">
+        No se pudo cargar el diseño seleccionado.
+        <a routerLink="/disenos-guardados">
+          Volver a Mis diseños
+        </a>
+      </div>
+    }
+
+  </div>
+</main>
+
