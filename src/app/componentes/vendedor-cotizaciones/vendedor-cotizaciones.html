@@ -1,6 +1,6 @@
 <section class="view_section">
 
-  <!-- CABECERA: pestañas principales y botones -->
+  <!-- CABECERA: pestañas principales y acciones de finanzas -->
   <div class="cabecera">
 
     <nav mat-tab-nav-bar [tabPanel]="tabPanel1" class="tabs_principales" aria-label="Módulos del vendedor">
@@ -17,12 +17,7 @@
     </nav>
     <mat-tab-nav-panel #tabPanel1></mat-tab-nav-panel>
 
-    @if (pestanaPrincipal === 'cotizaciones') {
-      <button matButton="filled" type="button" class="boton_nueva">
-        <mat-icon>add</mat-icon>
-        Nueva Propuesta
-      </button>
-    } @else {
+    @if (pestanaPrincipal === 'finanzas') {
       <div class="acciones">
         <button matButton="outlined" type="button">
           <mat-icon>download</mat-icon>
@@ -74,7 +69,7 @@
       @for (pestana of pestanas; track pestana.estado) {
         <a mat-tab-link
            [active]="pestanaCotizacion === pestana.estado"
-           (click)="pestanaCotizacion = pestana.estado">
+           (click)="cambiarPestana(pestana.estado)">
           {{ pestana.etiqueta }}
           <span class="contador"
                 [class.contador_verde]="pestana.estado === 'Nueva Solicitud'"
@@ -86,68 +81,241 @@
     </nav>
     <mat-tab-nav-panel #tabPanel2></mat-tab-nav-panel>
 
+    <!-- Mensaje de la oferta (éxito o error) -->
+    @if (mensajeOferta) {
+      <p class="mensaje_oferta"
+         [class.mensaje_oferta_error]="tipoMensajeOferta === 'error'"
+         role="status">
+        {{ mensajeOferta }}
+      </p>
+    }
+
     <div class="main_grid">
 
-      <!-- Tabla de solicitudes -->
+      <!-- Lista: solicitudes reales o tabla local según la pestaña -->
       <mat-card appearance="outlined" class="panel_card">
-        <div class="panel_header">
-          <span class="panel_title">
-            <mat-icon class="panel_title_icon">inbox</mat-icon>
-            {{ pestanaActual.titulo }}
-          </span>
-        </div>
 
-        <div class="tabla_wrap">
-          <table mat-table [dataSource]="cotizacionesFiltradas" class="tabla_cotizaciones">
+        @if (pestanaCotizacion === 'Nueva Solicitud') {
 
-            <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef>ID Solicitud</th>
-              <td mat-cell *matCellDef="let c" class="celda_id">#{{ c.id }}</td>
-            </ng-container>
+          <div class="panel_header">
+            <span class="panel_title">
+              <mat-icon class="panel_title_icon">inbox</mat-icon>
+              Nuevas Solicitudes
+            </span>
 
-            <ng-container matColumnDef="cliente">
-              <th mat-header-cell *matHeaderCellDef>Cliente</th>
-              <td mat-cell *matCellDef="let c">
-                <div class="cliente_celda">
-                  <span class="avatar">{{ iniciales(c.cliente) }}</span>
-                  {{ c.cliente }}
-                </div>
-              </td>
-            </ng-container>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="filtro_categoria">
+              <mat-label>Categoría</mat-label>
+              <mat-select [(ngModel)]="categoriaId" (ngModelChange)="cambiarCategoria()">
+                <mat-option [value]="null">Todas</mat-option>
+                @for (categoria of categorias; track categoria.categoryId) {
+                  <mat-option [value]="categoria.categoryId">{{ categoria.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-            <ng-container matColumnDef="proyecto">
-              <th mat-header-cell *matHeaderCellDef>Proyecto</th>
-              <td mat-cell *matCellDef="let c">{{ c.proyecto }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="fecha">
-              <th mat-header-cell *matHeaderCellDef>Fecha</th>
-              <td mat-cell *matCellDef="let c" class="celda_fecha">{{ c.fecha }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="estado">
-              <th mat-header-cell *matHeaderCellDef>Estado</th>
-              <td mat-cell *matCellDef="let c">
-                <span [class]="'estado ' + claseEstado(c.estado)">{{ c.estado }}</span>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="columnasCotizaciones"></tr>
-            <tr mat-row *matRowDef="let row; columns: columnasCotizaciones"></tr>
-          </table>
-
-          @if (cotizacionesFiltradas.length === 0) {
-            <p class="sin_datos">No hay solicitudes en esta categoría.</p>
+          @if (errorSolicitudes) {
+            <p class="sin_datos error_texto" role="alert">{{ errorSolicitudes }}</p>
           }
-        </div>
+
+          <div class="tabla_wrap">
+            @if (cargandoSolicitudes) {
+              <p class="sin_datos">Cargando solicitudes...</p>
+            } @else if (solicitudes.length === 0) {
+              <p class="sin_datos">No hay solicitudes abiertas en esta categoría.</p>
+            } @else {
+
+              <table mat-table [dataSource]="solicitudes" class="tabla_cotizaciones">
+
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <td mat-cell *matCellDef="let s" class="celda_id">#{{ s.requestId }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="proyecto">
+                  <th mat-header-cell *matHeaderCellDef>Producto</th>
+                  <td mat-cell *matCellDef="let s">{{ s.prototype }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="cantidad">
+                  <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+                  <td mat-cell *matCellDef="let s">{{ s.quantity }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="ofertas">
+                  <th mat-header-cell *matHeaderCellDef>Ofertas</th>
+                  <td mat-cell *matCellDef="let s">{{ s.offerCount }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="fecha">
+                  <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                  <td mat-cell *matCellDef="let s" class="celda_fecha">{{ s.createdAt | date:'dd/MM/yyyy' }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="estado">
+                  <th mat-header-cell *matHeaderCellDef>Estado</th>
+                  <td mat-cell *matCellDef="let s">
+                    <span [class]="'estado ' + claseEstadoSolicitud(s.status)">
+                      {{ etiquetaEstadoSolicitud(s.status) }}
+                    </span>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnasSolicitudes"></tr>
+                <tr mat-row *matRowDef="let fila; columns: columnasSolicitudes"
+                    class="fila_clicable"
+                    [class.fila_activa]="seleccionada?.requestId === fila.requestId"
+                    (click)="verDetalle(fila)"></tr>
+              </table>
+
+              <div class="paginacion">
+                <button matButton="outlined" type="button"
+                        [disabled]="pagina === 0 || cargandoDetalle"
+                        (click)="paginaAnterior()">
+                  Anterior
+                </button>
+                <span>Página {{ pagina + 1 }} de {{ totalPaginas }}</span>
+                <button matButton="outlined" type="button"
+                        [disabled]="pagina >= totalPaginas - 1 || cargandoDetalle"
+                        (click)="paginaSiguiente()">
+                  Siguiente
+                </button>
+              </div>
+            }
+          </div>
+
+        } @else {
+
+          <div class="panel_header">
+            <span class="panel_title">
+              <mat-icon class="panel_title_icon">inbox</mat-icon>
+              {{ pestanaActual.titulo }}
+            </span>
+          </div>
+
+          <div class="tabla_wrap">
+            <table mat-table [dataSource]="cotizacionesFiltradas" class="tabla_cotizaciones">
+
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>ID Solicitud</th>
+                <td mat-cell *matCellDef="let c" class="celda_id">#{{ c.id }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="cliente">
+                <th mat-header-cell *matHeaderCellDef>Cliente</th>
+                <td mat-cell *matCellDef="let c">
+                  <div class="cliente_celda">
+                    <span class="avatar">{{ iniciales(c.cliente) }}</span>
+                    {{ c.cliente }}
+                  </div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="proyecto">
+                <th mat-header-cell *matHeaderCellDef>Proyecto</th>
+                <td mat-cell *matCellDef="let c">{{ c.proyecto }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                <td mat-cell *matCellDef="let c" class="celda_fecha">{{ c.fecha }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef>Estado</th>
+                <td mat-cell *matCellDef="let c">
+                  <span [class]="'estado ' + claseEstado(c.estado)">{{ c.estado }}</span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="columnasCotizaciones"></tr>
+              <tr mat-row *matRowDef="let row; columns: columnasCotizaciones"></tr>
+            </table>
+
+            @if (cotizacionesFiltradas.length === 0) {
+              <p class="sin_datos">No hay solicitudes en esta categoría.</p>
+            }
+          </div>
+
+        }
+
       </mat-card>
 
-      <!-- Panel de detalle -->
+      <!-- Panel de detalle y formulario de oferta -->
       <mat-card appearance="outlined" class="panel_card detalle_card">
-        <div class="detalle_vacio">
-          <mat-icon>inbox</mat-icon>
-          <p>Selecciona una solicitud para ver sus detalles.</p>
-        </div>
+
+        @if (cargandoDetalle) {
+          <div class="detalle_vacio">
+            <p>Cargando solicitud...</p>
+          </div>
+        } @else if (seleccionada) {
+
+          <div class="detalle_cabecera">
+            <h2>Solicitud #{{ seleccionada.requestId }}</h2>
+            <button matButton type="button" aria-label="Cerrar detalle" (click)="cerrarDetalle()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          <h3 class="detalle_titulo">{{ seleccionada.prototype }}</h3>
+
+          <p class="dato">Cantidad: <strong>{{ seleccionada.quantity }}</strong></p>
+          <p class="dato">Zona de entrega: <strong>{{ seleccionada.deliveryZone }}</strong></p>
+          <p class="dato">Condiciones de entrega: <strong>{{ seleccionada.deliveryConditions }}</strong></p>
+
+          @if (seleccionada.specifications) {
+            <div class="bloque_texto">
+              <span class="etiqueta">Especificaciones</span>
+              <p>{{ seleccionada.specifications }}</p>
+            </div>
+          }
+
+          @if (seleccionada.images && seleccionada.images.length > 0) {
+            <div class="miniaturas">
+              @for (imagen of seleccionada.images; track imagen) {
+                <img [src]="imagen" alt="Imagen de referencia">
+              }
+            </div>
+          }
+
+          <h3 class="subtitulo_seccion">Presentar oferta</h3>
+
+          <div class="form_oferta">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Monto total (S/)</mat-label>
+              <input matInput type="number" min="0" step="0.01" [(ngModel)]="monto">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Plazo de entrega (días)</mat-label>
+              <input matInput type="number" min="1" step="1" [(ngModel)]="plazoDias">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Oferta válida hasta</mat-label>
+              <input matInput type="date" [min]="fechaMinima" [(ngModel)]="vencimiento">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo_completo">
+              <mat-label>Condiciones de la oferta</mat-label>
+              <textarea matInput rows="3" [maxlength]="maximoCondiciones" [(ngModel)]="condiciones"></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="acciones_oferta">
+            <button matButton="filled" type="button" [disabled]="enviando" (click)="enviarOferta()">
+              <mat-icon>send</mat-icon>
+              {{ enviando ? 'Enviando...' : 'Enviar oferta' }}
+            </button>
+          </div>
+
+        } @else {
+          <div class="detalle_vacio">
+            <mat-icon>inbox</mat-icon>
+            <p>Selecciona una solicitud para ver sus detalles.</p>
+          </div>
+        }
+
       </mat-card>
 
     </div>
