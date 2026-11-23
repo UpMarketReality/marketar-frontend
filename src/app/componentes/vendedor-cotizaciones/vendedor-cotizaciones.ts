@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { forkJoin, finalize } from 'rxjs';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatCard } from '@angular/material/card';
@@ -18,14 +19,7 @@ import { SalesReportDTO } from '../../model/sales-report-dto';
 import { QuoteRequestDTO } from '../../model/quote-request-dto';
 import { CategoryDTO } from '../../model/category-dto';
 import { OfferRequest } from '../../model/offer-request';
-
-interface Cotizacion {
-  id: string;
-  cliente: string;
-  proyecto: string;
-  fecha: string;
-  estado: string;
-}
+import { OfferDTO } from '../../model/offer-dto';
 
 interface Movimiento {
   fecha: string;
@@ -45,6 +39,7 @@ interface Pestana {
   imports: [
     FormsModule,
     DatePipe,
+    DecimalPipe,
     MatTabNav,
     MatTabLink,
     MatTableModule,
@@ -91,8 +86,7 @@ export class VendedorCotizaciones implements OnInit {
   // Pestaña financiera: movimientos o retiros
   pestanaFinanzas = 'movimientos';
 
-  // Solo las pestañas Enviadas, Aceptadas y Rechazadas usan estos datos (aún sin endpoint)
-  cotizaciones: Cotizacion[] = [];
+  // Estos datos aún no tienen endpoint en finanzas
   movimientos: Movimiento[] = [];
 
   // NUEVAS SOLICITUDES (API: solicitudes abiertas)
@@ -104,6 +98,17 @@ export class VendedorCotizaciones implements OnInit {
   pagina = 0;
   totalPaginas = 0;
   totalSolicitudes = 0;
+
+  // OFERTAS DEL VENDEDOR (API): pestaña -> estado del backend
+  readonly estadoOferta: Record<string, string> = {
+    Enviada: 'PENDIENTE',
+    Aceptada: 'ACEPTADA',
+    Rechazada: 'RECHAZADA',
+  };
+  conteoOfertas: Record<string, number> = { Enviada: 0, Aceptada: 0, Rechazada: 0 };
+  ofertas: OfferDTO[] = [];
+  cargandoOfertas = false;
+  errorOfertas = '';
 
   // SOLICITUD ABIERTA Y FORMULARIO DE OFERTA
   seleccionada: QuoteRequestDTO | null = null;
@@ -121,13 +126,13 @@ export class VendedorCotizaciones implements OnInit {
   // Estructura fija
   readonly pestanas: Pestana[] = [
     { estado: 'Nueva Solicitud', etiqueta: 'Nuevas Solicitudes', titulo: 'Nuevas Solicitudes' },
-    { estado: 'Enviada', etiqueta: 'Enviadas', titulo: 'Cotizaciones Enviadas' },
-    { estado: 'Aceptada', etiqueta: 'Aceptadas', titulo: 'Cotizaciones Aceptadas' },
-    { estado: 'Rechazada', etiqueta: 'Rechazadas', titulo: 'Cotizaciones Rechazadas' },
+    { estado: 'Enviada', etiqueta: 'Enviadas', titulo: 'Ofertas Enviadas' },
+    { estado: 'Aceptada', etiqueta: 'Aceptadas', titulo: 'Ofertas Aceptadas' },
+    { estado: 'Rechazada', etiqueta: 'Rechazadas', titulo: 'Ofertas Rechazadas' },
   ];
 
   readonly columnasSolicitudes = ['id', 'proyecto', 'cantidad', 'ofertas', 'fecha', 'estado'];
-  readonly columnasCotizaciones = ['id', 'cliente', 'proyecto', 'fecha', 'estado'];
+  readonly columnasOfertas = ['id', 'monto', 'plazo', 'vence', 'estado'];
   readonly columnasMovimientos = ['fecha', 'concepto', 'referencia', 'monto', 'estado'];
 
   ngOnInit(): void {
@@ -141,8 +146,9 @@ export class VendedorCotizaciones implements OnInit {
       },
     });
 
-    // Se carga al entrar para mostrar el contador de la pestaña
+    // Se cargan al entrar para mostrar los contadores de las pestañas
     this.cargarSolicitudes(0);
+    this.cargarConteosOfertas();
   }
 
   // Verdadero si el inicio es posterior al fin
@@ -165,11 +171,6 @@ export class VendedorCotizaciones implements OnInit {
   // Pestaña de estado que está activa
   get pestanaActual(): Pestana {
     return this.pestanas.find((p) => p.estado === this.pestanaCotizacion) ?? this.pestanas[0];
-  }
-
-  // Solicitudes de la pestaña activa (solo para las pestañas sin API)
-  get cotizacionesFiltradas(): Cotizacion[] {
-    return this.cotizaciones.filter((c) => c.estado === this.pestanaCotizacion);
   }
 
   // Fecha mínima para la oferta: mañana
@@ -248,6 +249,10 @@ export class VendedorCotizaciones implements OnInit {
     this.pestanaCotizacion = estado;
     this.cerrarDetalle();
     this.mensajeOferta = '';
+
+    if (this.estadoOferta[estado]) {
+      this.cargarOfertas(estado);
+    }
   }
 
   // GET /api/v1/seller/quote-requests/{requestId}
@@ -329,6 +334,7 @@ export class VendedorCotizaciones implements OnInit {
         this.cerrarDetalle();
         this.mostrarMensajeOferta('Oferta enviada correctamente.', 'exito');
         this.cargarSolicitudes(this.pagina);
+        this.cargarConteosOfertas();
       },
       error: (error: HttpErrorResponse) => {
         this.enviando = false;
@@ -337,12 +343,58 @@ export class VendedorCotizaciones implements OnInit {
     });
   }
 
-  // Cantidad de la pestaña: solicitudes con API, o filas locales para el resto
+  // GET /api/v1/seller/offers?status=... (solo el total, para los contadores)
+  cargarConteosOfertas(): void {
+    forkJoin({
+      Enviada: this.quoteService.getSellerOffers('PENDIENTE', 0, 1),
+      Aceptada: this.quoteService.getSellerOffers('ACEPTADA', 0, 1),
+      Rechazada: this.quoteService.getSellerOffers('RECHAZADA', 0, 1),
+    }).subscribe({
+      next: (respuesta) => {
+        this.conteoOfertas = {
+          Enviada: respuesta.Enviada.totalElements ?? 0,
+          Aceptada: respuesta.Aceptada.totalElements ?? 0,
+          Rechazada: respuesta.Rechazada.totalElements ?? 0,
+        };
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.conteoOfertas = { Enviada: 0, Aceptada: 0, Rechazada: 0 };
+      },
+    });
+  }
+
+  // GET /api/v1/seller/offers?status=... (lista de la pestaña)
+  cargarOfertas(estado: string): void {
+    const status = this.estadoOferta[estado];
+    if (!status) {
+      return;
+    }
+
+    this.cargandoOfertas = true;
+    this.errorOfertas = '';
+
+    this.quoteService.getSellerOffers(status, 0, 50).subscribe({
+      next: (respuesta) => {
+        this.ofertas = respuesta.content ?? [];
+        this.cargandoOfertas = false;
+        this.cdr.markForCheck();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.ofertas = [];
+        this.cargandoOfertas = false;
+        this.errorOfertas = error.error?.message ?? 'No se pudieron cargar las ofertas.';
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  // Cantidad de la pestaña: solicitudes abiertas u ofertas por estado
   contar(estado: string): number {
     if (estado === 'Nueva Solicitud') {
       return this.totalSolicitudes;
     }
-    return this.cotizaciones.filter((c) => c.estado === estado).length;
+    return this.conteoOfertas[estado] ?? 0;
   }
 
   etiquetaEstadoSolicitud(status?: string): string {
@@ -360,22 +412,35 @@ export class VendedorCotizaciones implements OnInit {
     return status === 'COTIZADA' ? 'estado_verde' : 'estado_amarillo';
   }
 
-  // Color del estado: amarillo, azul, verde, rojo o naranja
-  claseEstado(estado: string): string {
-    if (estado === 'Nueva Solicitud') return 'estado_amarillo';
-    if (estado === 'Enviada') return 'estado_azul';
-    if (estado === 'Rechazada') return 'estado_rojo';
-    if (estado === 'Pendiente' || estado === 'En Tránsito') return 'estado_naranja';
-    return 'estado_verde';
+  etiquetaOferta(status?: string): string {
+    switch (status) {
+      case 'PENDIENTE':
+        return 'Enviada';
+      case 'ACEPTADA':
+        return 'Aceptada';
+      case 'RECHAZADA':
+        return 'Rechazada';
+      default:
+        return status ?? '';
+    }
   }
 
-  iniciales(nombre: string): string {
-    return nombre
-      .split(' ')
-      .slice(0, 2)
-      .map((parte) => parte.charAt(0))
-      .join('')
-      .toUpperCase();
+  claseOferta(status?: string): string {
+    switch (status) {
+      case 'ACEPTADA':
+        return 'estado_verde';
+      case 'RECHAZADA':
+        return 'estado_rojo';
+      default:
+        return 'estado_azul';
+    }
+  }
+
+  // Color del estado de los movimientos financieros
+  claseEstado(estado: string): string {
+    if (estado === 'Pendiente' || estado === 'En Tránsito') return 'estado_naranja';
+    if (estado === 'Rechazada') return 'estado_rojo';
+    return 'estado_verde';
   }
 
   private limpiarFormulario(): void {
