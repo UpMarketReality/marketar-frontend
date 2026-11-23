@@ -90,9 +90,9 @@
       </p>
     }
 
-    <div class="main_grid">
+    <div class="main_grid" [class.una_columna]="pestanaCotizacion !== 'Nueva Solicitud'">
 
-      <!-- Lista: solicitudes reales o tabla local según la pestaña -->
+      <!-- Lista: solicitudes abiertas u ofertas según la pestaña -->
       <mat-card appearance="outlined" class="panel_card">
 
         @if (pestanaCotizacion === 'Nueva Solicitud') {
@@ -193,47 +193,55 @@
             </span>
           </div>
 
+          @if (errorOfertas) {
+            <p class="sin_datos error_texto" role="alert">{{ errorOfertas }}</p>
+          }
+
           <div class="tabla_wrap">
-            <table mat-table [dataSource]="cotizacionesFiltradas" class="tabla_cotizaciones">
+            @if (cargandoOfertas) {
+              <p class="sin_datos">Cargando ofertas...</p>
+            } @else {
+              <table mat-table [dataSource]="ofertas" class="tabla_cotizaciones">
 
-              <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef>ID Solicitud</th>
-                <td mat-cell *matCellDef="let c" class="celda_id">#{{ c.id }}</td>
-              </ng-container>
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef>ID Solicitud</th>
+                  <td mat-cell *matCellDef="let o" class="celda_id">#{{ o.requestId }}</td>
+                </ng-container>
 
-              <ng-container matColumnDef="cliente">
-                <th mat-header-cell *matHeaderCellDef>Cliente</th>
-                <td mat-cell *matCellDef="let c">
-                  <div class="cliente_celda">
-                    <span class="avatar">{{ iniciales(c.cliente) }}</span>
-                    {{ c.cliente }}
-                  </div>
-                </td>
-              </ng-container>
+                <ng-container matColumnDef="monto">
+                  <th mat-header-cell *matHeaderCellDef>Monto</th>
+                  <td mat-cell *matCellDef="let o" class="celda_monto">
+                    S/ {{ o.amount | number:'1.2-2' }}
+                  </td>
+                </ng-container>
 
-              <ng-container matColumnDef="proyecto">
-                <th mat-header-cell *matHeaderCellDef>Proyecto</th>
-                <td mat-cell *matCellDef="let c">{{ c.proyecto }}</td>
-              </ng-container>
+                <ng-container matColumnDef="plazo">
+                  <th mat-header-cell *matHeaderCellDef>Plazo</th>
+                  <td mat-cell *matCellDef="let o">{{ o.deliveryDays }} días</td>
+                </ng-container>
 
-              <ng-container matColumnDef="fecha">
-                <th mat-header-cell *matHeaderCellDef>Fecha</th>
-                <td mat-cell *matCellDef="let c" class="celda_fecha">{{ c.fecha }}</td>
-              </ng-container>
+                <ng-container matColumnDef="vence">
+                  <th mat-header-cell *matHeaderCellDef>Vence</th>
+                  <td mat-cell *matCellDef="let o" class="celda_fecha"
+                      [class.vencida]="o.isExpired">
+                    {{ o.expiresAt | date:'dd/MM/yyyy' }}
+                  </td>
+                </ng-container>
 
-              <ng-container matColumnDef="estado">
-                <th mat-header-cell *matHeaderCellDef>Estado</th>
-                <td mat-cell *matCellDef="let c">
-                  <span [class]="'estado ' + claseEstado(c.estado)">{{ c.estado }}</span>
-                </td>
-              </ng-container>
+                <ng-container matColumnDef="estado">
+                  <th mat-header-cell *matHeaderCellDef>Estado</th>
+                  <td mat-cell *matCellDef="let o">
+                    <span [class]="'estado ' + claseOferta(o.status)">{{ etiquetaOferta(o.status) }}</span>
+                  </td>
+                </ng-container>
 
-              <tr mat-header-row *matHeaderRowDef="columnasCotizaciones"></tr>
-              <tr mat-row *matRowDef="let row; columns: columnasCotizaciones"></tr>
-            </table>
+                <tr mat-header-row *matHeaderRowDef="columnasOfertas"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnasOfertas"></tr>
+              </table>
 
-            @if (cotizacionesFiltradas.length === 0) {
-              <p class="sin_datos">No hay solicitudes en esta categoría.</p>
+              @if (ofertas.length === 0) {
+                <p class="sin_datos">No tienes ofertas en esta pestaña.</p>
+              }
             }
           </div>
 
@@ -241,82 +249,84 @@
 
       </mat-card>
 
-      <!-- Panel de detalle y formulario de oferta -->
-      <mat-card appearance="outlined" class="panel_card detalle_card">
+      <!-- Panel de detalle y formulario de oferta (solo para nuevas solicitudes) -->
+      @if (pestanaCotizacion === 'Nueva Solicitud') {
+        <mat-card appearance="outlined" class="panel_card detalle_card">
 
-        @if (cargandoDetalle) {
-          <div class="detalle_vacio">
-            <p>Cargando solicitud...</p>
-          </div>
-        } @else if (seleccionada) {
+          @if (cargandoDetalle) {
+            <div class="detalle_vacio">
+              <p>Cargando solicitud...</p>
+            </div>
+          } @else if (seleccionada) {
 
-          <div class="detalle_cabecera">
-            <h2>Solicitud #{{ seleccionada.requestId }}</h2>
-            <button matButton type="button" aria-label="Cerrar detalle" (click)="cerrarDetalle()">
-              <mat-icon>close</mat-icon>
-            </button>
-          </div>
+            <div class="detalle_cabecera">
+              <h2>Solicitud #{{ seleccionada.requestId }}</h2>
+              <button matButton type="button" aria-label="Cerrar detalle" (click)="cerrarDetalle()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
 
-          <h3 class="detalle_titulo">{{ seleccionada.prototype }}</h3>
+            <h3 class="detalle_titulo">{{ seleccionada.prototype }}</h3>
 
-          <p class="dato">Cantidad: <strong>{{ seleccionada.quantity }}</strong></p>
-          <p class="dato">Zona de entrega: <strong>{{ seleccionada.deliveryZone }}</strong></p>
-          <p class="dato">Condiciones de entrega: <strong>{{ seleccionada.deliveryConditions }}</strong></p>
+            <p class="dato">Cantidad: <strong>{{ seleccionada.quantity }}</strong></p>
+            <p class="dato">Zona de entrega: <strong>{{ seleccionada.deliveryZone }}</strong></p>
+            <p class="dato">Condiciones de entrega: <strong>{{ seleccionada.deliveryConditions }}</strong></p>
 
-          @if (seleccionada.specifications) {
-            <div class="bloque_texto">
-              <span class="etiqueta">Especificaciones</span>
-              <p>{{ seleccionada.specifications }}</p>
+            @if (seleccionada.specifications) {
+              <div class="bloque_texto">
+                <span class="etiqueta">Especificaciones</span>
+                <p>{{ seleccionada.specifications }}</p>
+              </div>
+            }
+
+            @if (seleccionada.images && seleccionada.images.length > 0) {
+              <div class="miniaturas">
+                @for (imagen of seleccionada.images; track imagen) {
+                  <img [src]="imagen" alt="Imagen de referencia">
+                }
+              </div>
+            }
+
+            <h3 class="subtitulo_seccion">Presentar oferta</h3>
+
+            <div class="form_oferta">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Monto total (S/)</mat-label>
+                <input matInput type="number" min="0" step="0.01" [(ngModel)]="monto">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Plazo de entrega (días)</mat-label>
+                <input matInput type="number" min="1" step="1" [(ngModel)]="plazoDias">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Oferta válida hasta</mat-label>
+                <input matInput type="date" [min]="fechaMinima" [(ngModel)]="vencimiento">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo_completo">
+                <mat-label>Condiciones de la oferta</mat-label>
+                <textarea matInput rows="3" [maxlength]="maximoCondiciones" [(ngModel)]="condiciones"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="acciones_oferta">
+              <button matButton="filled" type="button" [disabled]="enviando" (click)="enviarOferta()">
+                <mat-icon>send</mat-icon>
+                {{ enviando ? 'Enviando...' : 'Enviar oferta' }}
+              </button>
+            </div>
+
+          } @else {
+            <div class="detalle_vacio">
+              <mat-icon>inbox</mat-icon>
+              <p>Selecciona una solicitud para ver sus detalles.</p>
             </div>
           }
 
-          @if (seleccionada.images && seleccionada.images.length > 0) {
-            <div class="miniaturas">
-              @for (imagen of seleccionada.images; track imagen) {
-                <img [src]="imagen" alt="Imagen de referencia">
-              }
-            </div>
-          }
-
-          <h3 class="subtitulo_seccion">Presentar oferta</h3>
-
-          <div class="form_oferta">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Monto total (S/)</mat-label>
-              <input matInput type="number" min="0" step="0.01" [(ngModel)]="monto">
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Plazo de entrega (días)</mat-label>
-              <input matInput type="number" min="1" step="1" [(ngModel)]="plazoDias">
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Oferta válida hasta</mat-label>
-              <input matInput type="date" [min]="fechaMinima" [(ngModel)]="vencimiento">
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo_completo">
-              <mat-label>Condiciones de la oferta</mat-label>
-              <textarea matInput rows="3" [maxlength]="maximoCondiciones" [(ngModel)]="condiciones"></textarea>
-            </mat-form-field>
-          </div>
-
-          <div class="acciones_oferta">
-            <button matButton="filled" type="button" [disabled]="enviando" (click)="enviarOferta()">
-              <mat-icon>send</mat-icon>
-              {{ enviando ? 'Enviando...' : 'Enviar oferta' }}
-            </button>
-          </div>
-
-        } @else {
-          <div class="detalle_vacio">
-            <mat-icon>inbox</mat-icon>
-            <p>Selecciona una solicitud para ver sus detalles.</p>
-          </div>
-        }
-
-      </mat-card>
+        </mat-card>
+      }
 
     </div>
   }

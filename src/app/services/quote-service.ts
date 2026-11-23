@@ -86,4 +86,21 @@ export class QuoteService {
       null,
     );
   }
+
+  // US24 (vendedor): ofertas enviadas, aceptadas o rechazadas
+  // GET /api/v1/seller/offers?status=PENDIENTE|ACEPTADA|RECHAZADA
+  getSellerOffers(
+    status?: string,
+    page: number = 0,
+    size: number = 20,
+  ): Observable<PageDTO<OfferDTO>> {
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+
+    if (status) {
+      params = params.set('status', status);
+    }
+
+    return this.http.get<PageDTO<OfferDTO>>(`${this.apiUrl}/seller/offers`, { params });
+  }
+
 }
