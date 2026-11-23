@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../core/auth/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RequestDTO } from '../../model/request-dto';
 import { finalize } from 'rxjs';
 import { RegisterRequestDTO } from '../../model/register-request-dto';
@@ -25,7 +25,7 @@ function validarContrasenas(control: AbstractControl): ValidationErrors | null {
 }
 
 @Component({
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, RouterLink],
   selector: 'app-inicio-sesion',
   styleUrl: './inicio-sesion.css',
   templateUrl: './inicio-sesion.html',

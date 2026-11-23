@@ -297,6 +297,23 @@ button:focus-visible {
   outline: 3px solid var(--primary-dark);
   outline-offset: 3px;
 }
+.auth-page {
+  position: relative; /* Necesario para posicionar el botón */
+}
+
+.btn-back-floating {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  color: #1e293b;
+  text-decoration: none;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
 
 /* TABLET */
 @media (max-width: 850px) {

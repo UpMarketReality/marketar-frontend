@@ -24,6 +24,9 @@ import { GeneralLayoutComponente } from './componentes/general-layout-componente
 import { VendedorEditarProducto } from './componentes/vendedor-editar-producto/vendedor-editar-producto';
 import { VendedorInicioSesion } from './componentes/vendedor-inicio-sesion/vendedor-inicio-sesion';
 import { VendedorRegistro } from './componentes/vendedor-registro/vendedor-registro';
+import {
+  SolicitarCotizacionComponente
+} from './componentes/solicitar-cotizacion-componente/solicitar-cotizacion-componente';
 
 export const routes: Routes = [
   // PANEL DEL VENDEDOR: sin encabezado del comprador
@@ -121,6 +124,14 @@ export const routes: Routes = [
         component: EmpiezaACrear,
         canActivate: [authGuard],
         data: { role: 'COMPRADOR' },
+      },
+      {
+        path: 'solicitar-cotizacion/:prototypeId',
+        component: SolicitarCotizacionComponente,
+        canActivate: [authGuard],
+        data: {
+          role: 'COMPRADOR',
+        },
       },
       { path: 'catalogo', component: CatalogComponent },
       { path: 'producto/:productId', component: DetalleProductos },

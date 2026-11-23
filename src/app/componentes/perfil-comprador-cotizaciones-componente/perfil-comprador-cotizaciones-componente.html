@@ -1,190 +1,449 @@
-<main id="contenido" tabindex="-1">
-  <noscript
-  ><p class="demo-note">
-    Activa JavaScript para usar filtros, validaciones y acciones de
-    demostración.
-  </p></noscript
-  >
+<main class="quotes-page">
+
+  <!-- CABECERA -->
   <header class="page-heading">
-    <h1>Cotizaciones solicitadas</h1>
-    <p class="subtitle">
-      Revisa el estado de los diseños personalizados que has enviado a
-      cotizar con nuestros fabricantes.
-    </p>
+    <div>
+      <h1>Mis cotizaciones</h1>
+      <p>
+        Revisa las solicitudes de tus diseños y compara
+        las ofertas de los fabricantes.
+      </p>
+    </div>
+
+    <a
+      routerLink="/disenos-guardados"
+      class="button button--primary"
+    >
+      Cotizar otro diseño
+    </a>
   </header>
-  <div class="card-stack">
-    <article class="quote-card" id="cotizacion-1042" data-quote-card>
-      <header class="quote-meta">
-        <strong>Solicitud #CQ-1042</strong
-        ><span>Actualizado: hoy, 10:30 a. m.</span>
-      </header>
-      <div class="quote-body">
-        <img
-          src="assets/escritorio.svg"
-          alt="Ilustración de escritorio nórdico personalizado"
-          width="96"
-          height="96"
-        />
-        <div class="quote-detail">
-          <div class="quote-title">
-            <h3>Escritorio nórdico personalizado</h3>
-            <span class="badge badge--teal"
-            ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                      <path d="m5 12 4 4L20 5" /></svg
-            >Oferta recibida</span
-            >
-          </div>
-          <p>
-            Cotización para escritorio en medidas 1.60 m × 0.60 m con
-            acabado en roble claro y patas metálicas blancas. Incluye 2
-            cajones frontales.
-          </p>
-          <dl class="quote-facts">
-            <div>
-              <dt>Fabricante</dt>
-              <dd>DomusDecoSAC</dd>
-            </div>
-            <div>
-              <dt>Tiempo de fabricación</dt>
-              <dd>15 días hábiles</dd>
-            </div>
-            <div>
-              <dt>Precio ofertado</dt>
-              <dd class="price">S/ 1,450.00</dd>
-            </div>
-          </dl>
-        </div>
-      </div>
-      <footer class="card-actions">
-        <button
-          type="button"
-          class="button"
-          data-action="reject"
-          data-quote="1042"
-        >
-          Rechazar</button
-        ><button
+
+  @if (mensajeExito) {
+    <div class="feedback feedback--success" role="status">
+      {{ mensajeExito }}
+    </div>
+  }
+
+  @if (errorGeneral) {
+    <div class="feedback feedback--error" role="alert">
+      {{ errorGeneral }}
+      <button
         type="button"
-        class="button"
-        data-action="contact"
-        data-seller="DomusDecoSAC"
+        class="retry-link"
+        (click)="cargarSolicitudes(paginaActual)"
       >
-        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-          <path
-            d="M21 12a9 9 0 0 1-9 9H3l2-5a9 9 0 1 1 16-4ZM8 10h8M8 14h5"
-          /></svg
-        >Enviar mensaje</button
-      ><button
-        type="button"
-        class="button button--primary"
-        data-action="pay"
-        data-quote="1042"
-      >
-        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-          <path d="M2 3h3l3 13h11l3-9H6M9 20h.01M18 20h.01" /></svg
-        >Aceptar y pagar
+        Reintentar
       </button>
-      </footer>
-    </article>
-    <article class="quote-card" id="cotizacion-1048" data-quote-card>
-      <header class="quote-meta">
-        <strong>Solicitud #CQ-1048</strong
-        ><span>Enviado: ayer, 4:45 p. m.</span>
-      </header>
-      <div class="quote-body">
-        <img
-          src="assets/sofa.svg"
-          alt="Ilustración de sofá seccional minimalista (modificación)"
-          width="96"
-          height="96"
-        />
-        <div class="quote-detail">
-          <div class="quote-title">
-            <h3>Sofá seccional minimalista (modificación)</h3>
-            <span class="badge badge--orange"
-            ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 6v6l4 2" /></svg
-            >Esperando respuesta</span
-            >
-          </div>
-          <p>
-            Solicitud de cambio de tela a velvet color esmeralda profundo.
-            Medidas originales del catálogo.
-          </p>
-          <dl class="quote-facts">
-            <div>
-              <dt>Fabricante</dt>
-              <dd>Muebles M&M</dd>
-            </div>
-            <div>
-              <dt>Presupuesto referencial</dt>
-              <dd>S/ 4,100.00</dd>
-            </div>
-          </dl>
-        </div>
+    </div>
+  }
+
+  <!-- PANEL PRINCIPAL -->
+  <div class="quotes-workspace">
+
+    <!-- LISTADO DE SOLICITUDES -->
+    <section class="requests-panel">
+      <div class="panel-heading">
+        <h2>Solicitudes realizadas</h2>
+        <p>Selecciona una solicitud para consultar sus ofertas.</p>
       </div>
-      <footer class="card-actions">
-        <button
-          type="button"
-          class="button"
-          data-action="cancel-quote"
-          data-quote="1048"
-        >
-          Cancelar solicitud
-        </button>
-      </footer>
-    </article>
-    <article class="quote-card" id="cotizacion-1015" data-quote-card>
-      <header class="quote-meta">
-        <strong>Solicitud #CQ-1015</strong
-        ><span>Pagado: 12 oct., 2026</span>
-      </header>
-      <div class="quote-body">
-        <img
-          src="assets/comoda.svg"
-          alt="Ilustración de cómoda moderna 4 cajones"
-          width="96"
-          height="96"
-        />
-        <div class="quote-detail">
-          <div class="quote-title">
-            <h3>Cómoda moderna 4 cajones</h3>
-            <span class="badge badge--green"
-            ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                      <path d="m5 12 4 4L20 5" /></svg
-            >Aceptada y pagada</span
-            >
-          </div>
-          <p>
-            Fabricación en melamina roble oscuro, correderas telescópicas
-            pesadas.
-          </p>
-          <dl class="quote-facts">
-            <div>
-              <dt>Fabricante</dt>
-              <dd>Carpintería Ruiz</dd>
-            </div>
-            <div>
-              <dt>Total pagado</dt>
-              <dd>S/ 1,200.00</dd>
-            </div>
-          </dl>
+
+      <nav class="filter-tabs" aria-label="Filtrar solicitudes">
+        @for (opcion of filtros; track opcion.valor) {
+          <button
+            type="button"
+            [class.active]="filtro === opcion.valor"
+            [attr.aria-pressed]="filtro === opcion.valor"
+            (click)="cambiarFiltro(opcion.valor)"
+          >
+            {{ opcion.texto }}
+          </button>
+        }
+      </nav>
+
+      @if (cargandoSolicitudes) {
+        <div class="loading-state" role="status">
+          Cargando tus solicitudes...
         </div>
-      </div>
-      <footer class="card-actions">
-        <a class="button button--dark" href="pedidos.html#pedido-9105"
-        ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-          <path
-            d="m3 6 9-4 9 4v12l-9 4-9-4Zm0 0 9 4 9-4M12 10v12M7 4l10 4"
-          /></svg
-        >Ver estado del pedido</a
-        >
-      </footer>
-    </article>
+      } @else {
+
+        <div class="request-list">
+          @for (
+            solicitud of solicitudesFiltradas;
+            track solicitud.requestId
+            ) {
+
+            <button
+              type="button"
+              class="request-card"
+              [class.selected]="
+                solicitudSeleccionada?.requestId ===
+                solicitud.requestId
+              "
+              [attr.aria-pressed]="
+                solicitudSeleccionada?.requestId ===
+                solicitud.requestId
+              "
+              (click)="seleccionarSolicitud(solicitud)"
+            >
+
+              <div class="request-media">
+                @if (imagenSolicitud(solicitud); as imagen) {
+                  <img
+                    [src]="imagen"
+                    [alt]="solicitud.prototype || 'Diseño personalizado'"
+                  />
+                } @else {
+                  <span aria-hidden="true">IA</span>
+                }
+              </div>
+
+              <div class="request-content">
+                <span class="request-id">
+                  Solicitud #{{ solicitud.requestId }}
+                </span>
+
+                <h3>
+                  {{ solicitud.prototype }}
+                </h3>
+
+                <span [class]="claseEstado(solicitud.status)">
+                  {{ estadoTexto(solicitud.status) }}
+                </span>
+
+                <div class="request-footer">
+                  <span>
+                    {{ solicitud.createdAt | date:'dd/MM/yyyy' }}
+                  </span>
+
+                  <strong>
+                    {{ solicitud.offerCount ?? 0 }}
+                    {{
+                      solicitud.offerCount === 1
+                        ? 'oferta'
+                        : 'ofertas'
+                    }}
+                  </strong>
+                </div>
+              </div>
+
+            </button>
+
+          } @empty {
+            <div class="empty-state">
+              <h3>No hay solicitudes para mostrar</h3>
+              <p>
+                Puedes crear una cotización a partir
+                de un diseño generado con IA.
+              </p>
+              <a routerLink="/disenos-guardados">
+                Ver mis diseños
+              </a>
+            </div>
+          }
+        </div>
+
+        <!-- PAGINACIÓN -->
+        @if (totalPaginas > 1) {
+          <div class="pagination">
+            <button
+              type="button"
+              [disabled]="paginaActual === 0"
+              (click)="cambiarPagina(paginaActual - 1)"
+            >
+              Anterior
+            </button>
+
+            <span>
+              {{ paginaActual + 1 }} / {{ totalPaginas }}
+            </span>
+
+            <button
+              type="button"
+              [disabled]="paginaActual + 1 >= totalPaginas"
+              (click)="cambiarPagina(paginaActual + 1)"
+            >
+              Siguiente
+            </button>
+          </div>
+        }
+
+      }
+    </section>
+
+    <!-- DETALLE DE LA SOLICITUD Y SUS OFERTAS -->
+    <section class="detail-panel">
+
+      @if (solicitudSeleccionada; as seleccionada) {
+
+        <div class="detail-heading">
+          <div>
+            <span class="eyebrow">
+              SOLICITUD #{{ seleccionada.requestId }}
+            </span>
+
+            <h2>Detalle de cotización</h2>
+          </div>
+
+          <span [class]="claseEstado(seleccionada.status)">
+            {{ estadoTexto(seleccionada.status) }}
+          </span>
+        </div>
+
+        <!-- PRODUCTO -->
+        <div class="selected-product">
+
+          <div class="selected-image">
+            @if (imagenSolicitud(seleccionada); as imagen) {
+              <img
+                [src]="imagen"
+                [alt]="seleccionada.prototype || 'Diseño'"
+              />
+            } @else {
+              <span aria-hidden="true">IA</span>
+            }
+          </div>
+
+          <div class="selected-info">
+            <h3>{{ seleccionada.prototype }}</h3>
+            <p>
+              Diseño personalizado creado con inteligencia
+              artificial.
+            </p>
+
+            <span>
+              Cantidad:
+              <strong>
+                {{ seleccionada.quantity }}
+                {{
+                  seleccionada.quantity === 1
+                    ? 'unidad'
+                    : 'unidades'
+                }}
+              </strong>
+            </span>
+          </div>
+
+        </div>
+
+        <!-- DATOS DE LA SOLICITUD -->
+        <dl class="request-facts">
+          <div>
+            <dt>Fecha de solicitud</dt>
+            <dd>
+              {{ seleccionada.createdAt | date:'dd/MM/yyyy' }}
+            </dd>
+          </div>
+
+          <div>
+            <dt>Zona de entrega</dt>
+            <dd>{{ seleccionada.deliveryZone }}</dd>
+          </div>
+
+          <div>
+            <dt>Dirección</dt>
+            <dd>{{ seleccionada.deliveryAddress }}</dd>
+          </div>
+        </dl>
+
+        <details class="request-details">
+          <summary>Ver condiciones y especificaciones</summary>
+
+          <h4>Condiciones de entrega</h4>
+          <p>{{ seleccionada.deliveryConditions }}</p>
+
+          <h4>Especificaciones del diseño</h4>
+          <pre>{{ seleccionada.specifications }}</pre>
+        </details>
+
+        <!-- OFERTAS RECIBIDAS -->
+        <div class="offers-heading">
+          <div>
+            <h3>Ofertas de fabricantes</h3>
+            <p>
+              Compara los precios, tiempos y condiciones
+              antes de elegir.
+            </p>
+          </div>
+
+          <span class="offers-count">
+            {{ ofertas.length }} ofertas
+          </span>
+        </div>
+
+        @if (cargandoOfertas) {
+          <div class="loading-state" role="status">
+            Consultando las ofertas recibidas...
+          </div>
+        } @else if (errorOfertas) {
+          <div class="feedback feedback--error" role="alert">
+            {{ errorOfertas }}
+
+            <button
+              type="button"
+              class="retry-link"
+              (click)="seleccionarSolicitud(seleccionada)"
+            >
+              Reintentar
+            </button>
+          </div>
+        } @else if (ofertas.length === 0) {
+          <div class="offers-empty">
+            <div class="offers-empty-icon" aria-hidden="true">
+              <span>...</span>
+            </div>
+
+            <h4>Aún no tienes ofertas</h4>
+            <p>
+              Tu solicitud está registrada. Cuando los
+              fabricantes envíen propuestas, aparecerán aquí.
+            </p>
+          </div>
+        } @else {
+
+          <div class="offers-list">
+            @for (oferta of ofertas; track oferta.offerId) {
+
+              <article
+                class="offer-card"
+                [class.offer-card--accepted]="
+                  oferta.status === 'ACEPTADA'
+                "
+              >
+
+                <header class="offer-header">
+                  <div class="store-avatar" aria-hidden="true">
+                    {{ oferta.storeName.charAt(0).toUpperCase() }}
+                  </div>
+
+                  <div class="store-info">
+                    <h4>{{ oferta.storeName }}</h4>
+                    <span>Fabricante de Marketar</span>
+                  </div>
+
+                  <span
+                    class="offer-status"
+                    [class.offer-status--accepted]="
+                      oferta.status === 'ACEPTADA'
+                    "
+                  >
+                    {{ estadoOferta(oferta) }}
+                  </span>
+                </header>
+
+                <div class="offer-price">
+                  <span>Precio ofertado</span>
+                  <strong>
+                    S/ {{ oferta.amount | number:'1.2-2' }}
+                  </strong>
+                </div>
+
+                <dl class="offer-facts">
+                  <div>
+                    <dt>Tiempo de entrega</dt>
+                    <dd>{{ oferta.deliveryDays }} días</dd>
+                  </div>
+
+                  <div>
+                    <dt>Válida hasta</dt>
+                    <dd>
+                      {{
+                        oferta.expiresAt |
+                          date:'dd/MM/yyyy HH:mm'
+                      }}
+                    </dd>
+                  </div>
+                </dl>
+
+                <div class="offer-conditions">
+                  <strong>Condiciones del fabricante</strong>
+                  <p>{{ oferta.conditions }}</p>
+                </div>
+
+                <footer class="offer-actions">
+                  @if (oferta.status === 'ACEPTADA') {
+                    <span class="accepted-text">
+                      Oferta seleccionada
+                    </span>
+                  } @else if (
+                    oferta.status === 'RECHAZADA'
+                    ) {
+                    <span class="unavailable-text">
+                      Oferta no seleccionada
+                    </span>
+                  } @else if (
+                    oferta.isExpired
+                    ) {
+                    <span class="unavailable-text">
+                      Oferta vencida
+                    </span>
+                  } @else if (
+                    estaAbierta(seleccionada)
+                    ) {
+                    <button
+                      class="button button--primary"
+                      type="button"
+                      [disabled]="!puedeAceptar(oferta)"
+                      (click)="aceptarOferta(oferta)"
+                    >
+                      {{
+                        procesando
+                          ? 'Procesando...'
+                          : 'Aceptar oferta'
+                      }}
+                    </button>
+                  }
+                </footer>
+
+              </article>
+
+            }
+          </div>
+        }
+
+        <!-- ACCIONES SOBRE LA SOLICITUD -->
+        <div class="request-actions">
+
+          @if (estaAbierta(seleccionada)) {
+            <button
+              type="button"
+              class="button button--danger"
+              [disabled]="procesando"
+              (click)="cancelarSolicitud(seleccionada)"
+            >
+              Cancelar solicitud
+            </button>
+          }
+
+          @if (
+            seleccionada.status === 'ACEPTADA' ||
+            seleccionada.status === 'COMPLETADA'
+            ) {
+            <a
+              class="button button--dark"
+              routerLink="/perfil-comprador/pedidos"
+            >
+              Ver mis pedidos
+            </a>
+          }
+
+        </div>
+
+      } @else {
+        <div class="detail-placeholder">
+          <div class="placeholder-icon" aria-hidden="true">
+            IA
+          </div>
+
+          <h2>Selecciona una solicitud</h2>
+          <p>
+            Aquí podrás revisar los detalles y comparar
+            las propuestas recibidas.
+          </p>
+        </div>
+      }
+
+    </section>
+
   </div>
-  <p class="demo-note">
-    Vista de demostración · Datos de ejemplo. Los pagos y cambios de
-    cuenta requieren conexión con el servidor.
-  </p>
+
 </main>
