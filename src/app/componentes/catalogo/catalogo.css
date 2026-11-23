@@ -184,7 +184,15 @@
   font-size: 18px;
   width: 18px;
   height: 18px;
-  color: #ef4444;
+  color: #64748b;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.fav-btn mat-icon.is-fav {
+  color: #ef4444; /* Rojo relleno cuando SÍ es favorito */
+  transform: scale(1.12);
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 .ar-badge {

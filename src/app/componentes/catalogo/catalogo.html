@@ -84,41 +84,62 @@
 
   <!-- Contenido del Catálogo -->
   @if (!isLoading && products.length > 0) {
-    <!-- Sección 1: Lo más novedoso -->
-    <section class="catalog-section">
-      <div class="section-header">
-        <h2>Lo más novedoso</h2>
-        <button mat-button class="view-all-btn" (click)="selectCategory(undefined)">
-          Ver todos
-          <mat-icon iconPositionEnd>arrow_forward</mat-icon>
-        </button>
-      </div>
-
-      <div class="products-grid">
-        @for (product of newestProducts; track product.productId) {
-          <ng-container *ngTemplateOutlet="productCardTpl; context: { $implicit: product }" />
-        }
-      </div>
-    </section>
-
-    <!-- Sección 2: Lo más vendido -->
-    @if (bestSellerProducts.length > 0) {
+    @if (showAllProducts) {
+      <!-- Vista completa: todos los productos sin slice -->
       <section class="catalog-section">
         <div class="section-header">
-          <h2>Lo más vendido</h2>
-          <button mat-button class="view-all-btn" (click)="selectCategory(undefined)">
+          <h2>Todos los diseños ({{ totalElements }})</h2>
+          <button mat-button class="view-all-btn" (click)="backToSections()">
+            <mat-icon>arrow_back</mat-icon>
+            Volver a secciones
+          </button>
+        </div>
+
+        <div class="products-grid">
+          @for (product of products; track product.productId) {
+            <ng-container *ngTemplateOutlet="productCardTpl; context: { $implicit: product }" />
+          }
+        </div>
+      </section>
+    } @else {
+      <!-- Sección 1: Lo más novedoso -->
+      <section class="catalog-section">
+        <div class="section-header">
+          <h2>Lo más novedoso</h2>
+          <button mat-button class="view-all-btn" (click)="viewAllProducts()">
             Ver todos
             <mat-icon iconPositionEnd>arrow_forward</mat-icon>
           </button>
         </div>
 
         <div class="products-grid">
-          @for (product of bestSellerProducts; track product.productId) {
+          @for (product of newestProducts; track product.productId) {
             <ng-container *ngTemplateOutlet="productCardTpl; context: { $implicit: product }" />
           }
         </div>
       </section>
+
+      <!-- Sección 2: Lo más vendido -->
+      @if (bestSellerProducts.length > 0) {
+        <section class="catalog-section">
+          <div class="section-header">
+            <h2>Lo más vendido</h2>
+            <button mat-button class="view-all-btn" (click)="viewAllProducts()">
+              Ver todos
+              <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+            </button>
+          </div>
+
+          <div class="products-grid">
+            @for (product of bestSellerProducts; track product.productId) {
+              <ng-container *ngTemplateOutlet="productCardTpl; context: { $implicit: product }" />
+            }
+          </div>
+        </section>
+      }
     }
+
+    <!-- Paginación (se mantiene igual debajo) -->
 
     <!-- Paginación -->
     @if (totalPages > 1) {

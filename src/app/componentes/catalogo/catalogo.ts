@@ -64,6 +64,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   sortBy: 'recent' | 'priceAsc' | 'priceDesc' = 'recent';
   isLoading = false;
   errorMessage = '';
+  showAllProducts = false;
 
   // Paginación (8 por página: 4 en "Lo más novedoso" y 4 en "Lo más vendido")
   currentPage = 0;
@@ -148,6 +149,24 @@ export class CatalogComponent implements OnInit, OnDestroy {
     this.loadProducts();
   }
 
+  // Activa el modo "Ver todos"
+  viewAllProducts(): void {
+    this.showAllProducts = true;
+    this.selectedCategoryId = undefined;
+    this.searchQuery = '';
+    this.currentPage = 0;
+    this.pageSize = 24;
+    this.loadProducts();
+  }
+
+  // Regresa a la vista original de 2 secciones (4 + 4)
+  backToSections(): void {
+    this.showAllProducts = false;
+    this.currentPage = 0;
+    this.pageSize = 8;
+    this.loadProducts();
+  }
+
   onSortChange(): void {
     this.products = this.applyLocalSort([...this.products]);
   }
@@ -190,6 +209,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   toggleFavorite(productId: number, event: Event): void {
     event.stopPropagation();
+    event.preventDefault();
 
     // 1) Sin sesión: mensaje y opción de ir al login (vuelve al catálogo después)
     if (!this.authService.isAuthenticated()) {
@@ -212,29 +232,45 @@ export class CatalogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // 3) Con sesión: se guarda o se quita en el backend
-    if (this.favoriteIds.has(productId)) {
+    // 3) Con sesión: actualización optimista (cambia al instante y revierte si hay error)
+    const nextFavorites = new Set(this.favoriteIds);
+
+    if (nextFavorites.has(productId)) {
+      nextFavorites.delete(productId);
+      this.favoriteIds = nextFavorites;
+      this.cdr.markForCheck();
+
       this.commerceService.removeFavorite(productId).subscribe({
         next: () => {
-          this.favoriteIds.delete(productId);
           this.snackBar.open('Se quitó de tus diseños guardados', 'Cerrar', { duration: 2500 });
-          this.cdr.markForCheck();
         },
-        error: () =>
-          this.snackBar.open('No se pudo quitar de favoritos', 'Cerrar', { duration: 3000 }),
+        error: () => {
+          // Revierte si falló el backend
+          this.favoriteIds = new Set(this.favoriteIds).add(productId);
+          this.cdr.markForCheck();
+          this.snackBar.open('No se pudo quitar de favoritos', 'Cerrar', { duration: 3000 });
+        },
       });
     } else {
+      nextFavorites.add(productId);
+      this.favoriteIds = nextFavorites;
+      this.cdr.markForCheck();
+
       this.commerceService.addFavorite(productId).subscribe({
         next: () => {
-          this.favoriteIds.add(productId);
           this.snackBar
             .open('Se agregó a tus diseños guardados', 'Ver Mis Diseños', { duration: 3500 })
             .onAction()
             .subscribe(() => this.router.navigate(['/disenos-guardados']));
-          this.cdr.markForCheck();
         },
-        error: () =>
-          this.snackBar.open('No se pudo agregar a favoritos', 'Cerrar', { duration: 3000 }),
+        error: () => {
+          // Revierte si falló el backend
+          const reverted = new Set(this.favoriteIds);
+          reverted.delete(productId);
+          this.favoriteIds = reverted;
+          this.cdr.markForCheck();
+          this.snackBar.open('No se pudo agregar a favoritos', 'Cerrar', { duration: 3000 });
+        },
       });
     }
   }
