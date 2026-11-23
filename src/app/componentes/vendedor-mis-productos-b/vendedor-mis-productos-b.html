@@ -30,11 +30,46 @@
         <div class="form_col_left">
           <div class="form_group">
             <span class="form_label">Imágenes del producto</span>
-            <div class="upload_zone">
+
+            <div class="upload_zone upload_zone_click"
+                 role="button"
+                 tabindex="0"
+                 (click)="inputImagenes.click()"
+                 (keydown.enter)="inputImagenes.click()">
+              <input #inputImagenes
+                     type="file"
+                     accept="image/jpeg,image/png,image/webp"
+                     multiple
+                     hidden
+                     (change)="seleccionarImagenes($event)">
               <mat-icon class="upload_icon">image</mat-icon>
-              <p class="upload_text">Arrastra las imágenes aquí</p>
-              <p class="upload_subtext">Formatos JPG, PNG (Máx 5MB)</p>
+              <p class="upload_text">Haz clic para elegir las imágenes</p>
+              <p class="upload_subtext">Formatos JPG, PNG o WebP (Máx 5MB, hasta 10 imágenes)</p>
             </div>
+
+            @if (previews.length > 0) {
+              <div class="vista_previa">
+                @for (url of previews; track url; let i = $index) {
+                  <div class="miniatura">
+                    <img [src]="url" [alt]="'Imagen ' + (i + 1)">
+                    @if (i === 0) {
+                      <span class="etiqueta_principal">Principal</span>
+                    }
+                    <button matButton="text"
+                            type="button"
+                            class="quitar"
+                            aria-label="Quitar imagen"
+                            (click)="quitarImagen(i)">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+
+            @if (errorImagenes) {
+              <p class="error_form" role="alert">{{ errorImagenes }}</p>
+            }
           </div>
 
           <div class="form_group">
@@ -55,7 +90,11 @@
           <div class="form_group">
             <span class="form_label">Nombre del Mueble</span>
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
-              <input matInput placeholder="Ej: Escritorio Minimalista de Roble">
+              <input matInput
+                     name="nombre"
+                     maxlength="150"
+                     placeholder="Ej: Escritorio Minimalista de Roble"
+                     [(ngModel)]="nombre">
             </mat-form-field>
           </div>
 
@@ -63,15 +102,23 @@
             <div class="form_group">
               <span class="form_label">Categoría Principal</span>
               <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
-                <mat-select placeholder="Selecciona una categoría...">
+                <mat-select placeholder="Selecciona una categoría..."
+                            name="categoria"
+                            [(ngModel)]="categoriaId">
+                  @for (c of categorias; track c.categoryId) {
+                    <mat-option [value]="c.categoryId">{{ c.name }}</mat-option>
+                  }
                 </mat-select>
               </mat-form-field>
             </div>
             <div class="form_group">
               <span class="form_label">Material Principal</span>
               <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
-                <mat-select placeholder="Seleccionar material...">
-                </mat-select>
+                <input matInput
+                       name="material"
+                       maxlength="100"
+                       placeholder="Ej: Roble, melamina"
+                       [(ngModel)]="material">
               </mat-form-field>
             </div>
           </div>
@@ -80,13 +127,48 @@
             <div class="form_group">
               <span class="form_label">Precio de Venta (S/)</span>
               <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
-                <input matInput placeholder="0.00">
+                <input matInput
+                       type="number"
+                       name="precio"
+                       min="0.01"
+                       step="0.01"
+                       placeholder="0.00"
+                       [(ngModel)]="precio">
               </mat-form-field>
             </div>
             <div class="form_group">
               <span class="form_label">Stock Disponible</span>
               <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
-                <input matInput type="number" placeholder="1">
+                <input matInput
+                       type="number"
+                       name="stock"
+                       min="0"
+                       step="1"
+                       placeholder="1"
+                       [(ngModel)]="stock">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="form_row_2">
+            <div class="form_group">
+              <span class="form_label">Dimensiones</span>
+              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+                <input matInput
+                       name="dimensiones"
+                       maxlength="150"
+                       placeholder="Ej: 120 x 60 x 75 cm"
+                       [(ngModel)]="dimensiones">
+              </mat-form-field>
+            </div>
+            <div class="form_group">
+              <span class="form_label">Color</span>
+              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+                <input matInput
+                       name="color"
+                       maxlength="50"
+                       placeholder="Ej: Roble claro"
+                       [(ngModel)]="color">
               </mat-form-field>
             </div>
           </div>
@@ -96,35 +178,25 @@
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo campo_area">
               <textarea matInput
                         rows="5"
-                        placeholder="Escribe las características, medidas exactas y detalles de fabricación..."></textarea>
+                        name="descripcion"
+                        maxlength="1000"
+                        placeholder="Escribe las características, medidas exactas y detalles de fabricación..."
+                        [(ngModel)]="descripcion"></textarea>
             </mat-form-field>
-          </div>
-
-          <div class="form_row_2">
-            <div class="form_group">
-              <span class="form_label">Tiempo de Fabricación</span>
-              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
-                <mat-select placeholder="Stock inmediato (1-3 días)">
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="form_group">
-              <span class="form_label">Requiere Armado</span>
-              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
-                <mat-select placeholder="No, se entrega armado">
-                </mat-select>
-              </mat-form-field>
-            </div>
           </div>
         </div>
 
       </mat-card-content>
 
+      @if (errorMessage) {
+        <p class="error_form error_general" role="alert">{{ errorMessage }}</p>
+      }
+
       <mat-card-actions class="form_footer_actions">
         <button matButton="outlined" type="button" routerLink="/perfil-vendedor/productos">
           Cancelar
         </button>
-        <button matButton="filled" type="button">
+        <button matButton="filled" type="button" (click)="publicar()">
           <mat-icon>check_circle</mat-icon>
           Publicar Producto
         </button>
