@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { MatTabLink, MatTabNav } from '@angular/material/tabs';
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatCard } from '@angular/material/card';
 import { MatFormField, MatLabel, MatPrefix } from '@angular/material/form-field';
@@ -46,6 +46,7 @@ interface Pestana {
     MatInput,
     MatIcon,
     MatButton,
+    MatTabNavPanel,
   ],
   selector: 'app-vendedor-cotizaciones',
   styleUrl: './vendedor-cotizaciones.css',

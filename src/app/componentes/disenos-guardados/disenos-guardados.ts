@@ -241,7 +241,7 @@ export class DisenosGuardados implements OnInit, OnDestroy {
 
   // Recomendados: productos del catálogo que no están en favoritos ni en vistos recientemente.
   // Se priorizan las categorías que el usuario ya guardó y luego la mejor valoración.
-  private buildRecommendations(catalog: ProductDTO[]): ProductDTO[] {
+  /*private buildRecommendations(catalog: ProductDTO[]): ProductDTO[] {
     const excluded = new Set<number | undefined>(
       [...this.favorites, ...this.recentlyViewed].map((p) => p.productId),
     );
@@ -255,7 +255,7 @@ export class DisenosGuardados implements OnInit, OnDestroy {
         return catDiff !== 0 ? catDiff : (b.rating ?? 0) - (a.rating ?? 0);
       })
       .slice(0, this.previewSize);
-  }
+  }*/
 
   // ---------- Sección "Diseños Guardados" ----------
 
@@ -429,7 +429,7 @@ export class DisenosGuardados implements OnInit, OnDestroy {
   }
 
   private requireBuyer(): boolean {
-    if (environment.useMockData) return true; // modo demo: sin login
+    /*if (environment.useMockData) return true; // modo demo: sin login*/
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/inicio-sesion'], {
         queryParams: { returnUrl: '/disenos-guardados' },

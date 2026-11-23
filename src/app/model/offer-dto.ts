@@ -3,7 +3,7 @@ export class OfferDTO {
   requestId?: number;
   sellerId?: number;
   storeName?: string;
-  amopunt?: number;
+  amount?: number;
   currency?: string;
   deliveryDays?: number;
   expiresAt?: string;

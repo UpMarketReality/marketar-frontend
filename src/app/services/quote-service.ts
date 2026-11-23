@@ -21,7 +21,7 @@ export class QuoteService {
   // US23 (Andre realizado por David K.)
   // 1. POST /api/v1/quote-requests
   createQuoteRequest(request: CreateQuoteRequest): Observable<QuoteRequestDTO> {
-    return this.http.post<QuoteRequestDTO>(`${this.apiUrl}/quote-requests`, request);
+    return this.http.post<QuoteRequestDTO>(`${this.apiUrl}/v1/quote-requests`, request);
   }
 
   // US24 (Andre realizado por David K.)
