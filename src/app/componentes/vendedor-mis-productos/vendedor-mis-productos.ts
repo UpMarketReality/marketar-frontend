@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -20,6 +20,7 @@ import {
 } from '@angular/material/card';
 import { CatalogService } from '../../services/catalog-service';
 import { ProductDTO } from '../../model/product-dto';
+
 
 @Component({
   imports: [
@@ -51,6 +52,7 @@ import { ProductDTO } from '../../model/product-dto';
 })
 export class VendedorMisProductos implements OnInit {
   private readonly catalogService = inject(CatalogService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   // PRODUCTOS DE LA PAGINA ACTUAL (vienen de la API)
   productos: ProductDTO[] = [];
@@ -98,10 +100,12 @@ export class VendedorMisProductos implements OnInit {
         this.totalPaginas = respuesta.totalPages ?? 0;
         this.totalProductos = respuesta.totalElements ?? this.productos.length;
         this.cargando = false;
+        this.cdr.markForCheck();
       },
       error: (error: HttpErrorResponse) => {
         this.cargando = false;
         this.errorMessage = error.error?.message ?? 'No se pudieron cargar tus productos.';
+        this.cdr.markForCheck();
       },
     });
   }
