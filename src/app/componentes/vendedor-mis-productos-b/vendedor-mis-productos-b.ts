@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { MatTabLink, MatTabNav } from '@angular/material/tabs';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
@@ -10,6 +11,7 @@ import { MatButton } from '@angular/material/button';
 import { MatCard, MatCardActions, MatCardContent, MatCardTitle } from '@angular/material/card';
 import { CatalogService } from '../../services/catalog-service';
 import { CategoryDTO } from '../../model/category-dto';
+import { ProductRequest } from '../../model/product-request';
 
 @Component({
   imports: [
@@ -18,6 +20,7 @@ import { CategoryDTO } from '../../model/category-dto';
     RouterLinkActive,
     MatTabNav,
     MatTabLink,
+    MatTabNavPanel,
     MatFormField,
     MatInput,
     MatSelect,
@@ -35,6 +38,7 @@ import { CategoryDTO } from '../../model/category-dto';
 })
 export class VendedorMisProductosB implements OnInit, OnDestroy {
   private readonly catalogService = inject(CatalogService);
+  private readonly router = inject(Router);
 
   // LÍMITES DEL BACKEND (US08)
   private readonly maxImagenes = 10;
@@ -58,9 +62,10 @@ export class VendedorMisProductosB implements OnInit, OnDestroy {
   imagenes: File[] = [];
   previews: string[] = [];
 
-  // Mensajes de la pantalla
+  // Estado de la pantalla
   errorImagenes = '';
   errorMessage = '';
+  guardando = false;
 
   ngOnInit(): void {
     this.catalogService.getProductCategories().subscribe({
@@ -128,7 +133,9 @@ export class VendedorMisProductosB implements OnInit, OnDestroy {
     this.errorImagenes = '';
   }
 
+  // POST /api/v1/seller/products. Si sale bien, vuelve al catálogo del vendedor
   publicar(): void {
+    if (this.guardando) return;
     this.errorMessage = '';
 
     if (!this.formularioValido) {
@@ -136,6 +143,27 @@ export class VendedorMisProductosB implements OnInit, OnDestroy {
       return;
     }
 
+    const producto = new ProductRequest();
+    producto.name = this.nombre.trim();
+    producto.description = this.descripcion.trim();
+    producto.categoryId = this.categoriaId as number;
+    producto.unitPrice = this.precio as number;
+    producto.dimensions = this.dimensiones.trim();
+    producto.material = this.material.trim();
+    producto.color = this.color.trim();
+    producto.stock = this.stock as number;
 
+    this.guardando = true;
+
+    this.catalogService.createProduct(producto, this.imagenes).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/perfil-vendedor/productos');
+      },
+      error: (error: HttpErrorResponse) => {
+        this.guardando = false;
+        this.errorMessage =
+          error.error?.message ?? 'No se pudo publicar el producto. Inténtalo nuevamente.';
+      },
+    });
   }
 }
