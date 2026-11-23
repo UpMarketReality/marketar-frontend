@@ -1,0 +1,207 @@
+<main class="contenido_main_vendedor">
+  <section class="view_section">
+
+    <header class="encabezado">
+      <div>
+        <h1 class="page_title">Editar Producto</h1>
+        <p class="subtitulo">Código #{{ productId }}</p>
+      </div>
+
+      <button matButton="outlined" type="button" routerLink="/perfil-vendedor/productos">
+        <mat-icon>arrow_back</mat-icon>
+        Volver a mis productos
+      </button>
+    </header>
+
+    @if (mensaje) {
+      <p class="mensaje" [class.mensaje_error]="tipoMensaje === 'error'" role="status">
+        {{ mensaje }}
+      </p>
+    }
+
+    @if (cargando) {
+      <p class="estado_carga">Cargando producto...</p>
+    } @else {
+
+      <mat-card appearance="outlined" class="form_card">
+        <mat-card-content class="form_layout">
+
+          <!-- COLUMNA IZQUIERDA: IMAGENES -->
+          <div class="form_col_left">
+
+            <div class="form_group">
+              <span class="form_label">Imágenes actuales</span>
+
+              @if (imagenesActuales.length === 0) {
+                <p class="ayuda">Este producto no tiene imágenes cargadas.</p>
+              }
+
+              <div class="miniaturas">
+                @for (imagen of imagenesActuales; track imagen.imageId) {
+                  <div class="miniatura" [class.miniatura_quitada]="estaQuitada(idImagen(imagen))">
+                    <img [src]="imagen.url" alt="Imagen del producto">
+
+                    @if (imagen.principal) {
+                      <span class="etiqueta_principal">Principal</span>
+                    }
+
+                    <button type="button"
+                            class="quitar"
+                            [attr.aria-label]="estaQuitada(idImagen(imagen)) ? 'Conservar imagen' : 'Quitar imagen'"
+                            (click)="alternarImagenActual(idImagen(imagen))">
+                      <mat-icon>{{ estaQuitada(idImagen(imagen)) ? 'undo' : 'close' }}</mat-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+
+              <p class="ayuda">Las imágenes quitadas se eliminan al guardar.</p>
+            </div>
+
+            <div class="form_group">
+              <span class="form_label">Agregar imágenes</span>
+
+              <label class="upload_zone" for="nuevasImagenes">
+                <mat-icon class="upload_icon">add_photo_alternate</mat-icon>
+                <p class="upload_text">Selecciona imágenes</p>
+                <p class="upload_subtext">JPG, PNG o WebP (máx. 5 MB cada una)</p>
+              </label>
+
+              <input id="nuevasImagenes"
+                     class="input_oculto"
+                     type="file"
+                     multiple
+                     accept="image/jpeg,image/png,image/webp"
+                     (change)="seleccionarImagenes($event)">
+
+              @if (errorImagenes) {
+                <p class="error_form">{{ errorImagenes }}</p>
+              }
+
+              @if (previews.length > 0) {
+                <div class="miniaturas">
+                  @for (url of previews; track url; let i = $index) {
+                    <div class="miniatura">
+                      <img [src]="url" alt="Imagen nueva">
+                      <button type="button"
+                              class="quitar"
+                              aria-label="Quitar imagen nueva"
+                              (click)="quitarNueva(i)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+
+            <p class="ayuda">Total de imágenes: {{ totalImagenes }} de {{ maximoImagenes }}</p>
+          </div>
+
+          <!-- COLUMNA DERECHA: DATOS -->
+          <div class="form_col_right">
+
+            <div class="form_group">
+              <span class="form_label">Estado</span>
+              <div class="bloque_estado">
+                <span>Producto activo (visible en la tienda)</span>
+                <mat-slide-toggle [(ngModel)]="activo"></mat-slide-toggle>
+              </div>
+            </div>
+
+            <div class="form_group">
+              <span class="form_label">Nombre del producto</span>
+              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+                <input matInput maxlength="150" placeholder="Ej: Escritorio Minimalista de Roble" [(ngModel)]="nombre">
+              </mat-form-field>
+            </div>
+
+            <div class="form_group">
+              <span class="form_label">Categoría</span>
+              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+                <mat-select placeholder="Selecciona una categoría..." [(ngModel)]="categoriaId">
+                  @for (categoria of categorias; track categoria.categoryId) {
+                    <mat-option [value]="categoria.categoryId">{{ categoria.name }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="form_row_2">
+              <div class="form_group">
+                <span class="form_label">Precio de venta (S/)</span>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+                  <input matInput type="number" min="0" step="0.01" placeholder="0.00" [(ngModel)]="precio">
+                </mat-form-field>
+              </div>
+
+              <div class="form_group">
+                <span class="form_label">Precio por mayor (S/) <small>(opcional)</small></span>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+                  <input matInput type="number" min="0" step="0.01" placeholder="0.00" [(ngModel)]="precioMayor">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form_row_2">
+              <div class="form_group">
+                <span class="form_label">Stock disponible</span>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+                  <input matInput type="number" min="0" step="1" placeholder="0" [(ngModel)]="stock">
+                </mat-form-field>
+              </div>
+
+              <div class="form_group">
+                <span class="form_label">Material principal</span>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+                  <input matInput maxlength="100" placeholder="Ej: Melamina" [(ngModel)]="material">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form_row_2">
+              <div class="form_group">
+                <span class="form_label">Color</span>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+                  <input matInput maxlength="50" placeholder="Ej: Roble claro" [(ngModel)]="color">
+                </mat-form-field>
+              </div>
+
+              <div class="form_group">
+                <span class="form_label">Dimensiones</span>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+                  <input matInput maxlength="150" placeholder="Ej: 120 x 60 x 75 cm" [(ngModel)]="dimensiones">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form_group">
+              <span class="form_label">Descripción detallada</span>
+              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="campo">
+              <textarea matInput
+                        rows="5"
+                        maxlength="1000"
+                        placeholder="Escribe las características, medidas exactas y detalles de fabricación..."
+                        [(ngModel)]="descripcion"></textarea>
+              </mat-form-field>
+            </div>
+
+          </div>
+
+        </mat-card-content>
+
+        <mat-card-actions class="form_footer_actions">
+          <button matButton="outlined" type="button" routerLink="/perfil-vendedor/productos">
+            Cancelar
+          </button>
+          <button matButton="filled" type="button" [disabled]="guardando" (click)="guardar()">
+            <mat-icon>save</mat-icon>
+            {{ guardando ? 'Guardando...' : 'Guardar Cambios' }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+    }
+
+  </section>
+</main>

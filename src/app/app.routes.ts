@@ -21,6 +21,9 @@ import { DisenosGuardados } from './componentes/disenos-guardados/disenos-guarda
 import { VendedorPerfil } from './componentes/vendedor-perfil/vendedor-perfil';
 import { VendedorCotizaciones } from './componentes/vendedor-cotizaciones/vendedor-cotizaciones';
 import { GeneralLayoutComponente } from './componentes/general-layout-componente/general-layout-componente';
+import { VendedorEditarProducto } from './componentes/vendedor-editar-producto/vendedor-editar-producto';
+import { VendedorInicioSesion } from './componentes/vendedor-inicio-sesion/vendedor-inicio-sesion';
+import { VendedorRegistro } from './componentes/vendedor-registro/vendedor-registro';
 import {
   SolicitarCotizacionComponente
 } from './componentes/solicitar-cotizacion-componente/solicitar-cotizacion-componente';
@@ -74,6 +77,10 @@ export const routes: Routes = [
       {
         path: 'nuevo-producto',
         component: VendedorMisProductosB,
+      },
+      {
+        path: 'productos/:id/editar',
+        component: VendedorEditarProducto,
       },
       {
         path: 'gestor-pedidos',

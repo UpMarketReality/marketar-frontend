@@ -1,0 +1,339 @@
+/* =========================================
+   PALETA DE LA APP (igual que Mis Productos y Añadir Nuevo)
+   teal #00bfb3, títulos #1e293b, etiquetas #334155,
+   bordes #e2e8f0, texto secundario #607491
+========================================= */
+
+:host {
+  display: block;
+
+  /* Campos de formulario */
+  --mat-form-field-container-height: 38px;
+  --mat-form-field-container-vertical-padding: 10px;
+  --mat-form-field-container-text-size: 12px;
+  --mat-form-field-outlined-container-shape: 5px;
+  --mat-form-field-outlined-outline-color: #e2e8f0;
+  --mat-form-field-outlined-hover-outline-color: #cbd5e1;
+  --mat-form-field-outlined-focus-outline-color: #00bfb3;
+  --mat-form-field-outlined-focus-outline-width: 1px;
+  --mat-form-field-outlined-input-text-color: #334155;
+  --mat-form-field-outlined-input-text-placeholder-color: #94a3b8;
+  --mat-select-trigger-text-size: 12px;
+  --mat-select-enabled-trigger-text-color: #334155;
+  --mat-select-enabled-arrow-color: #64748b;
+  --mat-select-focused-arrow-color: #00bfb3;
+
+  /* Botones */
+  --mat-button-outlined-label-text-color: #334155;
+  --mat-button-outlined-outline-color: #e2e8f0;
+  --mat-button-outlined-container-height: 40px;
+  --mat-button-outlined-container-shape: 5px;
+  --mat-button-outlined-label-text-size: 13px;
+  --mat-button-outlined-label-text-weight: 600;
+
+  --mat-button-filled-container-color: #00bfb3;
+  --mat-button-filled-label-text-color: #ffffff;
+  --mat-button-filled-container-height: 40px;
+  --mat-button-filled-container-shape: 5px;
+  --mat-button-filled-label-text-size: 13px;
+  --mat-button-filled-label-text-weight: 600;
+
+  /* Interruptor de estado (activo / inactivo) */
+  --mat-switch-selected-track-color: #00bfb3;
+  --mat-switch-selected-handle-color: #ffffff;
+  --mat-switch-selected-hover-track-color: #009e95;
+  --mat-switch-selected-focus-track-color: #009e95;
+  --mat-switch-selected-pressed-track-color: #009e95;
+  --mat-switch-selected-icon-color: #007e77;
+  --mdc-switch-selected-track-color: #00bfb3;
+  --mdc-switch-selected-handle-color: #ffffff;
+  --mdc-switch-selected-hover-track-color: #009e95;
+  --mdc-switch-selected-focus-track-color: #009e95;
+  --mdc-switch-selected-pressed-track-color: #009e95;
+
+  /* Tarjetas */
+  --mat-card-outlined-container-color: #ffffff;
+  --mat-card-outlined-container-outline-color: #e2e8f0;
+}
+
+/* =========================================
+   ESTRUCTURA
+========================================= */
+
+.view_section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.page_title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1e293b;
+}
+
+.subtitulo {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #607491;
+}
+
+.mensaje {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #e3f9f7;
+  color: #007e77;
+  font-size: 14px;
+}
+
+.mensaje_error {
+  background: #fff6f6;
+  color: #bc3039;
+  border: 1px solid #fecaca;
+}
+
+.estado_carga {
+  margin: 0;
+  padding: 48px 16px;
+  text-align: center;
+  color: #607491;
+}
+
+/* =========================================
+   TARJETA DEL FORMULARIO
+========================================= */
+
+.form_card {
+  padding: 24px 28px;
+  border-radius: 12px;
+  border-color: #e2e8f0;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgb(15 23 42 / 5%);
+}
+
+.form_layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 28px;
+  padding: 0;
+}
+
+.form_group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.form_label {
+  display: block;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.form_label small {
+  font-weight: 400;
+  color: #607491;
+}
+
+/* Etiquetas de la columna izquierda en verde, como en Añadir Nuevo */
+.form_col_left .form_label {
+  color: #007e77;
+}
+
+.form_row_2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.campo {
+  width: 100%;
+}
+
+.ayuda {
+  margin: 0;
+  font-size: 12px;
+  color: #607491;
+}
+
+.error_form {
+  margin: 0;
+  font-size: 12px;
+  color: #bc3039;
+}
+
+/* =========================================
+   IMÁGENES
+========================================= */
+
+.miniaturas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+.miniatura {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  background: #f7f9fb;
+}
+
+.miniatura img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.miniatura_quitada img {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+.etiqueta_principal {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #00bfb3;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.quitar {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgb(30 41 59 / 75%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.quitar:hover {
+  background: #bc3039;
+}
+
+.quitar mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.upload_zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 180px;
+  padding: 24px;
+  border: 1px dashed #67e8d9;
+  border-radius: 12px;
+  background: #effdfa;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.upload_zone:hover {
+  border-color: #00bfb3;
+}
+
+.upload_icon {
+  width: 36px;
+  height: 36px;
+  font-size: 36px;
+  color: #00bfb3;
+}
+
+.upload_text {
+  margin: 0;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.upload_subtext {
+  margin: 0;
+  font-size: 12px;
+  color: #607491;
+}
+
+.input_oculto {
+  display: none;
+}
+
+/* =========================================
+   ESTADO Y PIE DEL FORMULARIO
+========================================= */
+
+.bloque_estado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.form_footer_actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 20px 0 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.form_footer_actions mat-icon {
+  margin-right: 6px;
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+@media (max-width: 900px) {
+  .form_card {
+    padding: 18px;
+  }
+
+  .form_layout,
+  .form_row_2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .form_footer_actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}

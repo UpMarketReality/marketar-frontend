@@ -26,84 +26,94 @@
     <div class="toolbar_container">
       <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search_field">
         <mat-icon matPrefix>search</mat-icon>
-        <input matInput type="search" placeholder="Buscar por nombre o ID...">
+        <input matInput type="search" placeholder="Buscar por nombre o ID..." [(ngModel)]="busqueda">
       </mat-form-field>
 
       <div class="filter_actions">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-select value="todos" aria-label="Filtrar por estado">
-            <mat-option value="todos">Todos (12)</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-select value="recientes" aria-label="Ordenar productos">
-            <mat-option value="recientes">Más recientes</mat-option>
+          <mat-select [(ngModel)]="estadoFiltro" aria-label="Filtrar por estado">
+            <mat-option value="todos">Todos ({{ totalProductos }})</mat-option>
+            <mat-option value="ACTIVO">Activos</mat-option>
+            <mat-option value="AGOTADO">Agotados</mat-option>
+            <mat-option value="INACTIVO">Inactivos</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
     </div>
 
-    <div class="product_grid">
-      <mat-card appearance="outlined" class="product_card">
-        <div class="product_image_wrapper">
-          <mat-chip class="status_chip" highlighted>
-            <mat-icon matChipAvatar class="status_dot">circle</mat-icon>
-            Activo
-          </mat-chip>
-          <img mat-card-image src="assets/placeholder-mueble.svg" alt="Armario" class="product_img">
-        </div>
+    @if (errorMessage) {
+      <p class="mensaje_error" role="alert">{{ errorMessage }}</p>
+    }
 
-        <mat-card-content class="product_info">
-          <p class="product_category">Armarios & Closets</p>
-          <h3 mat-card-title class="product_name">Armario Bella y la Bestia de Melamina</h3>
-          <div class="product_meta">
-            <span class="product_price">S/ 2,400.00</span>
-            <span class="product_stock">Stock: 5</span>
-          </div>
-        </mat-card-content>
+    @if (cargando) {
+      <p class="estado_vacio">Cargando productos...</p>
+    } @else if (productos.length === 0) {
+      <div class="estado_vacio">
+        <mat-icon>inventory_2</mat-icon>
+        <p>Aún no tienes productos publicados.</p>
+        <button matButton="filled" type="button" routerLink="/perfil-vendedor/nuevo-producto">
+          <mat-icon>add_box</mat-icon>
+          Añadir Nuevo
+        </button>
+      </div>
+    } @else if (productosFiltrados.length === 0) {
+      <p class="estado_vacio">No hay productos que coincidan con la búsqueda o el filtro.</p>
+    } @else {
 
-        <mat-card-actions class="product_actions">
-          <button matButton="outlined" class="card_btn">
-            <mat-icon>edit</mat-icon>
-            Editar
-          </button>
-          <button matButton="outlined" class="card_btn card_btn_danger">
-            <mat-icon>delete</mat-icon>
-            Eliminar
-          </button>
-        </mat-card-actions>
-      </mat-card>
+      <div class="product_grid">
+        @for (producto of productosFiltrados; track producto.productId) {
+          <mat-card appearance="outlined" class="product_card">
+            <div class="product_image_wrapper">
+              <mat-chip class="status_chip"
+                        [class.chip_agotado]="producto.status === 'AGOTADO'"
+                        [class.chip_inactivo]="producto.status === 'INACTIVO'"
+                        highlighted>
+                <mat-icon matChipAvatar class="status_dot">circle</mat-icon>
+                {{ etiquetaEstado(producto.status) }}
+              </mat-chip>
 
-      <mat-card appearance="outlined" class="product_card">
-        <div class="product_image_wrapper">
-          <mat-chip class="status_chip" highlighted>
-            <mat-icon matChipAvatar class="status_dot">circle</mat-icon>
-            Activo
-          </mat-chip>
-          <img mat-card-image src="assets/placeholder-mueble.svg" alt="Escritorio" class="product_img">
-        </div>
+              @if (producto.mainImageUrl) {
+                <img mat-card-image
+                     [src]="producto.mainImageUrl"
+                     [alt]="producto.name ?? ''"
+                     class="product_img">
+              } @else {
+                <div class="product_sin_imagen">
+                  <mat-icon>image_not_supported</mat-icon>
+                </div>
+              }
+            </div>
 
-        <mat-card-content class="product_info">
-          <p class="product_category">Escritorios</p>
-          <h3 mat-card-title class="product_name">Escritorio Minimalista Roble Claro</h3>
-          <div class="product_meta">
-            <span class="product_price">S/ 1,450.00</span>
-            <span class="product_stock">Stock: 2</span>
-          </div>
-        </mat-card-content>
+            <mat-card-content class="product_info">
+              <p class="product_category">Código #{{ producto.productId }}</p>
+              <h3 mat-card-title class="product_name">{{ producto.name }}</h3>
+              <div class="product_meta">
+                <span class="product_price">S/ {{ producto.price | number:'1.2-2' }}</span>
+                <span class="product_stock">Stock: {{ producto.stock }}</span>
+              </div>
+            </mat-card-content>
 
-        <mat-card-actions class="product_actions">
-          <button matButton="outlined" class="card_btn">
-            <mat-icon>edit</mat-icon>
-            Editar
-          </button>
-          <button matButton="outlined" class="card_btn card_btn_danger">
-            <mat-icon>delete</mat-icon>
-            Eliminar
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+            <mat-card-actions class="product_actions">
+              <button matButton="outlined"
+                      class="card_btn"
+                      [routerLink]="['/perfil-vendedor/productos', producto.productId, 'editar']">
+                <mat-icon>edit</mat-icon>
+                Editar
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+
+      <div class="paginacion">
+        <button matButton="outlined" type="button" [disabled]="pagina === 0" (click)="paginaAnterior()">
+          Anterior
+        </button>
+        <span>Página {{ pagina + 1 }} de {{ totalPaginas }}</span>
+        <button matButton="outlined" type="button" [disabled]="pagina >= totalPaginas - 1" (click)="paginaSiguiente()">
+          Siguiente
+        </button>
+      </div>
+    }
   </section>
 </main>

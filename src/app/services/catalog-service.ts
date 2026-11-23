@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { PageDTO } from '../model/page-dto';
 import { ProductDTO } from '../model/product-dto';
 import { CategoryDTO } from '../model/category-dto';
@@ -29,7 +29,6 @@ export class CatalogService {
     page: number = 0,
     size: number = 20,
   ): Observable<PageDTO<ProductDTO>> {
-
     let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
 
     if (search && search.trim() !== '') {
@@ -70,9 +69,49 @@ export class CatalogService {
     return this.http.put<StoreDTO>(`${this.apiUrl}/seller/store`, data);
   }
 
-  // US08 - POST /api/v1/seller/products
-  // Envío multipart: "data" con el JSON del producto y "images" con las imágenes
+  // US08 / US21 - PRODUCTOS DEL VENDEDOR
+
+  // GET /api/v1/seller/products (paginado)
+  getOwnProducts(page: number = 0, size: number = 12): Observable<PageDTO<ProductDTO>> {
+    const params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+    return this.http.get<PageDTO<ProductDTO>>(`${this.apiUrl}/seller/products`, { params });
+  }
+
+  // GET /api/v1/seller/products/{productId}
+  getOwnProduct(productId: number): Observable<ProductDTO> {
+    return this.http.get<ProductDTO>(`${this.apiUrl}/seller/products/${productId}`);
+  }
+
+  // POST /api/v1/seller/products (US08)
   createProduct(data: ProductRequest, imagenes: File[]): Observable<ProductDTO> {
+    return this.http.post<ProductDTO>(
+      `${this.apiUrl}/seller/products`,
+      this.construirFormulario(data, imagenes),
+    );
+  }
+
+  // PUT /api/v1/seller/products/{productId} (US21)
+  // Las imágenes son opcionales: si no hay nuevas, no se envía la parte "images"
+  updateProduct(
+    productId: number,
+    data: ProductRequest,
+    imagenes: File[] = [],
+  ): Observable<ProductDTO> {
+    return this.http.put<ProductDTO>(
+      `${this.apiUrl}/seller/products/${productId}`,
+      this.construirFormulario(data, imagenes),
+    );
+  }
+
+  // PATCH /api/v1/seller/products/{productId}/status (activar o pausar)
+  changeStatus(productId: number, activo: boolean): Observable<ProductDTO> {
+    return this.http.patch<ProductDTO>(`${this.apiUrl}/seller/products/${productId}/status`, {
+      active: activo,
+    });
+  }
+
+  // Envío multipart: "data" con el JSON del producto y "images" con las imágenes
+  private construirFormulario(data: ProductRequest, imagenes: File[]): FormData {
     const formulario = new FormData();
     formulario.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
 
@@ -81,6 +120,6 @@ export class CatalogService {
     }
 
     // No se pone Content-Type: el navegador agrega el boundary del multipart
-    return this.http.post<ProductDTO>(`${this.apiUrl}/seller/products`, formulario);
+    return formulario;
   }
 }
