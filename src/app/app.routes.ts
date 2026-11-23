@@ -21,8 +21,9 @@ import { DisenosGuardados } from './componentes/disenos-guardados/disenos-guarda
 import { VendedorPerfil } from './componentes/vendedor-perfil/vendedor-perfil';
 import { VendedorCotizaciones } from './componentes/vendedor-cotizaciones/vendedor-cotizaciones';
 import { GeneralLayoutComponente } from './componentes/general-layout-componente/general-layout-componente';
-import { VendedorInicioSesion } from './componentes/vendedor-inicio-sesion/vendedor-inicio-sesion';
-import { VendedorRegistro } from './componentes/vendedor-registro/vendedor-registro';
+import {
+  SolicitarCotizacionComponente
+} from './componentes/solicitar-cotizacion-componente/solicitar-cotizacion-componente';
 
 export const routes: Routes = [
   // PANEL DEL VENDEDOR: sin encabezado del comprador
@@ -32,25 +33,25 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'inicio-sesion',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'inicio-sesion',
         component: InicioSesion,
         data: {
           modo: 'login',
-          tipoCuenta: 'VENDEDOR'
-        }
+          tipoCuenta: 'VENDEDOR',
+        },
       },
       {
         path: 'registro',
         component: InicioSesion,
         data: {
           modo: 'registro',
-          tipoCuenta: 'VENDEDOR'
-        }
-      }
-    ]
+          tipoCuenta: 'VENDEDOR',
+        },
+      },
+    ],
   },
   {
     path: 'perfil-vendedor',
@@ -58,13 +59,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
     data: {
       role: 'VENDEDOR',
-      loginUrl: '/vendedor/inicio-sesion'
+      loginUrl: '/vendedor/inicio-sesion',
     },
     children: [
       {
         path: '',
         component: VendedorPerfil,
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'productos',
@@ -100,18 +101,31 @@ export const routes: Routes = [
         component: InicioSesion,
         data: {
           modo: 'login',
-          tipoCuenta: 'COMPRADOR'
-        }
+          tipoCuenta: 'COMPRADOR',
+        },
       },
       {
         path: 'registro',
         component: InicioSesion,
         data: {
           modo: 'registro',
-          tipoCuenta: 'COMPRADOR'
-        }
+          tipoCuenta: 'COMPRADOR',
+        },
       },
-      { path: 'empieza-acrear', component: EmpiezaACrear, canActivate: [authGuard], data: { role: 'COMPRADOR' } },
+      {
+        path: 'empieza-acrear',
+        component: EmpiezaACrear,
+        canActivate: [authGuard],
+        data: { role: 'COMPRADOR' },
+      },
+      {
+        path: 'solicitar-cotizacion/:prototypeId',
+        component: SolicitarCotizacionComponente,
+        canActivate: [authGuard],
+        data: {
+          role: 'COMPRADOR',
+        },
+      },
       { path: 'catalogo', component: CatalogComponent },
       { path: 'producto/:productId', component: DetalleProductos },
       { path: 'home1', component: Home1 },

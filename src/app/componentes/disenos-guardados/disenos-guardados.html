@@ -67,7 +67,7 @@
                   <p class="tarjeta__estado" [ngClass]="quoteStatusClass(item.quote)">
                     {{ quoteStatusLabel(item.quote) }}
                   </p>
-                  <button mat-flat-button type="button" class="tarjeta__boton tarjeta__boton--oscuro" (click)="goToQuotes(item.quote)">
+                  <button mat-flat-button type="button" class="tarjeta__boton tarjeta__boton--oscuro" (click)="goToQuotes(item)">
                     <mat-icon svgIcon="file"></mat-icon>
                     {{ item.quote ? 'Ver Cotizaciones' : 'Solicitar Cotización' }}
                   </button>

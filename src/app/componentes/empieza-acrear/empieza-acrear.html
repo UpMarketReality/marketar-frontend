@@ -429,6 +429,21 @@
                 Ver en Mis diseños
 
               </a>
+              @if (
+                prototipo?.generationStatus === 'COMPLETADO' &&
+                prototipo?.prototypeId
+                ) {
+                <a
+                  class="btn btn-quote"
+                  [routerLink]="[
+                   '/solicitar-cotizacion',
+                   prototipo?.prototypeId
+                   ]"
+                >
+                  <i class="fa-solid fa-file-invoice-dollar"></i>
+                  Solicitar cotización
+                </a>
+              }
 
             </div>
 

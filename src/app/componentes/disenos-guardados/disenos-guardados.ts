@@ -340,15 +340,24 @@ export class DisenosGuardados implements OnInit, OnDestroy {
     return 'estado--proceso';
   }
 
-  goToQuotes(quote?: QuoteRequestDTO): void {
-    if (quote) {
+  goToQuotes(item: Extract<SavedItem, { kind: 'prototype' }>): void {
+    if (item.quote?.requestId != null) {
       this.router.navigate(['/perfil-comprador/cotizacion'], {
-        queryParams: { requestId: quote.requestId },
+        queryParams: {
+          requestId: item.quote.requestId,
+        },
       });
-    } else {
-      // Aún no se ha solicitado cotización: se lleva al flujo de creación
-      this.router.navigate(['/empieza-acrear']);
+      return;
     }
+
+    if (item.prototype.generationStatus === 'COMPLETADO') {
+      this.router.navigate(['/solicitar-cotizacion', item.prototype.prototypeId]);
+      return;
+    }
+
+    this.snackBar.open('El diseño debe estar completado para solicitar una cotización.', 'Cerrar', {
+      duration: 3500,
+    });
   }
 
   // ---------- Acciones de producto ----------
