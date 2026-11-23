@@ -250,6 +250,69 @@
 }
 
 /* =========================================
+   ZONA DE IMÁGENES, VISTA PREVIA Y ERRORES
+========================================= */
+
+.upload_zone_click {
+  cursor: pointer;
+}
+
+.vista_previa {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.miniatura {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.miniatura img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.etiqueta_principal {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #00bfb3;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.miniatura .quitar {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: auto;
+  padding: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 90%);
+  --mat-button-text-label-text-color: #334155;
+}
+
+.error_form {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #bc3039;
+}
+
+.error_general {
+  padding: 0 24px;
+}
+
+/* =========================================
    DISEÑO RESPONSIVO
 ========================================= */
 
