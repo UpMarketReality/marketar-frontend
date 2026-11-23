@@ -3,7 +3,7 @@
   <!-- CABECERA: pestañas principales y botones -->
   <div class="cabecera">
 
-    <nav mat-tab-nav-bar class="tabs_principales" aria-label="Módulos del vendedor">
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel1" class="tabs_principales" aria-label="Módulos del vendedor">
       <a mat-tab-link
          [active]="pestanaPrincipal === 'cotizaciones'"
          (click)="pestanaPrincipal = 'cotizaciones'">
@@ -15,6 +15,7 @@
         Finanzas y Liquidaciones
       </a>
     </nav>
+    <mat-tab-nav-panel #tabPanel1></mat-tab-nav-panel>
 
     @if (pestanaPrincipal === 'cotizaciones') {
       <button matButton="filled" type="button" class="boton_nueva">
@@ -69,7 +70,7 @@
   @if (pestanaPrincipal === 'cotizaciones') {
 
     <!-- Pestañas por estado -->
-    <nav mat-tab-nav-bar class="tabs_secundarias" aria-label="Estados de cotizaciones">
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel2" class="tabs_secundarias" aria-label="Estados de cotizaciones">
       @for (pestana of pestanas; track pestana.estado) {
         <a mat-tab-link
            [active]="pestanaCotizacion === pestana.estado"
@@ -83,6 +84,7 @@
         </a>
       }
     </nav>
+    <mat-tab-nav-panel #tabPanel2></mat-tab-nav-panel>
 
     <div class="main_grid">
 
@@ -210,7 +212,7 @@
     </div>
 
     <!-- Pestañas financieras -->
-    <nav mat-tab-nav-bar class="tabs_secundarias" aria-label="Secciones financieras">
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel3" class="tabs_secundarias" aria-label="Secciones financieras">
       <a mat-tab-link
          [active]="pestanaFinanzas === 'movimientos'"
          (click)="pestanaFinanzas = 'movimientos'">
@@ -222,6 +224,7 @@
         Retiros y Facturación
       </a>
     </nav>
+    <mat-tab-nav-panel #tabPanel3></mat-tab-nav-panel>
 
     <div class="grid_finanzas">
 

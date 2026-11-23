@@ -2,7 +2,8 @@ import { Routes } from '@angular/router';
 import { InicioSesion } from './componentes/inicio-sesion/inicio-sesion';
 import { Carrito } from './componentes/carrito/carrito';
 import { EmpiezaACrear } from './componentes/empieza-acrear/empieza-acrear';
-import { Catalogo } from './componentes/catalogo/catalogo';
+import { CatalogComponent } from './componentes/catalogo/catalogo';
+import { DetalleProductos } from './componentes/detalle-productos/detalle-productos';
 import { Home1 } from './componentes/home1/home1';
 import { PerfilCompradorDatosComponente } from './componentes/perfil-comprador-datos-componente/perfil-comprador-datos-componente';
 import { PerfilCompradorPedidosComponente } from './componentes/perfil-comprador-pedidos-componente/perfil-comprador-pedidos-componente';
@@ -17,7 +18,6 @@ import { VendedorResumen } from './componentes/vendedor-resumen/vendedor-resumen
 import { VendedorMisProductosB } from './componentes/vendedor-mis-productos-b/vendedor-mis-productos-b';
 import { authGuard } from './core/auth/auth-guard';
 import { DisenosGuardados } from './componentes/disenos-guardados/disenos-guardados';
-import { environment } from '../environments/environment';
 import { VendedorPerfil } from './componentes/vendedor-perfil/vendedor-perfil';
 import { VendedorCotizaciones } from './componentes/vendedor-cotizaciones/vendedor-cotizaciones';
 import { GeneralLayoutComponente } from './componentes/general-layout-componente/general-layout-componente';
@@ -112,13 +112,13 @@ export const routes: Routes = [
         }
       },
       { path: 'empieza-acrear', component: EmpiezaACrear, canActivate: [authGuard], data: { role: 'COMPRADOR' } },
-      { path: 'catalogo', component: Catalogo },
+      { path: 'catalogo', component: CatalogComponent },
+      { path: 'producto/:productId', component: DetalleProductos },
       { path: 'home1', component: Home1 },
       {
         path: 'disenos-guardados',
         component: DisenosGuardados,
-        // En modo mock (datos internos) no se exige sesión para poder probar la vista
-        canActivate: environment.useMockData ? [] : [authGuard],
+        canActivate: [authGuard],
         data: { role: 'COMPRADOR' },
       },
       {

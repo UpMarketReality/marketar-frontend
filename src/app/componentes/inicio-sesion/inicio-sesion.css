@@ -49,7 +49,7 @@
       rgba(12, 18, 33, 0.05) 0%,
       rgba(12, 18, 33, 0.9) 100%
     ),
-    url('/public/images/login-sala.png');
+    url('/images/login-sala.png');
 
   background-size: cover;
   background-position: center;
@@ -62,7 +62,7 @@
       rgba(12, 18, 33, 0.1) 0%,
       rgba(12, 18, 33, 0.94) 100%
     ),
-    url('/public/images/registro-camera.jpg');
+    url('/images/registro-camera.jpg');
 }
 
 .visual-content h1 {

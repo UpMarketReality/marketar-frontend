@@ -45,6 +45,8 @@ export function provideAppIcons() {
   return provideAppInitializer(() => {
     const registry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
+    // Los <mat-icon> por nombre (ej. <mat-icon>favorite</mat-icon>) usan la fuente Material Symbols de index.html
+    registry.setDefaultFontSetClass('material-symbols-outlined');
     for (const [name, svg] of Object.entries(APP_ICONS)) {
       registry.addSvgIconLiteral(name, sanitizer.bypassSecurityTrustHtml(svg));
     }

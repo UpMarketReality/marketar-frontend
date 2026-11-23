@@ -1,1 +1,192 @@
-<p>detalle-productos works!</p>
+<div class="page-wrapper">
+  @if (loading) {
+    <div class="state-container">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Cargando producto...</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="state-container">
+      <mat-icon color="warn">error_outline</mat-icon>
+      <p>{{ errorMessage }}</p>
+      <button mat-stroked-button (click)="retry()">Reintentar</button>
+    </div>
+  } @else if (product) {
+    <main class="product-container">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a routerLink="/home1">Inicio</a>
+        <span>/</span>
+        <a routerLink="/catalogo">Catálogo</a>
+        <span>/</span>
+        <span>Categoría #{{ product.categoryId }}</span>
+        <span>/</span>
+        <span class="current">{{ product.name }}</span>
+      </nav>
+
+      <!-- Sección Superior: Galería + Detalle de Compra -->
+      <section class="hero-grid">
+        <!-- Columna Izquierda: Galería -->
+        <div class="gallery-column">
+          <div class="main-image-card">
+            <img
+              [src]="selectedImageUrl"
+              [alt]="product.name"
+              class="main-image"
+              (error)="onImageError($event)"
+            />
+            <button mat-flat-button class="ar-badge-btn" (click)="openARViewer()">
+              <mat-icon>view_in_ar</mat-icon>
+              Ver en AR
+            </button>
+          </div>
+
+          @if (product.images && product.images.length) {
+            <div class="thumbnails-row">
+              @for (img of product.images; track img.imageId) {
+                <button
+                  type="button"
+                  class="thumb-btn"
+                  [class.active]="isSelected(img)"
+                  (click)="selectImage(img)">
+                  <img [src]="resolveImage(img.url)" [alt]="product.name + ' imagen ' + img.imageId" (error)="onImageError($event)" />
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Columna Derecha: Información y Acciones -->
+        <div class="info-column">
+          <h1 class="product-title">{{ product.name }}</h1>
+
+          <div class="price-box">
+            <span class="price-label">PRECIO ESTIMADO</span>
+            <div class="price-value">S/ {{ product.price | number:'1.2-2' }}</div>
+
+            @if (hasWholesaleDiscount) {
+              <div class="wholesale-note">
+                Precio mayorista: <strong>S/ {{ product.wholesalePrice | number:'1.2-2' }}</strong>
+              </div>
+            }
+
+            <p class="price-note">
+              Incluye IGV · Stock disponible: <strong>{{ product.stock }}</strong> ·
+              Estado: <strong>{{ product.status }}</strong>
+            </p>
+          </div>
+
+          <!-- Tienda / Vendedor -->
+          <mat-card appearance="outlined" class="manufacturer-card">
+            <div class="manufacturer-content">
+              <div class="avatar-circle">{{ getStoreInitials(product.storeName) }}</div>
+              <div>
+                <div class="manufacturer-name">{{ product.storeName }}</div>
+                <div class="manufacturer-sub">Vendedor #{{ product.sellerId }}</div>
+              </div>
+            </div>
+          </mat-card>
+
+          <!-- Color y Material -->
+          <div class="attributes-box">
+            <div class="attr-line">
+              <span>Color / Acabado:</span>
+              <strong>{{ product.color }}</strong>
+            </div>
+            <div class="attr-line">
+              <span>Material:</span>
+              <strong>{{ product.material }}</strong>
+            </div>
+          </div>
+
+          <!-- Selector de Cantidad + Agregar al Carrito -->
+          <div class="purchase-actions">
+            <div class="quantity-selector">
+              <button
+                mat-icon-button
+                (click)="decreaseQuantity()"
+                [disabled]="quantity <= 1 || stock <= 0">
+                <mat-icon>remove</mat-icon>
+              </button>
+              <span class="qty-value">{{ quantity }}</span>
+              <button
+                mat-icon-button
+                (click)="increaseQuantity()"
+                [disabled]="stock <= 0 || quantity >= stock">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+
+            <button
+              mat-flat-button
+              class="add-cart-btn"
+              [disabled]="stock <= 0"
+              (click)="addToCart()">
+              <mat-icon>shopping_cart</mat-icon>
+              {{ stock > 0 ? 'Agregar al Carrito' : 'Sin Stock' }}
+            </button>
+          </div>
+
+          <button mat-stroked-button class="project-ar-btn" (click)="openARViewer()">
+            <mat-icon>3d_rotation</mat-icon>
+            Proyectar mueble en mi sala (AR)
+          </button>
+
+          <!-- Beneficios -->
+          <mat-card appearance="outlined" class="benefits-card">
+            <div class="benefit-item">
+              <mat-icon>local_shipping</mat-icon>
+              <span>Envío e instalación gratis en Lima Metropolitana</span>
+            </div>
+            <div class="benefit-item">
+              <mat-icon>verified_user</mat-icon>
+              <span>1 año de garantía estructural por defectos de fábrica</span>
+            </div>
+            <div class="benefit-item">
+              <mat-icon>build</mat-icon>
+              <span>Fabricación bajo pedido (Tiempo est. 10-15 días)</span>
+            </div>
+          </mat-card>
+        </div>
+      </section>
+
+      <!-- Sobre este diseño -->
+      <section class="content-section">
+        <h2 class="section-title">Sobre este diseño</h2>
+        <div class="description-text">
+          <p>{{ product.description }}</p>
+        </div>
+      </section>
+
+      <!-- Ficha Técnica -->
+      <section class="content-section">
+        <h2 class="section-title">Ficha Técnica</h2>
+        <div class="specs-grid">
+          <div class="spec-row">
+            <span class="spec-key">Material Principal</span>
+            <span class="spec-val">{{ product.material }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Dimensiones</span>
+            <span class="spec-val">{{ product.dimensions }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Color / Acabado</span>
+            <span class="spec-val">{{ product.color }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Precio Mayorista</span>
+            <span class="spec-val">S/ {{ product.wholesalePrice | number:'1.2-2' }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Stock Disponible</span>
+            <span class="spec-val">{{ product.stock }} unidades</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Estado</span>
+            <span class="spec-val">{{ product.status }}</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  }
+</div>

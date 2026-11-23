@@ -175,7 +175,9 @@ export class InicioSesion {
     // exclusiva de comprador, o viceversa.
     const rutaPermitida = esVendedor
       ? /^\/perfil-vendedor(?:\/|$)/.test(path)
-      : /^\/(?:carrito|perfil-comprador|disenos-guardados|empieza-acrear|pagos)(?:\/|$)/.test(path);
+      : /^\/(?:carrito|perfil-comprador|disenos-guardados|empieza-acrear|pagos|catalogo)(?:\/|$)/.test(
+          path,
+        );
 
     const destino =
       rutaInterna && rutaPermitida ? returnUrl! : esVendedor ? '/perfil-vendedor' : '/home1';

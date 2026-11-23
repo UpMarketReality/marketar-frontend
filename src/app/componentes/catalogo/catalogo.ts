@@ -1,330 +1,278 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-
+import { CatalogService } from '../../services/catalog-service';
 import { ProductDTO } from '../../model/product-dto';
 import { CategoryDTO } from '../../model/category-dto';
-import { PageDTO } from '../../model/page-dto';
-import { CatalogService } from '../../services/catalog-service';
-import { CommerceService } from '../../services/commerce-service';
-import { CartService } from '../../services/cart-service';
-import { AuthService } from '../../core/auth/auth.service';
-import { RecentlyViewedService } from '../../services/recently-viewed-service';
-import { environment } from '../../../environments/environment';
 
-type SortOption = 'recientes' | 'precio-asc' | 'precio-desc';
-type StarType = 'full' | 'half' | 'empty';
-
-// Valor del chip "Todos" (mat-chip-listbox necesita un valor distinto de null)
-const ALL_CATEGORIES = 'todos';
+import {Router} from '@angular/router';
+import { MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {CommerceService} from '../../services/commerce-service';
+import {AuthService} from '../../core/auth/auth.service';
 
 @Component({
-  selector: 'app-catalogo',
+  selector: 'app-catalog',
   standalone: true,
   imports: [
     CommonModule,
     FormsModule,
+    RouterModule,
     MatCardModule,
-    MatButtonModule,
-    MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatChipsModule,
-    MatMenuModule,
-    MatPaginatorModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatTooltipModule,
   ],
   templateUrl: './catalogo.html',
-  styleUrl: './catalogo.css',
+  styleUrls: ['./catalogo.css'],
 })
-export class Catalogo implements OnInit {
-  private readonly catalogService = inject(CatalogService);
-  private readonly commerceService = inject(CommerceService);
-  private readonly cartService = inject(CartService);
-  private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly recentlyViewed = inject(RecentlyViewedService);
-  private readonly snackBar = inject(MatSnackBar);
+export class CatalogComponent implements OnInit, OnDestroy {
+  private catalogService = inject(CatalogService);
+  // La app no usa zone.js: hay que avisar a Angular cuando llegan datos asíncronos
+  private cdr = inject(ChangeDetectorRef);
+  private commerceService = inject(CommerceService);
+  private authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
 
-  readonly allCategories = ALL_CATEGORIES;
+  // Datos del backend
+  products: ProductDTO[] = [];
+  categories: CategoryDTO[] = [];
 
-  // Productos de las dos secciones
-  customProducts: ProductDTO[] = [];
-  bestSellerProducts: ProductDTO[] = [];
-
-  // Categorías (GET /product-categories; si falla se usan estas por defecto)
-  categories: CategoryDTO[] = [
-    { categoryId: 1, name: 'Armarios & Closets' },
-    { categoryId: 2, name: 'Mesas de Noche' },
-    { categoryId: 3, name: 'Sillones & Sofás' },
-    { categoryId: 4, name: 'Escritorios' },
-    { categoryId: 5, name: 'Comedores' },
-    { categoryId: 6, name: 'Estanterías' },
-  ];
-
-  // Estado de carga y filtros
-  loading = true;
-  errorMessage = '';
+  // Filtros y estado
   searchQuery = '';
-  selectedCategoryId: number | null = null; // null = "Todos"
+  selectedCategoryId?: number;
+  sortBy: 'recent' | 'priceAsc' | 'priceDesc' = 'recent';
+  isLoading = false;
+  errorMessage = '';
 
-  // Ordenamiento (cliente, sobre la página actual)
-  sortOption: SortOption = 'recientes';
-  readonly sortOptions: { value: SortOption; label: string }[] = [
-    { value: 'recientes', label: 'Más recientes' },
-    { value: 'precio-asc', label: 'Precio: menor a mayor' },
-    { value: 'precio-desc', label: 'Precio: mayor a menor' },
-  ];
-
-  // Paginación (mat-paginator usa páginas base 0, igual que el backend)
+  // Paginación (8 por página: 4 en "Lo más novedoso" y 4 en "Lo más vendido")
   currentPage = 0;
+  pageSize = 8;
   totalPages = 0;
   totalElements = 0;
-  readonly pageSize = 12;
-  private readonly bestSellerSize = 4;
 
-  // Favoritos del usuario
-  private favoriteIds = new Set<number>();
+  // Favoritos locales (opcional si aún no tienes endpoint de favoritos)
+  favoriteIds = new Set<number>();
 
   ngOnInit(): void {
     this.loadCategories();
-    this.loadBestSellers();
-    this.loadFavorites();
     this.loadProducts();
+    this.loadFavorites();
+
+    // Debounce para evitar llamadas excesivas al escribir en el buscador
+    this.searchSubject
+      .pipe(debounceTime(350), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((term) => {
+        this.searchQuery = term;
+        this.currentPage = 0;
+        this.loadProducts();
+      });
   }
 
-  // ---------- Carga de datos ----------
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   loadCategories(): void {
-    this.catalogService.getProductCategories().subscribe({
-      next: (cats) => {
-        if (Array.isArray(cats) && cats.length > 0) this.categories = cats;
-      },
-      error: (err) =>
-        console.warn('No se pudieron cargar las categorías, se usan las por defecto.', err),
-    });
+    this.catalogService
+      .getProductCategories()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          this.categories = data;
+          this.cdr.markForCheck();
+        },
+        error: (err) => console.error('Error al cargar categorías:', err),
+      });
   }
 
-  loadProducts(page: number = 0): void {
-    this.loading = true;
+  loadProducts(): void {
+    this.isLoading = true;
     this.errorMessage = '';
 
     this.catalogService
       .getProducts(
-        this.searchQuery,
-        this.selectedCategoryId ?? undefined,
+        this.searchQuery || undefined,
+        this.selectedCategoryId,
         undefined,
         undefined,
-        page,
+        this.currentPage,
         this.pageSize,
       )
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (res) => {
-          this.customProducts = this.sortProducts(res?.content ?? []);
-          this.currentPage = this.pageNumberOf(res, page);
-          this.totalPages = res?.totalPages ?? 0;
-          this.totalElements = res?.totalElements ?? this.customProducts.length;
-          this.loading = false;
+        next: (page) => {
+          this.products = this.applyLocalSort(page.content ?? []);
+          this.totalPages = page.totalPages ?? 1;
+          this.totalElements = page.totalElements ?? this.products.length;
+          this.isLoading = false;
+          this.cdr.markForCheck();
         },
         error: (err) => {
-          console.error('Error al cargar el catálogo:', err);
-          this.customProducts = [];
-          this.totalPages = 0;
-          this.totalElements = 0;
-          this.errorMessage = 'No se pudieron cargar los diseños del catálogo.';
-          this.loading = false;
+          console.error('Error al cargar productos:', err);
+          this.errorMessage = 'No se pudieron cargar los productos. Intenta nuevamente.';
+          this.isLoading = false;
+          this.cdr.markForCheck();
         },
       });
   }
 
-  // "Lo más vendidos": productos con más reseñas de la primera página del catálogo
-  loadBestSellers(): void {
-    this.catalogService.getProducts(undefined, undefined, undefined, undefined, 0, 20).subscribe({
-      next: (res) =>
-        (this.bestSellerProducts = [...(res?.content ?? [])]
-          .sort((a, b) => (b.reviewCount ?? 0) - (a.reviewCount ?? 0))
-          .slice(0, this.bestSellerSize)),
-      error: () => (this.bestSellerProducts = []),
-    });
+  onSearchChange(value: string): void {
+    this.searchSubject.next(value);
   }
 
-  private loadFavorites(): void {
-    if (!environment.useMockData && !this.authService.isAuthenticated()) return;
+  selectCategory(categoryId?: number): void {
+    this.selectedCategoryId = categoryId;
+    this.currentPage = 0;
+    this.loadProducts();
+  }
+
+  onSortChange(): void {
+    this.products = this.applyLocalSort([...this.products]);
+  }
+
+  private applyLocalSort(items: ProductDTO[]): ProductDTO[] {
+    if (this.sortBy === 'priceAsc') {
+      return items.sort((a: any, b: any) => (a.price ?? 0) - (b.price ?? 0));
+    }
+    if (this.sortBy === 'priceDesc') {
+      return items.sort((a: any, b: any) => (b.price ?? 0) - (a.price ?? 0));
+    }
+    return items;
+  }
+
+  // División visual para las dos secciones de 4 tarjetas
+  get newestProducts(): ProductDTO[] {
+    return this.products.slice(0, 4);
+  }
+
+  get bestSellerProducts(): ProductDTO[] {
+    return this.products.slice(4, 8);
+  }
+
+  // Marca en el catálogo los favoritos que el usuario ya tiene guardados
+  loadFavorites(): void {
+    if (!this.authService.isAuthenticated() || !this.authService.hasRole('COMPRADOR')) return;
+
     this.commerceService.getFavorites().subscribe({
       next: (favs) => {
         this.favoriteIds = new Set(
           (favs ?? [])
-            .map((f) => f.productId ?? f.productDTO?.productId)
+            .map((f) => f.productId ?? f.product?.productId)
             .filter((id): id is number => typeof id === 'number'),
         );
+        this.cdr.markForCheck();
       },
-      error: () => (this.favoriteIds = new Set()),
+      error: (err) => console.error('Error al cargar favoritos:', err),
     });
   }
 
-  // ---------- Búsqueda, filtros y orden ----------
+  toggleFavorite(productId: number, event: Event): void {
+    event.stopPropagation();
 
-  onSearch(): void {
-    this.loadProducts(0);
-  }
+    // 1) Sin sesión: mensaje y opción de ir al login (vuelve al catálogo después)
+    if (!this.authService.isAuthenticated()) {
+      this.snackBar
+        .open('Necesita iniciar sesión para completar la acción', 'Iniciar sesión', {
+          duration: 4000,
+        })
+        .onAction()
+        .subscribe(() =>
+          this.router.navigate(['/inicio-sesion'], { queryParams: { returnUrl: '/catalogo' } }),
+        );
+      return;
+    }
 
-  // Si el usuario borra el texto, se recarga el catálogo completo
-  onSearchChange(value: string): void {
-    if (value.trim() === '') this.loadProducts(0);
-  }
+    // 2) Solo los compradores tienen favoritos
+    if (!this.authService.hasRole('COMPRADOR')) {
+      this.snackBar.open('Solo los compradores pueden guardar favoritos', 'Cerrar', {
+        duration: 3000,
+      });
+      return;
+    }
 
-  clearSearch(): void {
-    this.searchQuery = '';
-    this.loadProducts(0);
-  }
-
-  // Valor seleccionado del mat-chip-listbox
-  get selectedChip(): number | string {
-    return this.selectedCategoryId ?? ALL_CATEGORIES;
-  }
-
-  onCategoryChange(value: number | string | undefined): void {
-    // Si se vuelve a pulsar el chip activo, el listbox emite undefined: se ignora
-    if (value === undefined) return;
-    this.selectCategory(value === ALL_CATEGORIES ? null : Number(value));
-  }
-
-  selectCategory(categoryId: number | null | undefined): void {
-    this.selectedCategoryId = categoryId ?? null;
-    this.loadProducts(0);
-  }
-
-  get sortLabel(): string {
-    return this.sortOptions.find((o) => o.value === this.sortOption)?.label ?? '';
-  }
-
-  setSort(option: SortOption): void {
-    this.sortOption = option;
-    this.customProducts = this.sortProducts(this.customProducts);
-  }
-
-  private sortProducts(products: ProductDTO[]): ProductDTO[] {
-    const list = [...products];
-    switch (this.sortOption) {
-      case 'precio-asc':
-        return list.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
-      case 'precio-desc':
-        return list.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
-      default:
-        return list.sort((a, b) => (b.productId ?? 0) - (a.productId ?? 0));
+    // 3) Con sesión: se guarda o se quita en el backend
+    if (this.favoriteIds.has(productId)) {
+      this.commerceService.removeFavorite(productId).subscribe({
+        next: () => {
+          this.favoriteIds.delete(productId);
+          this.snackBar.open('Se quitó de tus diseños guardados', 'Cerrar', { duration: 2500 });
+          this.cdr.markForCheck();
+        },
+        error: () =>
+          this.snackBar.open('No se pudo quitar de favoritos', 'Cerrar', { duration: 3000 }),
+      });
+    } else {
+      this.commerceService.addFavorite(productId).subscribe({
+        next: () => {
+          this.favoriteIds.add(productId);
+          this.snackBar
+            .open('Se agregó a tus diseños guardados', 'Ver Mis Diseños', { duration: 3500 })
+            .onAction()
+            .subscribe(() => this.router.navigate(['/disenos-guardados']));
+          this.cdr.markForCheck();
+        },
+        error: () =>
+          this.snackBar.open('No se pudo agregar a favoritos', 'Cerrar', { duration: 3000 }),
+      });
     }
   }
 
-  // ---------- Paginación (mat-paginator) ----------
+  isFavorite(productId: number): boolean {
+    return this.favoriteIds.has(productId);
+  }
 
-  onPageChange(event: PageEvent): void {
-    this.loadProducts(event.pageIndex);
+  addToCart(product: ProductDTO, event: Event): void {
+    event.stopPropagation();
+    console.log('Agregado al carrito:', product);
+    // Aquí conectarías tu CartService
+  }
+
+  openAR(product: ProductDTO, event: Event): void {
+    event.stopPropagation();
+    console.log('Abrir vista AR para:', product);
+  }
+
+  // Paginación
+  goToPage(page: number): void {
+    if (page < 0 || page >= this.totalPages || page === this.currentPage) return;
+    this.currentPage = page;
+    this.loadProducts();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  private pageNumberOf(res: PageDTO<ProductDTO> | null | undefined, fallback: number): number {
-    return res?.page ?? res?.number ?? fallback;
-  }
-
-  // ---------- Acciones de la tarjeta ----------
-
-  getImageUrl(product: ProductDTO): string {
-    const url =
-      product.mainImageUrl ||
-      product.images?.find((i) => i.principal)?.url ||
-      product.images?.[0]?.url;
-    return url ? `url('${url}')` : '';
-  }
-
-  stars(rating: number | undefined): StarType[] {
-    const value = Math.max(0, Math.min(5, rating ?? 0));
-    return Array.from({ length: 5 }, (_, i) =>
-      value >= i + 1 ? 'full' : value >= i + 0.5 ? 'half' : 'empty',
-    );
-  }
-
-  starIcon(star: StarType): string {
-    return star === 'full' ? 'star' : star === 'half' ? 'star-half' : 'star-outline';
-  }
-
-  isFavorite(product: ProductDTO): boolean {
-    return product.productId !== undefined && this.favoriteIds.has(product.productId);
-  }
-
-  addToCart(product: ProductDTO): void {
-    if (!this.requireBuyer()) return;
-    this.recentlyViewed.add(product);
-    this.cartService.add(product);
-    this.snackBar
-      .open(`"${product.name}" se agregó al carrito`, 'Ver carrito', { duration: 3500 })
-      .onAction()
-      .subscribe(() => this.router.navigate(['/carrito']));
-  }
-
-  toggleFavorite(product: ProductDTO): void {
-    const id = product.productId;
-    if (id === undefined || !this.requireBuyer()) return;
-    this.recentlyViewed.add(product);
-
-    if (this.favoriteIds.has(id)) {
-      this.commerceService.removeFavorite(id).subscribe({
-        next: () => {
-          this.favoriteIds.delete(id);
-          this.notify('Se quitó de tus favoritos');
-        },
-        error: () => this.notify('No se pudo quitar de favoritos'),
-      });
+  get visiblePages(): (number | string)[] {
+    const pages: (number | string)[] = [];
+    if (this.totalPages <= 5) {
+      for (let i = 0; i < this.totalPages; i++) pages.push(i);
     } else {
-      this.commerceService.addFavorite(id).subscribe({
-        next: () => {
-          this.favoriteIds.add(id);
-          this.snackBar
-            .open('Se agregó a tus favoritos', 'Ver mis diseños', { duration: 3500 })
-            .onAction()
-            .subscribe(() => this.router.navigate(['/disenos-guardados']));
-        },
-        error: () => this.notify('No se pudo agregar a favoritos'),
-      });
+      pages.push(0, 1, 2, '...', this.totalPages - 1);
     }
+    return pages;
   }
 
-  viewInAR(product: ProductDTO): void {
-    // Aún no existe una vista AR en el frontend; se deja el punto de integración.
-    this.recentlyViewed.add(product);
-    this.notify('La vista en realidad aumentada estará disponible pronto');
-  }
-
-  private notify(message: string): void {
-    this.snackBar.open(message, 'Cerrar', { duration: 3000 });
-  }
-
-  // Redirige al login (y vuelve al catálogo) si no hay sesión de comprador
-  private requireBuyer(): boolean {
-    if (environment.useMockData) return true; // modo demo: sin login
-    if (!this.authService.isAuthenticated()) {
-      this.router.navigate(['/inicio-sesion'], { queryParams: { returnUrl: '/catalogo' } });
-      return false;
-    }
-    if (!this.authService.hasRole('COMPRADOR')) {
-      this.notify('Solo los compradores pueden usar el carrito y favoritos');
-      return false;
-    }
-    return true;
+  getStars(rating: number = 5): number[] {
+    return Array.from({ length: 5 }, (_, i) => (i < Math.round(rating) ? 1 : 0));
   }
 }
