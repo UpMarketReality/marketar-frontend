@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatTabLink, MatTabNav } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatCard } from '@angular/material/card';
+import { MatFormField, MatLabel, MatPrefix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 
@@ -28,12 +31,28 @@ interface Pestana {
 }
 
 @Component({
-  imports: [MatTabNav, MatTabLink, MatTableModule, MatCard, MatIcon, MatButton],
+  imports: [
+    FormsModule,
+    MatTabNav,
+    MatTabLink,
+    MatTableModule,
+    MatCard,
+    MatFormField,
+    MatLabel,
+    MatPrefix,
+    MatInput,
+    MatIcon,
+    MatButton,
+  ],
   selector: 'app-vendedor-cotizaciones',
   styleUrl: './vendedor-cotizaciones.css',
   templateUrl: './vendedor-cotizaciones.html',
 })
 export class VendedorCotizaciones {
+  // FILTRO DE FECHAS DEL REPORTE (formato YYYY-MM-DD)
+  fechaInicio = '';
+  fechaFin = '';
+
   // Pestaña principal: cotizaciones o finanzas
   pestanaPrincipal = 'cotizaciones';
 
@@ -57,6 +76,11 @@ export class VendedorCotizaciones {
 
   readonly columnasCotizaciones = ['id', 'cliente', 'proyecto', 'fecha', 'estado'];
   readonly columnasMovimientos = ['fecha', 'concepto', 'referencia', 'monto', 'estado'];
+
+  // Verdadero si el inicio es posterior al fin
+  get rangoInvalido(): boolean {
+    return !!this.fechaInicio && !!this.fechaFin && this.fechaInicio > this.fechaFin;
+  }
 
   // Pestaña de estado que está activa
   get pestanaActual(): Pestana {
