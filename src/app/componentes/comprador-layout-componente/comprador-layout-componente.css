@@ -32,6 +32,20 @@ main {
   min-width: 0;
 }
 
+.avatar--symbol {
+  display: grid;
+  place-items: center;
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+  border-radius: 50%;
+}
+
+.avatar--symbol .icon {
+  width: 34px;
+  height: 34px;
+  flex-basis: auto;
+}
+
 /* ADAPTACIÓN RESPONSIVE / PREFERENCIAS: (max-width: 900px). */
 @media (max-width: 900px) {
   /* GRID: MENÚ LATERAL Y CONTENIDO. */
