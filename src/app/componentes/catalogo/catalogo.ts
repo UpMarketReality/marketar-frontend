@@ -245,8 +245,30 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   addToCart(product: ProductDTO, event: Event): void {
     event.stopPropagation();
-    console.log('Agregado al carrito:', product);
-    // Aquí conectarías tu CartService
+
+    if (product.productId == null) {
+      this.snackBar.open('Producto no válido', 'Cerrar', { duration: 3000 });
+      return;
+    }
+
+    this.commerceService.addItem(product.productId, 1)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.snackBar.open('Producto agregado al carrito', 'Cerrar', {
+            duration: 3000
+          });
+          this.cdr.markForCheck();
+        },
+        error: (error) => {
+          this.snackBar.open(
+            error.error?.message ?? 'No se pudo agregar el producto al carrito',
+            'Cerrar',
+            { duration: 4000 }
+          );
+          this.cdr.markForCheck();
+        }
+      });
   }
 
   openAR(product: ProductDTO, event: Event): void {
@@ -276,3 +298,4 @@ export class CatalogComponent implements OnInit, OnDestroy {
     return Array.from({ length: 5 }, (_, i) => (i < Math.round(rating) ? 1 : 0));
   }
 }
+

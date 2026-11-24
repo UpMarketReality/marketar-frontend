@@ -1,3 +1,4 @@
+
 <div class="checkout">
   <a class="back-link" routerLink="/carrito">
     <span aria-hidden="true">←</span>
@@ -173,7 +174,10 @@
             <label class="method-label" for="payment-card">
               <span>Tarjeta de débito / crédito</span>
 
-              <span class="payment-brands" aria-label="Visa, Mastercard y American Express">
+              <span
+                class="payment-brands"
+                aria-label="Visa, Mastercard y American Express"
+              >
                 <span class="brand-tag brand-tag--visa">VISA</span>
                 <span class="brand-tag brand-tag--mastercard">MC</span>
                 <span class="brand-tag brand-tag--amex">AMEX</span>
@@ -181,10 +185,7 @@
             </label>
 
             <div class="method-details">
-              <!--
-                Solo presentación visual.
-                Sustituir estos campos por los controles de la pasarela.
-              -->
+              <!-- Campos visuales; no se procesan tarjetas reales -->
               <fieldset class="card-fields" disabled>
                 <legend class="visually-hidden">
                   Datos de la tarjeta: disponibles al integrar la pasarela
@@ -264,7 +265,7 @@
             </div>
           </div>
 
-          <!-- TRANSFERENCIA -->
+          <!-- TRANSFERENCIA BANCARIA -->
           <div class="payment-option">
             <input
               class="method-radio"
@@ -278,7 +279,9 @@
               <span>Transferencia bancaria</span>
 
               <svg class="bank-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m3 8 9-5 9 5H3ZM5 20h14M3 22h18M6 10v8M12 10v8M18 10v8" />
+                <path
+                  d="m3 8 9-5 9 5H3ZM5 20h14M3 22h18M6 10v8M12 10v8M18 10v8"
+                />
               </svg>
             </label>
 
@@ -293,75 +296,68 @@
       </section>
     </form>
 
-    <!-- COLUMNA DERECHA: resumen con datos de ejemplo -->
-    <aside class="checkout-card order-summary" aria-labelledby="summary-title">
+    <!-- COLUMNA DERECHA: RESUMEN DEL CARRITO REAL -->
+    <aside
+      class="checkout-card order-summary"
+      aria-labelledby="summary-title"
+    >
       <h2 id="summary-title" class="summary-title">
         Resumen de tu compra
       </h2>
 
-      <ul class="summary-products">
-        <li class="summary-product">
-          <!-- Ilustración local; puedes sustituirla por un img. -->
-          <svg
-            class="product-thumbnail"
-            viewBox="0 0 64 72"
-            role="img"
-            aria-label="Armario de madera clara"
-          >
-            <rect width="64" height="72" rx="6" fill="#eee8df" />
-            <rect x="14" y="6" width="36" height="59" rx="2" fill="#c8ae8a" />
-            <path d="M32 7v57" stroke="#9b805d" />
-            <path d="M28 30v9M36 30v9" stroke="#65584c" stroke-width="2" />
-          </svg>
+      @if (cargando) {
+        <p>Cargando resumen de compra...</p>
+      } @else if (errorMessage) {
+        <p role="alert">{{ errorMessage }}</p>
+      } @else if (cart && cart.items.length > 0) {
+        <ul class="summary-products">
+          @for (item of cart.items; track item.itemId) {
+            <li class="summary-product">
+              <img
+                class="product-thumbnail"
+                [src]="imagenProducto(item.product.mainImageUrl)"
+                [alt]="item.product.name"
+              >
 
-          <div class="product-info">
-            <h3>Armario Bella y la Bestia</h3>
-            <p>Cant.: 1 · DomusDecoSAC</p>
+              <div class="product-info">
+                <h3>{{ item.product.name }}</h3>
+                <p>Cant.: {{ item.quantity }}</p>
+              </div>
+
+              <span class="product-price">
+                {{ item.subtotal | currency:'PEN':'S/ ':'1.2-2' }}
+              </span>
+            </li>
+          }
+        </ul>
+
+        <dl class="summary-totals">
+          <div class="total-row">
+            <dt>
+              Subtotal ({{ cart.items.length }} productos)
+            </dt>
+            <dd>
+              {{ cart.total | currency:'PEN':'S/ ':'1.2-2' }}
+            </dd>
           </div>
 
-          <span class="product-price">S/ 2,400</span>
-        </li>
-
-        <li class="summary-product">
-          <svg
-            class="product-thumbnail"
-            viewBox="0 0 64 72"
-            role="img"
-            aria-label="Armario de madera oscura"
-          >
-            <rect width="64" height="72" rx="6" fill="#ebe9e5" />
-            <rect x="14" y="6" width="36" height="59" rx="2" fill="#a5754e" />
-            <path d="M32 7v57" stroke="#714d32" />
-            <path d="M28 30v9M36 30v9" stroke="#45382c" stroke-width="2" />
-          </svg>
-
-          <div class="product-info">
-            <h3>Armario Bella y la Bestia</h3>
-            <p>Cant.: 1 · RobleReal</p>
+          <div class="total-row">
+            <dt>Costo de envío</dt>
+            <dd>Por confirmar</dd>
           </div>
 
-          <span class="product-price">S/ 1,900</span>
-        </li>
-      </ul>
+          <div class="total-row total-row--final">
+            <dt>Total de productos</dt>
+            <dd>
+              {{ cart.total | currency:'PEN':'S/ ':'1.2-2' }}
+            </dd>
+          </div>
+        </dl>
+      } @else {
+        <p>Tu carrito está vacío.</p>
+      }
 
-      <dl class="summary-totals">
-        <div class="total-row">
-          <dt>Subtotal (2 productos)</dt>
-          <dd>S/ 4,300.00</dd>
-        </div>
-
-        <div class="total-row">
-          <dt>Costo de envío a Lima</dt>
-          <dd class="free-shipping">Gratis</dd>
-        </div>
-
-        <div class="total-row total-row--final">
-          <dt>Total a pagar</dt>
-          <dd>S/ 4,300.00</dd>
-        </div>
-      </dl>
-
-      <!-- Quitar disabled únicamente cuando exista la integración del pago. -->
+      <!-- PAGO REAL DESHABILITADO -->
       <button
         class="pay-button"
         type="submit"
@@ -374,24 +370,105 @@
           <path d="M8 10V7a4 4 0 0 1 8 0v3" />
         </svg>
 
-        Pagar S/ 4,300.00
+        Pagar {{ (cart?.total ?? 0) | currency:'PEN':'S/ ':'1.2-2' }}
       </button>
 
       <p id="payment-status" class="payment-status">
-        Vista previa · Pago aún no disponible.
+        Vista previa · Pago bancario aún no disponible.
       </p>
 
+      <!-- CONFIRMACIÓN DE PEDIDO SIMULADO - US-28 -->
+      @if (!compraConfirmada && cart && cart.items.length > 0) {
+        <button
+          type="button"
+          class="pay-button"
+          [disabled]="confirmando || cargando"
+          (click)="confirmarPedido()"
+        >
+          {{
+            confirmando
+              ? 'Confirmando pedido...'
+              : 'Confirmar pedido de prueba'
+          }}
+        </button>
+
+        <p class="payment-status">
+          Esta acción registra una compra simulada y descuenta el
+          stock de los productos en la base de datos de pruebas.
+          No se realiza ningún cobro bancario.
+        </p>
+
+        <p class="payment-status">
+          Los datos de contacto, dirección de envío y método de pago
+          de esta pantalla todavía no se envían al backend.
+        </p>
+      }
+
+      <!-- ERROR AL CONFIRMAR -->
+      @if (errorCompra) {
+        <p class="payment-status" role="alert">
+          {{ errorCompra }}
+        </p>
+      }
+
+      <!-- COMPRA CONFIRMADA -->
+      @if (compraConfirmada) {
+        <div class="security-note" role="status">
+          <div>
+            <h3>Pedido de prueba registrado correctamente</h3>
+
+            <p>
+              Número de pedido:
+              #{{ compraConfirmada.purchaseId }}
+            </p>
+
+            <p>
+              Total:
+              {{
+                compraConfirmada.total
+                  | currency:'PEN':'S/ ':'1.2-2'
+              }}
+            </p>
+
+            <p>
+              Método:
+              {{ compraConfirmada.method }}
+            </p>
+
+            <p>
+              Estado:
+              {{ compraConfirmada.status }}
+            </p>
+
+            <p>
+              No se realizó ningún cobro bancario.
+              Los datos de envío no fueron registrados.
+            </p>
+          </div>
+        </div>
+
+        <a
+          class="back-link"
+          routerLink="/carrito"
+        >
+          Volver al carrito
+        </a>
+      }
+
+      <!-- INFORMACIÓN DE SEGURIDAD -->
       <div class="security-note">
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z" />
+          <path
+            d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"
+          />
           <path d="m8 12 3 3 5-6" />
         </svg>
 
         <div>
           <h3>Pago protegido</h3>
           <p>
-            Al habilitar el pago, los datos de tarjeta deberán procesarse
-            mediante la pasarela integrada.
+            Al habilitar el pago real, los datos de tarjeta deberán
+            procesarse mediante una pasarela de pago integrada.
           </p>
         </div>
       </div>
