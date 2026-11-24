@@ -16,9 +16,12 @@ import { ImageDTO } from '../../model/image-dto';
 import { ProductDTO } from '../../model/product-dto';
 import { ProductRequest } from '../../model/product-request';
 
+import { MediaUrlPipe } from '../../core/media/media-url.pipe';
+
 @Component({
   imports: [
     FormsModule,
+    MediaUrlPipe,
     RouterLink,
     MatFormField,
     MatInput,

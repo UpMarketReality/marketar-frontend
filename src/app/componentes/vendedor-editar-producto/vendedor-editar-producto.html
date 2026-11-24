@@ -39,7 +39,7 @@
               <div class="miniaturas">
                 @for (imagen of imagenesActuales; track imagen.imageId) {
                   <div class="miniatura" [class.miniatura_quitada]="estaQuitada(idImagen(imagen))">
-                    <img [src]="imagen.url" alt="Imagen del producto">
+                    <img [src]="imagen.url | mediaUrl" alt="Imagen del producto">
 
                     @if (imagen.principal) {
                       <span class="etiqueta_principal">Principal</span>

@@ -21,9 +21,12 @@ import {
 import { CatalogService } from '../../services/catalog-service';
 import { ProductDTO } from '../../model/product-dto';
 
+import { MediaUrlPipe } from '../../core/media/media-url.pipe';
+
 @Component({
   imports: [
     FormsModule,
+    MediaUrlPipe,
     DecimalPipe,
     RouterLink,
     RouterLinkActive,

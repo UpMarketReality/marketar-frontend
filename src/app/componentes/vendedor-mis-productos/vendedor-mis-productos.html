@@ -76,7 +76,7 @@
 
               @if (producto.mainImageUrl) {
                 <img mat-card-image
-                     [src]="producto.mainImageUrl"
+                     [src]="producto.mainImageUrl | mediaUrl"
                      [alt]="producto.name ?? ''"
                      class="product_img">
               } @else {
