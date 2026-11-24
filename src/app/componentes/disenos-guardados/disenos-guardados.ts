@@ -51,7 +51,7 @@ export class DisenosGuardados implements OnInit, OnDestroy {
   private readonly commerceService = inject(CommerceService);
   private readonly prototypeService = inject(PrototypeService);
   private readonly quoteService = inject(QuoteService);
-  private readonly cartService = inject(CartService);
+  private readonly agregandoAlCarrito = new Set<number>();
   private readonly recentlyViewedService = inject(RecentlyViewedService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -189,54 +189,6 @@ export class DisenosGuardados implements OnInit, OnDestroy {
         },
       });
   }
-
-  // ---------- Carga de datos ----------
-  /*
-  loadData(): void {
-    this.loading = true;
-    this.errorMessage = '';
-    const canUsePrivateApi = environment.useMockData || this.authService.isAuthenticated();
-
-    forkJoin({
-      favorites: canUsePrivateApi
-        ? this.commerceService.getFavorites().pipe(catchError(() => of([])))
-        : of([]),
-      prototypes: canUsePrivateApi
-        ? this.prototypeService.getMyPrototypes().pipe(
-            map((page) => page?.content ?? []),
-            catchError(() => of([] as PrototypeDTO[])),
-          )
-        : of([] as PrototypeDTO[]),
-      quotes: canUsePrivateApi
-        ? this.quoteService.getMyQuoteRequests(0, 50).pipe(
-            map((page) => page?.content ?? []),
-            catchError(() => of([] as QuoteRequestDTO[])),
-          )
-        : of([] as QuoteRequestDTO[]),
-      catalog: this.catalogService
-        .getProducts(undefined, undefined, undefined, undefined, 0, 20)
-        .pipe(
-          map((page) => page?.content ?? []),
-          catchError(() => of([] as ProductDTO[])),
-        ),
-    }).subscribe({
-      next: ({ favorites, prototypes, quotes, catalog }) => {
-        this.favorites = favorites
-          .map((f) => f.productDTO ?? catalog.find((p) => p.productId === f.productId))
-          .filter((p): p is ProductDTO => !!p);
-
-        this.prototypes = prototypes;
-        this.quotesByPrototype = this.latestQuoteByPrototype(quotes);
-        this.recommended = this.buildRecommendations(catalog);
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Error al cargar Mis Diseños:', err);
-        this.errorMessage = 'No se pudo cargar tu información. Inténtalo nuevamente.';
-        this.loading = false;
-      },
-    });
-  }*/
 
   // Si hay varias solicitudes para el mismo prototipo, se usa la más reciente
 
@@ -473,12 +425,44 @@ export class DisenosGuardados implements OnInit, OnDestroy {
 
   addToCart(product: ProductDTO): void {
     if (!this.requireBuyer()) return;
-    this.cartService.add(product);
-    this.recentlyViewedService.add(product);
-    this.snackBar
-      .open(`"${product.name}" se agregó al carrito`, 'Ver carrito', { duration: 3500 })
-      .onAction()
-      .subscribe(() => this.router.navigate(['/carrito']));
+
+    const productId = product.productId;
+
+    if (productId == null || this.agregandoAlCarrito.has(productId)) {
+      return;
+    }
+
+    this.agregandoAlCarrito.add(productId);
+
+    this.commerceService
+      .addItem(productId, 1)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.agregandoAlCarrito.delete(productId);
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.recentlyViewedService.add(product);
+
+          this.snackBar
+            .open(`"${product.name}" se agregó al carrito`, 'Ver carrito', { duration: 3500 })
+            .onAction()
+            .subscribe(() => {
+              this.router.navigate(['/carrito']);
+            });
+        },
+
+        error: (error) => {
+          this.snackBar.open(
+            error.error?.message ?? 'No se pudo agregar el producto al carrito',
+            'Cerrar',
+            { duration: 4000 },
+          );
+        },
+      });
   }
 
   private restoreFavorite(product: ProductDTO, index: number): void {

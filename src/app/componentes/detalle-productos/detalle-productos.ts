@@ -12,9 +12,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProductDTO } from '../../model/product-dto';
 import { ImageDTO } from '../../model/image-dto';
 import { CatalogService } from '../../services/catalog-service';
-import { CartService } from '../../services/cart-service';
 import { RecentlyViewedService } from '../../services/recently-viewed-service';
 import { environment } from '../../../environments/environment';
+import { CommerceService } from '../../services/commerce-service';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-detalle-productos',
@@ -35,7 +36,10 @@ export class DetalleProductos implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly catalogService = inject(CatalogService);
-  private readonly cartService = inject(CartService);
+  private readonly commerceService = inject(CommerceService);
+  private readonly authService = inject(AuthService);
+
+  agregandoCarrito = false;
   private readonly recentlyViewed = inject(RecentlyViewedService);
   private readonly snackBar = inject(MatSnackBar);
   // La app no usa zone.js: hay que avisar a Angular cuando llegan datos asíncronos
@@ -158,20 +162,64 @@ export class DetalleProductos implements OnInit {
     if (this.quantity < this.stock) {
       this.quantity++;
     } else {
-      this.snackBar.open(`Solo hay ${this.stock} unidades disponibles`, 'Cerrar', { duration: 2500 });
+      this.snackBar.open(`Solo hay ${this.stock} unidades disponibles`, 'Cerrar', {
+        duration: 2500,
+      });
     }
   }
 
   // ---------- Acciones ----------
 
   addToCart(): void {
-    if (!this.product || this.stock <= 0) return;
+    if (
+      !this.product ||
+      this.product.productId == null ||
+      this.stock <= 0 ||
+      this.agregandoCarrito
+    ) {
+      return;
+    }
 
-    this.cartService.add(this.product, this.quantity);
-    this.snackBar
-      .open(`Se agregaron ${this.quantity} unidad(es) al carrito`, 'Ver carrito', { duration: 3500 })
-      .onAction()
-      .subscribe(() => this.router.navigate(['/carrito']));
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/inicio-sesion'], {
+        queryParams: { returnUrl: this.router.url },
+      });
+      return;
+    }
+
+    if (!this.authService.hasRole('COMPRADOR')) {
+      this.snackBar.open('Solo los compradores pueden agregar productos', 'Cerrar', {
+        duration: 3000,
+      });
+      return;
+    }
+
+    this.agregandoCarrito = true;
+
+    this.commerceService.addItem(this.product.productId, this.quantity).subscribe({
+      next: () => {
+        this.agregandoCarrito = false;
+        this.cdr.markForCheck();
+
+        this.snackBar
+          .open('Producto agregado al carrito correctamente', 'Ver carrito', { duration: 3500 })
+          .onAction()
+          .subscribe(() => {
+            this.router.navigate(['/carrito']);
+          });
+      },
+
+      error: (error) => {
+        this.agregandoCarrito = false;
+        this.cdr.markForCheck();
+
+        this.snackBar.open(
+          error.error?.message ?? 'No se pudo agregar el producto al carrito',
+          'Cerrar',
+          { duration: 4000 },
+        );
+      },
+    });
   }
 
   openARViewer(): void {
