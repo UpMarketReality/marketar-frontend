@@ -169,7 +169,7 @@
   <mat-card class="product-card" [routerLink]="['/producto', product.productId]">
     <div class="image-wrapper">
       <img
-        [src]="product.mainImageUrl || product.images?.[0]?.url || 'assets/placeholder-mueble.svg'"
+        [src]="(product.mainImageUrl || product.images?.[0]?.url)?.startsWith('/media/') ? 'http://localhost:8080' + (product.mainImageUrl || product.images?.[0]?.url) : (product.mainImageUrl || product.images?.[0]?.url || 'assets/placeholder-mueble.svg')"
         [alt]="product.name"
         loading="lazy"
       />
@@ -227,3 +227,4 @@
     </mat-card-content>
   </mat-card>
 </ng-template>
+

@@ -423,3 +423,37 @@ header {
     align-items: flex-end;
   }
 }
+
+/* Controles de cantidad del carrito */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+
+.quantity-selector button {
+  background: transparent;
+  border: none;
+  color: var(--text-slate);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.quantity-selector button:hover:not(:disabled) {
+  color: var(--primary);
+}
+
+.quantity-selector button:disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.btn-checkout:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+}
