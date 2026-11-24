@@ -1,283 +1,228 @@
-<main id="contenido" tabindex="-1">
-  <noscript
-  ><p class="demo-note">
-    Activa JavaScript para usar filtros, validaciones y acciones de
-    demostración.
-  </p></noscript
-  >
+<section class="pedidos-page" aria-labelledby="titulo-pedidos">
   <header class="page-heading">
-    <h1>Historial de pedidos</h1>
-    <p class="subtitle">
-      Haz seguimiento a tus compras y revisa el estado de fabricación o
-      envío.
-    </p>
+    <div>
+      <p class="eyebrow">MI CUENTA / ENCARGOS</p>
+      <h1 id="titulo-pedidos">Mis encargos personalizados</h1>
+      <p class="subtitle">Consulta los diseños encargados, el fabricante asignado y el avance de cada etapa.</p>
+    </div>
+    <a class="button button--outline" routerLink="/perfil-comprador/cotizacion">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h10v16H6V6l2-2ZM9 9h6M9 13h6M9 17h4" /></svg>
+      Mis cotizaciones
+    </a>
   </header>
-  <div class="tabs" role="group" aria-label="Filtrar pedidos">
-    <button type="button" aria-pressed="true" data-filter="all">
-      Todos los pedidos</button
-    ><button type="button" aria-pressed="false" data-filter="active">
-    En curso (2)</button
-  ><button type="button" aria-pressed="false" data-filter="delivered">
-    Entregados
-  </button>
-  </div>
-  <div class="card-stack" id="order-list">
-    <article
-      class="order-card"
-      data-order-card
-      data-state="transit"
-      id="pedido-9023"
-    >
-      <header class="order-meta">
-        <dl>
-          <dt>Pedido realizado</dt>
-          <dd><time datetime="2026-10-25">25 oct., 2026</time></dd>
-        </dl>
-        <dl>
-          <dt>Total pagado</dt>
-          <dd>S/ 5,000.00</dd>
-        </dl>
-        <dl>
-          <dt>N.º pedido</dt>
-          <dd>#ORD-9023</dd>
-        </dl>
-        <span class="badge badge--blue"
-        ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                  <path d="M1 5h13v12H1ZM14 9h5l4 5v3h-9" />
-                  <circle cx="6" cy="18" r="3" />
-                  <circle cx="18" cy="18" r="3" /></svg
-        >En tránsito</span
-        >
-      </header>
-      <ol class="progress" aria-label="Seguimiento del pedido">
-        <li class="is-complete">
-                <span class="progress__dot"
-                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                    <path d="m5 12 4 4L20 5" /></svg></span
-                >Pagado<span class="visually-hidden">: completado</span>
-        </li>
-        <li class="is-complete">
-                <span class="progress__dot"
-                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                    <path d="m5 12 4 4L20 5" /></svg></span
-                >Fabricación<span class="visually-hidden">: completado</span>
-        </li>
-        <li class="is-current" aria-current="step">
-                <span class="progress__dot"
-                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                    <path d="M1 5h13v12H1ZM14 9h5l4 5v3h-9" />
-                    <circle cx="6" cy="18" r="3" />
-                    <circle cx="18" cy="18" r="3" /></svg></span
-                >En camino<span class="visually-hidden">: etapa actual</span>
-        </li>
-        <li class="">
-                <span class="progress__dot"
-                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                    <path d="m2 11 10-9 10 9M5 9v13h5v-7h4v7h5V9" /></svg></span
-                >Entregado<span class="visually-hidden">: pendiente</span>
-        </li>
-      </ol>
-      <div class="product-row">
-        <img
-          src="assets/armario.svg"
-          alt="Ilustración de armario clásico de melamina premium"
-          width="64"
-          height="68"
-        />
-        <div>
-          <h3>Armario clásico de melamina premium</h3>
-          <p>Vendido por: DomusDecoSAC</p>
-          <p>Entrega estimada: 02 de noviembre, 2026</p>
-        </div>
+
+  @if (!cargandoPedidos && !errorPedidos) {
+    <section class="resumen-grid" aria-label="Resumen de encargos">
+      <div class="resumen-card">
+        <span class="resumen-icon resumen-icon--all" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><path d="m3 6 9-4 9 4v12l-9 4-9-4Zm0 0 9 4 9-4M12 10v12" /></svg>
+        </span>
+        <div><span class="resumen-label">Total de encargos</span><strong>{{ totalPedidos }}</strong></div>
       </div>
-      <footer class="card-actions">
-        <button
-          type="button"
-          class="button"
-          data-action="receipt"
-          data-order="9023"
-        >
-          Ver recibo</button
-        ><button
-        type="button"
-        class="button"
-        data-action="contact"
-        data-seller="Vendido por: DomusDecoSAC"
-      >
-        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-          <path
-            d="M21 12a9 9 0 0 1-9 9H3l2-5a9 9 0 1 1 16-4ZM8 10h8M8 14h5"
-          /></svg
-        >Contactar vendedor</button
-      ><button
-        type="button"
-        class="button button--dark"
-        data-action="tracking"
-        data-order="9023"
-      >
-        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-          <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" />
-          <circle cx="12" cy="10" r="2.5" /></svg
-        >Rastrear envío
+      <div class="resumen-card">
+        <span class="resumen-icon resumen-icon--active" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l4 2" /></svg>
+        </span>
+        <div><span class="resumen-label">En curso</span><strong>{{ totalEnCurso }}</strong></div>
+      </div>
+      <div class="resumen-card">
+        <span class="resumen-icon resumen-icon--done" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="m7 12 3 3 6-6" /></svg>
+        </span>
+        <div><span class="resumen-label">Entregados</span><strong>{{ totalEntregados }}</strong></div>
+      </div>
+    </section>
+  }
+
+  <section class="historial" aria-label="Historial de encargos">
+    <div class="historial-toolbar">
+      <div>
+        <h2>Seguimiento de encargos</h2>
+        <p>Los estados son actualizados por el vendedor.</p>
+      </div>
+      <button class="button button--refresh" type="button" (click)="cargarPedidos()" [disabled]="cargandoPedidos">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M5.8 9a7 7 0 0 1 12.4-2L20 12M4 12l1.8 3A7 7 0 0 0 18.2 16" /></svg>
+        {{ cargandoPedidos ? 'Actualizando…' : 'Actualizar' }}
       </button>
-      </footer>
-    </article>
-    <article
-      class="order-card"
-      data-order-card
-      data-state="making"
-      id="pedido-9105"
-    >
-      <header class="order-meta">
-        <dl>
-          <dt>Pedido realizado</dt>
-          <dd><time datetime="2026-10-12">12 oct., 2026</time></dd>
-        </dl>
-        <dl>
-          <dt>Total pagado</dt>
-          <dd>S/ 1,200.00</dd>
-        </dl>
-        <dl>
-          <dt>N.º pedido</dt>
-          <dd>#ORD-9105</dd>
-        </dl>
-        <span class="badge badge--orange"
-        ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                  <path
-                    d="m3 21 10-10M10 4l3-3 9 9-3 3-3-3-3 3-4-4 3-3Z"
-                  /></svg
-        >En fabricación</span
-        >
-      </header>
-      <ol class="progress" aria-label="Seguimiento del pedido">
-        <li class="is-complete">
-                <span class="progress__dot"
-                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                    <path d="m5 12 4 4L20 5" /></svg></span
-                >Cotización pagada<span class="visually-hidden"
-        >: completado</span
-        >
-        </li>
-        <li class="is-current" aria-current="step">
-                <span class="progress__dot"
-                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                    <path
-                      d="m3 21 10-10M10 4l3-3 9 9-3 3-3-3-3 3-4-4 3-3Z"
-                    /></svg></span
-                >Construyendo<span class="visually-hidden">: etapa actual</span>
-        </li>
-        <li class="">
-                <span class="progress__dot"
-                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                    <path d="M1 5h13v12H1ZM14 9h5l4 5v3h-9" />
-                    <circle cx="6" cy="18" r="3" />
-                    <circle cx="18" cy="18" r="3" /></svg></span
-                >Despacho<span class="visually-hidden">: pendiente</span>
-        </li>
-        <li class="">
-                <span class="progress__dot"
-                ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                    <path d="m2 11 10-9 10 9M5 9v13h5v-7h4v7h5V9" /></svg></span
-                >Entregado<span class="visually-hidden">: pendiente</span>
-        </li>
-      </ol>
-      <div class="product-row">
-        <img
-          src="assets/comoda.svg"
-          alt="Ilustración de cómoda moderna 4 cajones (diseño a medida)"
-          width="64"
-          height="68"
-        />
+    </div>
+
+    @if (errorPedidos) {
+      <div class="feedback feedback--error" role="alert">
         <div>
-          <h3>Cómoda moderna 4 cajones (diseño a medida)</h3>
-          <p>Fabricado por: Carpintería Ruiz</p>
-          <p>
-            Se encuentra en la etapa de ensamblaje final de la madera.
-          </p>
+          <strong>No pudimos cargar tus encargos</strong>
+          <p>{{ errorPedidos }}</p>
         </div>
+        <button class="button" type="button" (click)="cargarPedidos()">Reintentar</button>
       </div>
-      <footer class="card-actions">
-        <button
-          type="button"
-          class="button"
-          data-action="contact"
-          data-seller="Fabricado por: Carpintería Ruiz"
-        >
-          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-            <path
-              d="M21 12a9 9 0 0 1-9 9H3l2-5a9 9 0 1 1 16-4ZM8 10h8M8 14h5"
-            /></svg
-          >Contactar vendedor
+    }
+
+    @if (cargandoPedidos) {
+      <div class="loading-state" role="status" aria-live="polite">
+        <span class="loading-spinner" aria-hidden="true"></span>
+        Cargando tus encargos desde MarketAR…
+      </div>
+    } @else if (!errorPedidos) {
+      <nav class="filter-tabs" aria-label="Filtrar encargos">
+        <button type="button" [class.active]="filtro === 'TODOS'"
+                [attr.aria-pressed]="filtro === 'TODOS'" (click)="cambiarFiltro('TODOS')">
+          Todos <span>{{ totalPedidos }}</span>
         </button>
-      </footer>
-    </article>
-    <article
-      class="order-card order-card--delivered"
-      data-order-card
-      data-state="delivered"
-      id="pedido-8801"
-    >
-      <header class="order-meta">
-        <dl>
-          <dt>Pedido realizado</dt>
-          <dd><time datetime="2026-09-01">01 sept., 2026</time></dd>
-        </dl>
-        <dl>
-          <dt>Total pagado</dt>
-          <dd>S/ 650.00</dd>
-        </dl>
-        <dl>
-          <dt>N.º pedido</dt>
-          <dd>#ORD-8801</dd>
-        </dl>
-        <span class="badge badge--green"
-        ><svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                  <path d="m5 12 4 4L20 5" /></svg
-        >Entregado</span
-        >
-      </header>
-      <div class="product-row">
-        <img
-          src="assets/mesa.svg"
-          alt="Ilustración de mesa de centro rústica circular"
-          width="64"
-          height="68"
-        />
-        <div>
-          <h3>Mesa de centro rústica circular</h3>
-          <p>Vendido por: Muebles M&M</p>
-          <p>Entregado el 10 de septiembre, 2026</p>
-        </div>
+        <button type="button" [class.active]="filtro === 'EN_CURSO'"
+                [attr.aria-pressed]="filtro === 'EN_CURSO'" (click)="cambiarFiltro('EN_CURSO')">
+          En curso <span>{{ totalEnCurso }}</span>
+        </button>
+        <button type="button" [class.active]="filtro === 'ENTREGADOS'"
+                [attr.aria-pressed]="filtro === 'ENTREGADOS'" (click)="cambiarFiltro('ENTREGADOS')">
+          Entregados <span>{{ totalEntregados }}</span>
+        </button>
+      </nav>
+
+      <div class="card-stack" aria-live="polite">
+        @for (pedido of pedidosPagina; track pedido.orderId) {
+          <article class="order-card" [class.order-card--delivered]="pedido.status === 'ENTREGADO'">
+            <header class="order-meta">
+              <div class="order-reference">
+                <span class="eyebrow">ENCARGO #{{ pedido.orderId }}</span>
+                <span class="order-date">Realizado el {{ pedido.createdAt | date:'dd/MM/yyyy' }}</span>
+              </div>
+              <span class="estado" [ngClass]="claseEstado(pedido.status)">
+                <span class="estado-dot" aria-hidden="true"></span>
+                {{ etiquetaEstado(pedido.status) }}
+              </span>
+            </header>
+
+            <div class="order-body">
+              <div class="product-row">
+                <div class="product-image">
+                  @if (imagenPedido(pedido); as imagen) {
+                    <img [src]="imagen" [alt]="nombrePedido(pedido)" loading="lazy" />
+                  } @else {
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m3 6 9-4 9 4v12l-9 4-9-4Zm0 0 9 4 9-4M12 10v12" />
+                    </svg>
+                  }
+                </div>
+                <div class="product-info">
+                  <span class="product-type">DISEÑO PERSONALIZADO</span>
+                  <h3>{{ nombrePedido(pedido) }}</h3>
+                  <p class="seller-name">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9 5 4h14l2 5v12H3ZM3 9h18M8 21v-7h8v7" /></svg>
+                    {{ pedido.storeName || 'Vendedor asignado' }}
+                  </p>
+                </div>
+              </div>
+
+              <dl class="order-facts">
+                <div><dt>Monto acordado</dt><dd>{{ pedido.currency === 'PEN' || !pedido.currency ? 'S/' : pedido.currency }} {{ pedido.amount | number:'1.2-2' }}</dd></div>
+                <div><dt>Cantidad</dt><dd>{{ pedido.quantity ?? 0 }} {{ pedido.quantity === 1 ? 'unidad' : 'unidades' }}</dd></div>
+                <div><dt>Plazo de la oferta</dt><dd>{{ pedido.deliveryDays ?? '—' }} días</dd></div>
+              </dl>
+
+              <div class="tracking">
+                <div class="tracking-heading">
+                  <strong>Progreso de tu encargo</strong>
+                  <span>Etapa {{ indiceEstado(pedido.status) + 1 }} de {{ etapas.length }}</span>
+                </div>
+                <ol class="progress" aria-label="Etapas del encargo">
+                  @for (etapa of etapas; track etapa.codigo; let i = $index) {
+                    <li [class.is-complete]="i < indiceEstado(pedido.status)"
+                        [class.is-current]="i === indiceEstado(pedido.status)"
+                        [attr.aria-current]="i === indiceEstado(pedido.status) ? 'step' : null">
+                      <span class="progress__dot" aria-hidden="true">
+                        @if (i < indiceEstado(pedido.status)) {
+                          <svg class="icon" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10" /></svg>
+                        } @else { {{ i + 1 }} }
+                      </span>
+                      <span class="step-label">{{ etapa.titulo }}</span>
+                    </li>
+                  }
+                </ol>
+              </div>
+            </div>
+
+            <footer class="card-actions">
+              <span class="last-update">Última actualización: {{ pedido.updatedAt | date:'dd/MM/yyyy' }}</span>
+              <button class="button button--dark" type="button"
+                      [attr.aria-expanded]="detalleId === pedido.orderId"
+                      [attr.aria-controls]="'detalle-pedido-' + pedido.orderId"
+                      (click)="abrirDetalle(pedido)">
+                {{ detalleId === pedido.orderId ? 'Ocultar detalles' : 'Ver detalles del encargo' }}
+                <svg class="icon icon-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+              </button>
+            </footer>
+
+            @if (detalleId === pedido.orderId) {
+              <section class="order-detail" [attr.id]="'detalle-pedido-' + pedido.orderId"
+                       aria-label="Detalle del encargo" role="region">
+                @if (cargandoDetalle) {
+                  <p class="detail-feedback" role="status">Consultando datos del encargo…</p>
+                } @else if (errorDetalle) {
+                  <div class="feedback feedback--error" role="alert">
+                    <p>{{ errorDetalle }}</p>
+                    <button class="button" type="button" (click)="reintentarDetalle(pedido)">Reintentar</button>
+                  </div>
+                } @else if (detalle; as d) {
+                  <div class="detail-heading">
+                    <h4>Información del encargo</h4>
+                    <span>#{{ d.orderId }}</span>
+                  </div>
+                  <dl class="detail-facts">
+                    <div><dt>Vendedor</dt><dd>{{ d.storeName || '—' }}</dd></div>
+                    <div><dt>Dirección de entrega</dt><dd>{{ d.deliveryAddress || 'No especificada' }}</dd></div>
+                    <div><dt>Solicitud de cotización</dt><dd>#{{ d.requestId }}</dd></div>
+                    <div><dt>Tiempo estimado de elaboración y entrega</dt><dd>{{ d.deliveryDays }} días según la oferta</dd></div>
+                  </dl>
+
+                  @if (d.conditions) {
+                    <div class="detail-section">
+                      <h5>Condiciones acordadas</h5>
+                      <p>{{ d.conditions }}</p>
+                    </div>
+                  }
+                  @if (especificaciones.length) {
+                    <div class="detail-section">
+                      <h5>Especificaciones del diseño</h5>
+                      <dl class="spec-grid">
+                        @for (item of especificaciones; track item.nombre) {
+                          <div><dt>{{ item.nombre }}</dt><dd>{{ item.valor }}</dd></div>
+                        }
+                      </dl>
+                    </div>
+                  }
+                  <div class="detail-actions">
+                    <a class="button button--outline" routerLink="/perfil-comprador/cotizacion"
+                       [queryParams]="{requestId: d.requestId}">Ver cotización original</a>
+                  </div>
+                }
+              </section>
+            }
+          </article>
+        } @empty {
+          <div class="empty-state">
+            <div class="empty-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="m3 6 9-4 9 4v12l-9 4-9-4Zm0 0 9 4 9-4M12 10v12" /></svg>
+            </div>
+            <h3>{{ filtro === 'ENTREGADOS' ? 'Todavía no tienes encargos entregados' : (filtro === 'EN_CURSO' ? 'No tienes encargos en curso' : 'Aún no tienes encargos personalizados') }}</h3>
+            <p>Los encargos aparecerán aquí cuando aceptes una oferta en tus cotizaciones.</p>
+            <a routerLink="/perfil-comprador/cotizacion" class="button button--primary">Ver mis cotizaciones</a>
+          </div>
+        }
       </div>
-      <footer class="card-actions">
-        <button
-          type="button"
-          class="button"
-          data-action="receipt"
-          data-order="8801"
-        >
-          Ver factura</button
-        ><button
-        type="button"
-        class="button button--primary"
-        data-action="review"
-        data-order="8801"
-      >
-        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-          <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z" /></svg
-        >Escribir reseña
-      </button>
-      </footer>
-    </article>
-  </div>
-  <p
-    id="filter-status"
-    class="visually-hidden"
-    role="status"
-    aria-live="polite"
-  ></p>
-  <p class="demo-note">
-    Vista de demostración · Datos de ejemplo. Los pagos y cambios de
-    cuenta requieren conexión con el servidor.
-  </p>
-</main>
+
+      @if (pedidosFiltrados.length > 0) {
+        <div class="pagination" aria-label="Paginación de encargos">
+          <span>Mostrando {{ primerResultado }}–{{ ultimoResultado }} de {{ pedidosFiltrados.length }}</span>
+          @if (totalPaginasVista > 1) {
+            <div class="pagination-controls">
+              <button type="button" class="button" (click)="irPagina(paginaVista - 1)"
+                      [disabled]="paginaVista === 0" aria-label="Página anterior">Anterior</button>
+              <span>Página {{ paginaVista + 1 }} de {{ totalPaginasVista }}</span>
+              <button type="button" class="button" (click)="irPagina(paginaVista + 1)"
+                      [disabled]="paginaVista + 1 >= totalPaginasVista" aria-label="Página siguiente">Siguiente</button>
+            </div>
+          }
+        </div>
+      }
+    }
+  </section>
+</section>
