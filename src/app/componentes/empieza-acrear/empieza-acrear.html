@@ -9,7 +9,7 @@
       </h1>
 
       <p>
-        Describe tu mueble y personalízalo con nuestros filtros.
+        Describe tu producto ideal y personalízalo con nuestros filtros.
       </p>
     </div>
 
@@ -35,7 +35,7 @@
               type="text"
               formControlName="name"
               maxlength="150"
-              placeholder="Ej: Mi escritorio moderno">
+              placeholder="Ej: Mi prototipo de ...">
 
             @if (
               formulario.controls.name.invalid &&
@@ -51,7 +51,7 @@
           <div class="form-group">
 
             <label for="prompt">
-              Describe tu mueble ideal *
+              Describe tu producto ideal *
             </label>
 
             <p class="help-text">
@@ -63,7 +63,7 @@
               formControlName="prompt"
               maxlength="500"
               rows="6"
-              placeholder="Ej: Necesito un escritorio para oficina, con dos cajones y patas de metal negro..."></textarea>
+              placeholder="Describe cómo deseas que sea tu producto..."></textarea>
 
             <div class="char-count">
               {{ cantidadCaracteres }}/500 caracteres
@@ -80,7 +80,9 @@
 
           </div>
 
-          <!-- CATEGORÍA REAL -->
+          <!-- CATEGORÍA -->
+          <!-- CATEGORÍA -->
+
           <div class="form-group">
 
             <label for="categoria">
@@ -96,11 +98,12 @@
                 Selecciona una categoría
               </option>
 
-              @for (categoria of categorias;
-                track categoria.categoryId) {
+              @for (categoria of categorias; track categoria.categoryId) {
 
                 <option [ngValue]="categoria.categoryId">
+
                   {{ categoria.name }}
+
                 </option>
 
               }
@@ -108,120 +111,193 @@
             </select>
 
             @if (cargandoCategorias) {
+
               <small>Cargando categorías...</small>
+
             }
 
             @if (errorCategorias) {
+
               <small class="validation-error">
+
                 {{ errorCategorias }}
+
               </small>
+
+              <button
+                type="button"
+                class="btn-retry"
+                (click)="cargarCategorias()">
+
+                Volver a cargar categorías
+
+              </button>
+
             }
 
           </div>
 
           <!-- TIPO DE MUEBLE -->
-          <div class="form-group">
+          @if (configCategoria) {
 
-            <div class="label-row">
-              <label>Tipo de mueble</label>
-              <span class="optional-text">(Opcional)</span>
+            <div class="form-group">
+
+              <div class="label-row">
+
+                <label>
+                  {{ configCategoria?.etiquetaTipo }}
+                </label>
+
+                <span class="optional-text">
+        (Opcional)
+      </span>
+
+              </div>
+
+              <div class="pill-group">
+
+                @for (tipo of tiposProducto; track tipo) {
+
+                  <button
+                    type="button"
+                    class="pill"
+                    [class.active]="
+            formulario.controls.productType.value === tipo
+          "
+                    [attr.aria-pressed]="
+            formulario.controls.productType.value === tipo
+          "
+                    (click)="seleccionarFiltro('productType', tipo)">
+
+                    {{ tipo }}
+
+                  </button>
+
+                }
+
+              </div>
+
             </div>
 
-            <div class="pill-group">
+          }
+          @if (configCategoria) {
 
-              @for (tipo of tiposMueble; track tipo) {
+            <!-- ESTILO -->
+            <div class="form-group">
 
-                <button
-                  type="button"
-                  class="pill"
-                  [class.active]="
-                    formulario.controls.tipoMueble.value === tipo
-                  "
-                  [attr.aria-pressed]="
-                    formulario.controls.tipoMueble.value === tipo
-                  "
-                  (click)="seleccionarFiltro('tipoMueble', tipo)">
+              <div class="label-row">
+                <label>Estilo</label>
+                <span class="optional-text">(Opcional)</span>
+              </div>
 
-                  {{ tipo }}
+              <div class="pill-group">
 
-                </button>
+                @for (estilo of estilos; track estilo) {
 
-              }
-
-            </div>
-          </div>
-
-          <!-- ESTILO -->
-          <div class="form-group">
-
-            <div class="label-row">
-              <label>Estilo</label>
-              <span class="optional-text">(Opcional)</span>
-            </div>
-
-            <div class="pill-group">
-
-              @for (estilo of estilos; track estilo) {
-
-                <button
-                  type="button"
-                  class="pill"
-                  [class.active]="
+                  <button
+                    type="button"
+                    class="pill"
+                    [class.active]="
                     formulario.controls.style.value === estilo
                   "
-                  [attr.aria-pressed]="
+                    [attr.aria-pressed]="
                     formulario.controls.style.value === estilo
                   "
-                  (click)="seleccionarFiltro('style', estilo)">
+                    (click)="seleccionarFiltro('style', estilo)">
 
-                  {{ estilo }}
+                    {{ estilo }}
 
-                </button>
+                  </button>
 
-              }
+                }
 
+              </div>
             </div>
-          </div>
+            <!-- MATERIAL -->
+            <div class="form-group">
 
-          <!-- MATERIAL -->
-          <div class="form-group">
+              <div class="label-row">
+                <label>Material principal *</label>
+              </div>
 
-            <div class="label-row">
-              <label>Material principal *</label>
-            </div>
+              <div class="pill-group">
 
-            <div class="pill-group">
+                @for (material of materiales; track material) {
 
-              @for (material of materiales; track material) {
-
-                <button
-                  type="button"
-                  class="pill"
-                  [class.active]="
+                  <button
+                    type="button"
+                    class="pill"
+                    [class.active]="
                     formulario.controls.material.value === material
                   "
-                  [attr.aria-pressed]="
+                    [attr.aria-pressed]="
                     formulario.controls.material.value === material
                   "
-                  (click)="seleccionarFiltro('material', material)">
+                    (click)="seleccionarFiltro('material', material)">
 
-                  {{ material }}
+                    {{ material }}
 
-                </button>
+                  </button>
 
+                }
+
+              </div>
+
+              @if (
+                formulario.controls.material.invalid &&
+                formulario.controls.material.touched
+                ) {
+                <small class="validation-error">
+                  Selecciona un material.
+                </small>
               }
+            </div>
+
+          }
+
+
+
+
+          @if (tecnicas.length > 0) {
+
+            <div class="form-group">
+
+              <div class="label-row">
+
+                <label>Técnica de personalización</label>
+
+                <span class="optional-text">
+        (Opcional)
+      </span>
+
+              </div>
+
+              <div class="pill-group">
+
+                @for (tecnica of tecnicas; track tecnica) {
+
+                  <button
+                    type="button"
+                    class="pill"
+                    [class.active]="
+            formulario.controls.technique.value === tecnica
+          "
+                    [attr.aria-pressed]="
+            formulario.controls.technique.value === tecnica
+          "
+                    (click)="seleccionarFiltro('technique', tecnica)">
+
+                    {{ tecnica }}
+
+                  </button>
+
+                }
+
+              </div>
 
             </div>
 
-            @if (
-              formulario.controls.material.invalid &&
-              formulario.controls.material.touched
-              ) {
-              <small class="validation-error">
-                Selecciona un material.
-              </small>
-            }
-          </div>
+          }
 
           <!-- COLOR -->
           <div class="form-group">
@@ -248,101 +324,150 @@
             }
 
           </div>
+          @if (esMobiliario) {
 
-          <!-- DIMENSIONES -->
-          <div class="form-group">
+            <!--DIMENSIONES -->
+            <div class="form-group">
 
-            <label>Dimensiones aproximadas *</label>
+              <label>Dimensiones aproximadas *</label>
 
-            <p class="help-text">
-              Estas medidas orientan el diseño.
-              La imagen generada es referencial.
-            </p>
+              <p class="help-text">
+                Estas medidas orientan el diseño.
+                La imagen generada es referencial.
+              </p>
 
-            <div class="dimensions-grid">
+              <div class="dimensions-grid">
 
-              <div>
-                <label for="width">Ancho</label>
+                <div>
+                  <label for="width">Ancho</label>
 
-                <input
-                  id="width"
-                  type="number"
-                  class="form-input"
-                  formControlName="width"
-                  min="0.01"
-                  step="any"
-                  placeholder="160">
+                  <input
+                    id="width"
+                    type="number"
+                    class="form-input"
+                    formControlName="width"
+                    min="0.01"
+                    step="any"
+                    placeholder="160">
+                </div>
+
+                <div>
+                  <label for="height">Alto</label>
+
+                  <input
+                    id="height"
+                    type="number"
+                    class="form-input"
+                    formControlName="height"
+                    min="0.01"
+                    step="any"
+                    placeholder="75">
+                </div>
+
+                <div>
+                  <label for="depth">Profundidad</label>
+
+                  <input
+                    id="depth"
+                    type="number"
+                    class="form-input"
+                    formControlName="depth"
+                    min="0.01"
+                    step="any"
+                    placeholder="60">
+                </div>
+
+                <div>
+                  <label for="unit">Unidad</label>
+
+                  <select
+                    id="unit"
+                    class="form-input"
+                    formControlName="unit">
+
+                    <option value="cm">cm</option>
+                    <option value="mm">mm</option>
+                    <option value="m">m</option>
+
+                  </select>
+                </div>
+
               </div>
 
-              <div>
-                <label for="height">Alto</label>
+              @if (
+                (formulario.controls.width.invalid &&
+                  formulario.controls.width.touched) ||
+                (formulario.controls.height.invalid &&
+                  formulario.controls.height.touched) ||
+                (formulario.controls.depth.invalid &&
+                  formulario.controls.depth.touched)
+                ) {
+                <small class="validation-error">
+                  Ingresa dimensiones mayores que cero.
+                </small>
+              }
+            </div>
+          }
+          @if (mostrarTalla) {
 
-                <input
-                  id="height"
-                  type="number"
-                  class="form-input"
-                  formControlName="height"
-                  min="0.01"
-                  step="any"
-                  placeholder="75">
+            <div class="form-group">
+
+              <div class="label-row">
+
+                <label for="size">
+                  Talla
+                </label>
+
+                <span class="optional-text">
+        (Opcional)
+      </span>
+
               </div>
 
-              <div>
-                <label for="depth">Profundidad</label>
+              <select
+                id="size"
+                class="form-input"
+                formControlName="size">
 
-                <input
-                  id="depth"
-                  type="number"
-                  class="form-input"
-                  formControlName="depth"
-                  min="0.01"
-                  step="any"
-                  placeholder="60">
-              </div>
+                <option value="">
+                  Selecciona una talla
+                </option>
 
-              <div>
-                <label for="unit">Unidad</label>
+                @for (talla of tallas; track talla) {
 
-                <select
-                  id="unit"
-                  class="form-input"
-                  formControlName="unit">
+                  <option [value]="talla">
+                    {{ talla }}
+                  </option>
 
-                  <option value="cm">cm</option>
-                  <option value="mm">mm</option>
-                  <option value="m">m</option>
+                }
 
-                </select>
-              </div>
+              </select>
 
             </div>
 
-            @if (
-              (formulario.controls.width.invalid &&
-                formulario.controls.width.touched) ||
-              (formulario.controls.height.invalid &&
-                formulario.controls.height.touched) ||
-              (formulario.controls.depth.invalid &&
-                formulario.controls.depth.touched)
-              ) {
-              <small class="validation-error">
-                Ingresa dimensiones mayores que cero.
-              </small>
-            }
-          </div>
+          }
+
 
           <!-- GENERAR -->
           <button
             type="submit"
             class="btn-generate"
-            [disabled]="cargando">
+            [disabled]="
+    cargando ||
+    cargandoCategorias ||
+    !configCategoria
+  ">
 
             @if (cargando) {
+
               <i class="fa-solid fa-spinner fa-spin"></i>
               Procesando diseño...
+
             } @else {
+
               <i class="fa-solid fa-wand-magic-sparkles"></i>
               Generar Diseño con IA
+
             }
 
           </button>

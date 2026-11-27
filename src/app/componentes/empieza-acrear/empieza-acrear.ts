@@ -24,6 +24,13 @@ import { RouterLink } from '@angular/router';
 import { CatalogService } from '../../services/catalog-service';
 import { CategoryDTO } from '../../model/category-dto';
 
+interface ConfigCategoria {
+  etiquetaTipo: string;
+  tipos: string[];
+  estilos: string[];
+  materiales: string[];
+  tecnicas: string[];
+}
 
 @Component({
   selector: 'app-empieza-acrear',
@@ -31,7 +38,7 @@ import { CategoryDTO } from '../../model/category-dto';
   templateUrl: './empieza-acrear.html',
   styleUrl: './empieza-acrear.css',
 })
-export class EmpiezaACrear implements OnDestroy {
+export class EmpiezaACrear implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly api = inject(PrototypeService);
   private readonly destroyRef = inject(DestroyRef);
@@ -42,17 +49,49 @@ export class EmpiezaACrear implements OnDestroy {
   cargandoCategorias = true;
   errorCategorias = '';
 
-  // SOLO PARA EL SCRIPT SQL ACTUAL.
-  // Sustituir por el ID obtenido del backend
-  // cuando definan las categorías finales.
+  readonly configuraciones: Partial<Record<string, ConfigCategoria>> = {
+    MOBILIARIO: {
+      etiquetaTipo: 'Tipo de mueble',
 
-  readonly tiposMueble = ['Mesa', 'Cama', 'Sofá', 'Escritorio', 'Armario', 'Cómoda'];
+      tipos: ['Mesa', 'Cama', 'Sofá', 'Escritorio', 'Armario', 'Cómoda'],
 
-  readonly estilos = ['Moderno', 'Minimalista', 'Industrial', 'Rústico', 'Vintage'];
+      estilos: ['Moderno', 'Minimalista', 'Industrial', 'Rústico', 'Vintage'],
 
-  readonly materiales = ['Madera', 'Metal', 'Plástico', 'Bambú', 'Vidrio', 'Otro'];
+      materiales: ['Madera', 'Metal', 'Plástico', 'Bambú', 'Vidrio', 'Otro'],
+
+      tecnicas: [],
+    },
+
+    CERAMICA: {
+      etiquetaTipo: 'Tipo de cerámica',
+
+      tipos: ['Taza', 'Plato', 'Jarrón', 'Maceta', 'Cuenco', 'Jarra'],
+
+      estilos: ['Artesanal', 'Minimalista', 'Rústico', 'Moderno', 'Floral'],
+
+      materiales: ['Arcilla', 'Porcelana', 'Gres', 'Terracota', 'Otro'],
+
+      tecnicas: ['Pintado a mano', 'Esmaltado', 'Grabado'],
+    },
+
+    TEXTIL: {
+      etiquetaTipo: 'Tipo de textil',
+
+      tipos: ['Polo', 'Sudadera', 'Camisa', 'Bolso', 'Cojín', 'Manta'],
+
+      estilos: ['Casual', 'Minimalista', 'Urbano', 'Elegante', 'Vintage'],
+
+      materiales: ['Algodón', 'Lino', 'Lana', 'Poliéster', 'Seda', 'Otro'],
+
+      tecnicas: ['Bordado', 'Estampado', 'Sublimación', 'Tejido'],
+    },
+  };
+
+  readonly tallas = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
   readonly formulario = this.fb.group({
+    categoryId: this.fb.control<number | null>(null, [Validators.required]),
+
     name: this.fb.nonNullable.control('', [Validators.required, Validators.maxLength(150)]),
 
     prompt: this.fb.nonNullable.control('', [
@@ -60,9 +99,8 @@ export class EmpiezaACrear implements OnDestroy {
       Validators.minLength(10),
       Validators.maxLength(500),
     ]),
-    categoryId: this.fb.control<number | null>(null, [Validators.required]),
 
-    tipoMueble: this.fb.nonNullable.control(''),
+    productType: this.fb.nonNullable.control(''),
 
     style: this.fb.nonNullable.control(''),
 
@@ -70,13 +108,36 @@ export class EmpiezaACrear implements OnDestroy {
 
     color: this.fb.nonNullable.control('', [Validators.required, Validators.maxLength(60)]),
 
-    width: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),
+    technique: this.fb.nonNullable.control(''),
 
-    height: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),
+    // CAMPOS EXCLUSIVOS DE MOBILIARIO
 
-    depth: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),
+    width: this.fb.control<number | null>({ value: null, disabled: true }, [
+      Validators.required,
+      Validators.min(0.01),
+    ]),
 
-    unit: this.fb.nonNullable.control<'mm' | 'cm' | 'm'>('cm'),
+    height: this.fb.control<number | null>({ value: null, disabled: true }, [
+      Validators.required,
+      Validators.min(0.01),
+    ]),
+
+    depth: this.fb.control<number | null>({ value: null, disabled: true }, [
+      Validators.required,
+      Validators.min(0.01),
+    ]),
+
+    unit: this.fb.nonNullable.control<'mm' | 'cm' | 'm'>({ value: 'cm', disabled: true }),
+
+    // CAMPO EXCLUSIVO DE CERÁMICA
+
+    capacityMl: this.fb.control<number | null>({ value: null, disabled: true }, [
+      Validators.min(1),
+    ]),
+
+    // CAMPO EXCLUSIVO DE TEXTILES
+
+    size: this.fb.nonNullable.control({ value: '', disabled: true }),
   });
 
   cargando = false;
@@ -87,6 +148,18 @@ export class EmpiezaACrear implements OnDestroy {
   imagenUrl: string | null = null;
 
   ngOnInit(): void {
+    this.formulario.controls.categoryId.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.actualizarCamposCategoria();
+      });
+
+    this.formulario.controls.productType.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.actualizarCamposProducto();
+      });
+
     this.cargarCategorias();
   }
 
@@ -106,12 +179,140 @@ export class EmpiezaACrear implements OnDestroy {
       .subscribe({
         next: (categorias) => {
           this.categorias = categorias;
+
+          if (!this.categoriaSeleccionada) {
+            this.formulario.controls.categoryId.reset(null);
+          }
+
+          if (categorias.length === 0) {
+            this.errorCategorias = 'No hay categorías disponibles.';
+          }
         },
+
         error: () => {
           this.categorias = [];
+          this.formulario.controls.categoryId.reset(null);
+
           this.errorCategorias = 'No se pudieron cargar las categorías.';
         },
       });
+  }
+
+  private actualizarCamposCategoria(): void {
+    const controls = this.formulario.controls;
+
+    // Limpiar filtros de la categoría anterior.
+
+    controls.productType.reset('', { emitEvent: false });
+    controls.style.reset('');
+    controls.material.reset('');
+    controls.technique.reset('');
+
+    // Reiniciar dimensiones.
+
+    const dimensiones = [controls.width, controls.height, controls.depth];
+
+    for (const control of dimensiones) {
+      control.reset(null);
+
+      if (this.esMobiliario) {
+        control.enable();
+      } else {
+        control.disable();
+      }
+    }
+
+    controls.unit.reset('cm');
+
+    if (this.esMobiliario) {
+      controls.unit.enable();
+    } else {
+      controls.unit.disable();
+    }
+
+    this.actualizarCamposProducto();
+
+    this.mensajeError = '';
+  }
+
+  private actualizarCamposProducto(): void {
+    const controls = this.formulario.controls;
+
+    // Capacidad para determinados productos cerámicos.
+
+    controls.capacityMl.reset(null);
+
+    if (this.mostrarCapacidad) {
+      controls.capacityMl.enable();
+    } else {
+      controls.capacityMl.disable();
+    }
+
+    // Talla únicamente para prendas de vestir.
+
+    controls.size.reset('');
+
+    if (this.mostrarTalla) {
+      controls.size.enable();
+    } else {
+      controls.size.disable();
+    }
+  }
+
+  get categoriaSeleccionada(): CategoryDTO | undefined {
+    return this.categorias.find(
+      (categoria) => categoria.categoryId === this.formulario.controls.categoryId.value,
+    );
+  }
+
+  get tipoCategoria(): string {
+    return this.categoriaSeleccionada?.type ?? '';
+  }
+
+  get configCategoria(): ConfigCategoria | undefined {
+    return this.configuraciones[this.tipoCategoria];
+  }
+
+  get tiposProducto(): string[] {
+    return this.configCategoria?.tipos ?? [];
+  }
+
+  get estilos(): string[] {
+    return this.configCategoria?.estilos ?? [];
+  }
+
+  get materiales(): string[] {
+    return this.configCategoria?.materiales ?? [];
+  }
+
+  get tecnicas(): string[] {
+    return this.configCategoria?.tecnicas ?? [];
+  }
+
+  get esMobiliario(): boolean {
+    return this.tipoCategoria === 'MOBILIARIO';
+  }
+
+  get esCeramica(): boolean {
+    return this.tipoCategoria === 'CERAMICA';
+  }
+
+  get esTextil(): boolean {
+    return this.tipoCategoria === 'TEXTIL';
+  }
+
+  get mostrarCapacidad(): boolean {
+    return (
+      this.esCeramica &&
+      ['Taza', 'Jarra', 'Cuenco'].includes(this.formulario.controls.productType.value)
+    );
+  }
+
+  get mostrarTalla(): boolean {
+    return (
+      this.esTextil &&
+      ['Polo', 'Sudadera', 'Camisa'].includes(this.formulario.controls.productType.value)
+    );
   }
 
   get cantidadCaracteres(): number {
@@ -127,7 +328,10 @@ export class EmpiezaACrear implements OnDestroy {
     );
   }
 
-  seleccionarFiltro(campo: 'tipoMueble' | 'style' | 'material', valor: string): void {
+  seleccionarFiltro(
+    campo: 'productType' | 'style' | 'material' | 'technique',
+    valor: string,
+  ): void {
     const control = this.formulario.controls[campo];
 
     control.setValue(control.value === valor ? '' : valor);
@@ -135,81 +339,108 @@ export class EmpiezaACrear implements OnDestroy {
     control.markAsTouched();
   }
 
-  get categoriaSeleccionada(): CategoryDTO | undefined {
-    return this.categorias.find(
-      (categoria) => categoria.categoryId === this.formulario.controls.categoryId.value,
-    );
-  }
-
-  get tipoCategoria(): string {
-    return this.categoriaSeleccionada?.type ?? '';
-  }
-
   generarDiseno(): void {
-    if (this.cargando) return;
+    if (this.cargando || this.cargandoCategorias) return;
 
     this.mensajeError = '';
 
     if (this.formulario.invalid) {
       this.formulario.markAllAsTouched();
-      this.mensajeError = 'Completa los campos obligatorios y revisa las dimensiones.';
+
+      this.mensajeError = 'Completa correctamente los campos obligatorios.';
+
       return;
     }
 
     const datos = this.formulario.getRawValue();
 
-    const categoriaSeleccionada = this.categorias.find(
-      (categoria) => categoria.categoryId === datos.categoryId,
-    );
+    const categoriaSeleccionada = this.categoriaSeleccionada;
 
-    if (!categoriaSeleccionada || !categoriaSeleccionada.categoryId) {
+    if (!categoriaSeleccionada?.categoryId || !this.configCategoria) {
       this.mensajeError = 'Selecciona una categoría válida.';
+
       return;
     }
 
-    // Evita enviar cadenas que contienen solo espacios.
-    if (
-      !datos.name.trim() ||
-      !datos.prompt.trim() ||
-      !datos.material.trim() ||
-      !datos.color.trim()
-    ) {
-      this.mensajeError = 'El nombre, la descripción, el material y el color son obligatorios.';
+    const prompt = datos.prompt.trim();
+
+    // Validar cadenas vacías o espacios.
+
+    if (!datos.name.trim() || prompt.length < 10 || !datos.material.trim() || !datos.color.trim()) {
+      this.mensajeError = 'Revisa el nombre, la descripción, el material y el color.';
+
       return;
     }
 
-    if (datos.width === null || datos.height === null || datos.depth === null) {
-      this.mensajeError = 'Ingresa las tres dimensiones.';
-      return;
-    }
-
-    // Estas claves coinciden con validateSpecifications()
-    // en PrototypeServiceImpl.
+    // ESPECIFICACIONES COMUNES
 
     const specifications: Record<string, unknown> = {
+      category: categoriaSeleccionada.name ?? this.tipoCategoria,
+
       material: datos.material.trim(),
+
       color: datos.color.trim(),
-
-      dimensions: {
-        width: datos.width,
-        height: datos.height,
-        depth: datos.depth,
-        unit: datos.unit,
-      },
-
-      ...(datos.tipoMueble && {
-        furnitureType: datos.tipoMueble,
-      }),
 
       ...(datos.style && {
         style: datos.style,
       }),
     };
 
-    const prompt = datos.prompt.trim();
+    // MOBILIARIO
 
-    // Recreación preventiva de la longitud del texto
-    // que construye Spring Boot antes de llamar a Cloudflare.
+    if (this.esMobiliario) {
+      if (datos.width === null || datos.height === null || datos.depth === null) {
+        this.mensajeError = 'Ingresa las tres dimensiones.';
+
+        return;
+      }
+
+      specifications['dimensions'] = {
+        width: datos.width,
+        height: datos.height,
+        depth: datos.depth,
+        unit: datos.unit,
+      };
+
+      if (datos.productType) {
+        specifications['furnitureType'] = datos.productType;
+      }
+    }
+
+    // CERÁMICA
+
+    if (this.esCeramica) {
+      if (datos.productType) {
+        specifications['productType'] = datos.productType;
+      }
+
+      if (this.mostrarCapacidad && datos.capacityMl !== null) {
+        specifications['capacityMl'] = datos.capacityMl;
+      }
+
+      if (datos.technique) {
+        specifications['technique'] = datos.technique;
+      }
+    }
+
+    // TEXTILES
+
+    if (this.esTextil) {
+      if (datos.productType) {
+        specifications['productType'] = datos.productType;
+      }
+
+      if (this.mostrarTalla && datos.size) {
+        specifications['size'] = datos.size;
+      }
+
+      if (datos.technique) {
+        specifications['technique'] = datos.technique;
+      }
+    }
+
+    // VALIDAR LONGITUD DEL PROMPT FINAL
+
     const especificacionesJson = JSON.stringify(specifications);
 
     const promptFinal =
@@ -220,13 +451,19 @@ export class EmpiezaACrear implements OnDestroy {
 
     if (Array.from(promptFinal).length > 2048 || especificacionesJson.length > 2000) {
       this.mensajeError = 'La descripción y las especificaciones son demasiado extensas.';
+
       return;
     }
 
+    // SOLICITUD AL BACKEND
+
     const solicitud: PrototypeRequest = {
       name: datos.name.trim(),
+
       categoryId: categoriaSeleccionada.categoryId,
+
       prompt,
+
       specifications,
     };
 
