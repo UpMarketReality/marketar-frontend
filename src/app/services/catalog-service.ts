@@ -122,4 +122,7 @@ export class CatalogService {
     // No se pone Content-Type: el navegador agrega el boundary del multipart
     return formulario;
   }
+  getPrototypeCategories(): Observable<CategoryDTO[]> {
+    return this.http.get<CategoryDTO[]>(`${this.apiUrl}/prototype-categories`);
+  }
 }

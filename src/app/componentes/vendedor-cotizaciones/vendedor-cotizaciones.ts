@@ -136,7 +136,7 @@ export class VendedorCotizaciones implements OnInit {
   readonly columnasMovimientos = ['fecha', 'concepto', 'referencia', 'monto', 'estado'];
 
   ngOnInit(): void {
-    this.catalogService.getProductCategories().subscribe({
+    this.catalogService.getPrototypeCategories().subscribe({
       next: (categorias) => {
         this.categorias = categorias;
         this.cdr.markForCheck();

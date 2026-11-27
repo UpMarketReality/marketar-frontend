@@ -82,12 +82,41 @@
 
           <!-- CATEGORÍA REAL -->
           <div class="form-group">
-            <label>Categoría</label>
 
-            <div class="category-info">
-              <i class="fa-solid fa-couch text-primary"></i>
-              Muebles personalizados
-            </div>
+            <label for="categoria">
+              Categoría del producto *
+            </label>
+
+            <select
+              id="categoria"
+              class="form-input"
+              formControlName="categoryId">
+
+              <option [ngValue]="null">
+                Selecciona una categoría
+              </option>
+
+              @for (categoria of categorias;
+                track categoria.categoryId) {
+
+                <option [ngValue]="categoria.categoryId">
+                  {{ categoria.name }}
+                </option>
+
+              }
+
+            </select>
+
+            @if (cargandoCategorias) {
+              <small>Cargando categorías...</small>
+            }
+
+            @if (errorCategorias) {
+              <small class="validation-error">
+                {{ errorCategorias }}
+              </small>
+            }
+
           </div>
 
           <!-- TIPO DE MUEBLE -->

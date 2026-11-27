@@ -21,6 +21,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PrototypeRequest } from '../../model/prototype-request';
 import { PrototypeService } from '../../services/prototype-service';
 import { RouterLink } from '@angular/router';
+import { CatalogService } from '../../services/catalog-service';
+import { CategoryDTO } from '../../model/category-dto';
 
 
 @Component({
@@ -34,11 +36,15 @@ export class EmpiezaACrear implements OnDestroy {
   private readonly api = inject(PrototypeService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly catalogService = inject(CatalogService);
+
+  categorias: CategoryDTO[] = [];
+  cargandoCategorias = true;
+  errorCategorias = '';
 
   // SOLO PARA EL SCRIPT SQL ACTUAL.
   // Sustituir por el ID obtenido del backend
   // cuando definan las categorías finales.
-  readonly categoriaIdMobiliario = 1;
 
   readonly tiposMueble = ['Mesa', 'Cama', 'Sofá', 'Escritorio', 'Armario', 'Cómoda'];
 
@@ -54,6 +60,7 @@ export class EmpiezaACrear implements OnDestroy {
       Validators.minLength(10),
       Validators.maxLength(500),
     ]),
+    categoryId: this.fb.control<number | null>(null, [Validators.required]),
 
     tipoMueble: this.fb.nonNullable.control(''),
 
@@ -79,6 +86,34 @@ export class EmpiezaACrear implements OnDestroy {
   prototipo: PrototypeDTO | null = null;
   imagenUrl: string | null = null;
 
+  ngOnInit(): void {
+    this.cargarCategorias();
+  }
+
+  cargarCategorias(): void {
+    this.cargandoCategorias = true;
+    this.errorCategorias = '';
+
+    this.catalogService
+      .getPrototypeCategories()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.cargandoCategorias = false;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (categorias) => {
+          this.categorias = categorias;
+        },
+        error: () => {
+          this.categorias = [];
+          this.errorCategorias = 'No se pudieron cargar las categorías.';
+        },
+      });
+  }
+
   get cantidadCaracteres(): number {
     return this.formulario.controls.prompt.value.length;
   }
@@ -100,6 +135,16 @@ export class EmpiezaACrear implements OnDestroy {
     control.markAsTouched();
   }
 
+  get categoriaSeleccionada(): CategoryDTO | undefined {
+    return this.categorias.find(
+      (categoria) => categoria.categoryId === this.formulario.controls.categoryId.value,
+    );
+  }
+
+  get tipoCategoria(): string {
+    return this.categoriaSeleccionada?.type ?? '';
+  }
+
   generarDiseno(): void {
     if (this.cargando) return;
 
@@ -112,6 +157,15 @@ export class EmpiezaACrear implements OnDestroy {
     }
 
     const datos = this.formulario.getRawValue();
+
+    const categoriaSeleccionada = this.categorias.find(
+      (categoria) => categoria.categoryId === datos.categoryId,
+    );
+
+    if (!categoriaSeleccionada || !categoriaSeleccionada.categoryId) {
+      this.mensajeError = 'Selecciona una categoría válida.';
+      return;
+    }
 
     // Evita enviar cadenas que contienen solo espacios.
     if (
@@ -171,7 +225,7 @@ export class EmpiezaACrear implements OnDestroy {
 
     const solicitud: PrototypeRequest = {
       name: datos.name.trim(),
-      categoryId: this.categoriaIdMobiliario,
+      categoryId: categoriaSeleccionada.categoryId,
       prompt,
       specifications,
     };
