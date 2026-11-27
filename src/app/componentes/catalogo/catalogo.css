@@ -184,7 +184,14 @@
   font-size: 18px;
   width: 18px;
   height: 18px;
+  color: #64748b; /* Gris cuando NO es favorito (o déjalo en #ef4444 si quieres el borde rojo) */
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.fav-btn mat-icon.is-fav {
   color: #ef4444;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 .ar-badge {

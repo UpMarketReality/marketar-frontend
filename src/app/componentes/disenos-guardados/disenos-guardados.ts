@@ -94,9 +94,13 @@ export class DisenosGuardados implements OnInit, OnDestroy {
     forkJoin({
       paginaPrototipos: this.prototypeService.getMyPrototypes(0, 20),
       cotizaciones: this.quoteService.getAllMyQuoteRequests(),
+      favoritos: this.commerceService.getFavorites().pipe(catchError(() => of([]))),
     })
       .pipe(
-        switchMap(({ paginaPrototipos, cotizaciones }) => {
+        switchMap(({ paginaPrototipos, cotizaciones, favoritos }) => {
+          this.favorites = (favoritos ?? [])
+            .map((f: any) => f.product ?? f)
+            .filter((p: any) => p && p.productId != null);
           const prototipos = paginaPrototipos.content ?? [];
 
           // Relacionamos cada prototipo con la solicitud más reciente.
@@ -412,11 +416,13 @@ export class DisenosGuardados implements OnInit, OnDestroy {
         next: () => {
           this.favorites = [product, ...this.favorites];
           this.pendingFavorite.delete(id);
+          this.cdr.markForCheck(); // <-- AGREGAR ESTO
           this.notify('Se agregó a tus diseños guardados');
         },
         error: (err) => {
           console.error('No se pudo agregar a favoritos:', err);
           this.pendingFavorite.delete(id);
+          this.cdr.markForCheck(); // <-- AGREGAR ESTO
           this.notify('No se pudo agregar a favoritos');
         },
       });
